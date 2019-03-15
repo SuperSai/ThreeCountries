@@ -1,0 +1,13 @@
+<page>
+   <item name="test/TestScene.scene" props="" ifExport="分离模式" aName=""/>
+   <item name="hall/HallScene.scene" props="" ifExport="分离模式" aName=""/>
+   <item name="hall/item/HeadItem.scene" props="" ifExport="分离模式" aName=""/>
+   <item name="follow/FollowView.scene" props="" ifExport="默认" aName="关注有礼"/>
+   <item name="rank/RankView.scene" props="" ifExport="默认" aName="排行榜"/>
+   <item name="common/GoldNotEnoughView.scene" props="" ifExport="默认" aName="金币不足"/>
+   <item name="common/LevelRewardView.scene" props="" ifExport="默认" aName="等级奖励界面"/>
+   <item name="moduleView/common/OffLineRewardView.scene" props="" ifExport="默认" aName="离线奖励"/>
+   <item name="moduleView/common/LevelRewardView.scene" props="" ifExport="默认" aName="升级奖励界面"/>
+   <item name="moduleView/common/GoldNotEnoughView.scene" props="" ifExport="默认" aName="金币不足界面"/>
+   <item name="moduleView/common/DiamondBuyView.scene" props="" ifExport="默认" aName="钻石购买界面"/>
+</page>
