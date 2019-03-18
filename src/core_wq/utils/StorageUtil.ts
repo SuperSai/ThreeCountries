@@ -77,7 +77,7 @@ export default class StorageUtil extends Laya.Script {
             storage.setItem(this.storage_user, dataJson);
         }
 
-        if (upload && Laya.Browser.onMiniGame) {
+        if (upload) {
             this.requestSaveHerosData();
             this.requestSaveHeroShopData();
             this.requestSaveUserInfoData();
@@ -227,7 +227,7 @@ export default class StorageUtil extends Laya.Script {
             '&car_level=' + HallControl.Ins.Model.heroLevel +
             '&level=' + PlayerMgr.Ins.Info.userLevel +
             '&exp=' + PlayerMgr.Ins.Info.userExp +
-            '&asset=' + Math.floor(PlayerMgr.Ins.Info.userGold + this.heroAllAsset());
+            '&asset=' + Math.floor(PlayerMgr.Ins.Info.userGold + HallControl.Ins.Model.heroAllAsset());
         console.log("@David 保存用户信息金币:", dataString);
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
@@ -241,23 +241,6 @@ export default class StorageUtil extends Laya.Script {
                 console.log("@David 保存用户信息金币错误:", res);
             }
         });
-    }
-
-    /** 计算总资产（基础价格） */
-    private static heroAllAsset(): number {
-        let allAsset = 0;
-        let model: HallModel = HallControl.Ins.Model;
-        if (model && model.AllHeros) {
-            model.AllHeros.forEach(element => {
-                if (element && element.heroId > 0) {
-                    let vo: HeroConfigVO = GlobalData.getData(GlobalData.HeroConfigVO, element.heroId);
-                    if (vo) {
-                        allAsset += model.getHeroBuyPrice(vo.buyPrice, model.queryBuyHeroRecord(vo.id));
-                    }
-                }
-            });
-        }
-        return allAsset;
     }
 
     /** 保存加速剩余时间 */

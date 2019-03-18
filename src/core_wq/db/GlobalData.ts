@@ -98,6 +98,7 @@ export default class GlobalData extends Laya.Script {
         let DataClass: any = this._totalStepCsvList.getValueByIndex(this._currParseCount);
         let dic: TSDictionary<number, any> = CSVParser.ParseJsonData(DataClass, csvStr);
         GlobalData.AllCacheData.Add(key, dic);
+        // console.log("@David 表数据：key:", key, " --- data:", dic);
         this._currParseCount++;
     }
 

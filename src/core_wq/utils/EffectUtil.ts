@@ -173,7 +173,7 @@ export default class EffectUtil extends Laya.Script {
     }
 
     /** 金币雨 */
-    public static playCoinRainEffect(parentNode: any, imgUrl: string): void {
+    public static playCoinRainEffect(imgUrl: string): void {
         let coinCount = 8;
         for (var index = 0; index < coinCount; index++) {
             let imgCoin: Laya.Image = Laya.Pool.getItemByClass("p_Image", Laya.Image);
@@ -181,9 +181,9 @@ export default class EffectUtil extends Laya.Script {
             imgCoin.graphics.clear();
             imgCoin.loadImage(imgUrl);
             imgCoin.pivot(imgCoin.width / 2, imgCoin.height / 2);
-            parentNode.addChild(imgCoin);
-            imgCoin.pos(index * (Laya.stage.width / coinCount) + Math.random() * 100, Math.random() * 500 - 300);
-            Laya.Tween.to(imgCoin, { x: imgCoin.x, y: Laya.stage.height + 300 }, 3000,
+            LayerMgr.Ins.screenEffectLayer.addChild(imgCoin);
+            imgCoin.pos(index * (LayerMgr.stageDesignWidth / coinCount) + Math.random() * 100, Math.random() * 500 - 300);
+            Laya.Tween.to(imgCoin, { x: imgCoin.x, y: LayerMgr.stageDesignHeight }, 3000,
                 Laya.Ease.linearNone, Laya.Handler.create(this, (_coinSp: Laya.Node) => {
                     _coinSp.removeSelf();
                     Laya.Pool.recover("p_Image", _coinSp);

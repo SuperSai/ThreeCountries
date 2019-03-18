@@ -3,6 +3,9 @@ import ShareMgr from "./ShareMgr";
 import PlayerMgr from "../player/PlayerMgr";
 import SoundMgr from "../sound/SoundMgr";
 import SoundType from "../sound/SoundType";
+import MsgMgr from "./MsgMgr";
+import StorageUtil from "../utils/StorageUtil";
+import HallControl from "../../module/hall/HallControl";
 
 export default class SDKMgr extends Laya.Script {
 
@@ -11,6 +14,14 @@ export default class SDKMgr extends Laya.Script {
     public videoAd: any; //videoAd
 
     constructor() { super(); }
+
+    /** 初始化微信 */
+    public initWX(): void {
+        if (!Laya.Browser.onWeiXin) return;
+        this.wxOnShow();
+        this.wxOnHide();
+        this.wxSetKeepScreenOn();
+    }
 
     /**
      * 跳转小程序
@@ -129,7 +140,7 @@ export default class SDKMgr extends Laya.Script {
 
     /** 获取微信token */
     public wxHttpToken(baseUrl: any, callBack: Function = null, forceNew: boolean = false): any {
-        let token = wx.getStorageSync("token");
+        let token = wx ? wx.getStorageSync("token") : "";
         if (token && forceNew == false) {
             callBack && callBack(token);
         } else {
@@ -155,6 +166,7 @@ export default class SDKMgr extends Laya.Script {
                          */
                         lang: "zh_CN",
                         success: (result: _getUserInfoSuccessObject) => {
+                            console.log("@David userInfo:", result.userInfo);
                             PlayerMgr.Ins.Info.wxUserInfo = result.userInfo;
                             success && success();
                         },
@@ -181,28 +193,16 @@ export default class SDKMgr extends Laya.Script {
         });
     }
 
-    public wxApp(): void {
-        if (!Laya.Browser.onWeiXin) return;
-        App({
-            /** 当小程序初始化完成时，会触发 onLaunch（全局只触发一次） */
-            onLaunch: (options: _AppShowOptions) => {
-                PlayerMgr.Ins.Info.wxLaunch = options;
-            },
-            /** 当小程序启动，或从后台进入前台显示，会触发 onShow */
-            onShow: (options: _AppShowOptions) => {
-                SoundMgr.Ins.setBgOn(true);
-                SoundMgr.Ins.setEffectOn(true);
-                SoundMgr.Ins.playBg(SoundType.BG_MUSIC);
-            },
-            /** 当小程序从前台进入后台，会触发 onHide */
-            onHide: () => {
-                SoundMgr.Ins.setBgOn(false);
-                SoundMgr.Ins.setEffectOn(false);
-            },
-            /** 当小程序发生脚本错误，或者 api 调用失败时，会触发 onError 并带上错误信息 */
-            onError: (msg: string) => {
-
-            }
+    /** 设置游戏常亮 */
+    public wxSetKeepScreenOn(): void {
+        wx.setKeepScreenOn({
+            /**
+             * 是否保持屏幕常亮
+             */
+            keepScreenOn: true,
+            success: (result: _setKeepScreenOnSuccessObject) => { },
+            fail: () => { },
+            complete: () => { }
         })
     }
 
@@ -252,6 +252,98 @@ export default class SDKMgr extends Laya.Script {
             },
             fail: () => { },
             complete: () => { }
+        })
+    }
+
+    /** 游戏新版本提示 */
+    public wxShowUpdateVersionTips(): void {
+        if (!Laya.Browser.onWeiXin) return;
+        const updateManager = wx.getUpdateManager();
+        if (updateManager) {
+            updateManager.onCheckForUpdate(function (res) {
+                // 请求完新版本信息的回调
+                console.log(res.hasUpdate)
+            })
+            updateManager.onUpdateReady(function () {
+                wx.showModal({
+                    title: "更新提示",
+                    content: "新版本已经准备好，是否重启应用？",
+                    /**
+                     * 是否显示取消按钮，默认为 true
+                     */
+                    showCancel: true,
+                    /**
+                     * 取消按钮的文字，默认为"取消"，最多 4 个字符
+                     */
+                    cancelText: "取消",
+                    /**
+                     * 取消按钮的文字颜色，默认为"#000000"
+                     */
+                    cancelColor: "#000000",
+                    /**
+                     * 确定按钮的文字，默认为"确定"，最多 4 个字符
+                     */
+                    confirmText: "确定",
+                    /**
+                     * 确定按钮的文字颜色，默认为"#3CC51F"
+                     */
+                    confirmColor: "#3CC51F",
+                    success: (result: _showModalSuccessObject) => { },
+                    fail: () => { },
+                    complete: () => { }
+                })
+            })
+            updateManager.onUpdateFailed(function () {
+                MsgMgr.Ins.showMsg("游戏新版本更新失败！");
+            })
+        }
+    }
+
+    public wxOnShow(): void {
+        wx.onShow((options: any) => {
+            console.log("@David onLaunch:", options);
+            PlayerMgr.Ins.Info.wxLaunch = options;
+            if (!SoundMgr.Ins.bgOn) {
+                SoundMgr.Ins.setBgOn(true);
+                SoundMgr.Ins.setEffectOn(true);
+                SoundMgr.Ins.playBg(SoundType.BG_MUSIC);
+            }
+            //查询是否有离线奖励
+            StorageUtil.requestOfflinePrizeData();
+        })
+    }
+
+    public wxOnHide(): void {
+        wx.onHide(() => {
+            SoundMgr.Ins.setBgOn(false);
+            SoundMgr.Ins.setEffectOn(false);
+            StorageUtil.saveStorageToLocal(true);
+            this.wxSetUserCloudStorage();
+        })
+    }
+
+    /** 上传数据到开放域 */
+    private wxSetUserCloudStorage(): void {
+        //上传微信云
+        let money = Math.floor(PlayerMgr.Ins.Info.userGold + HallControl.Ins.Model.heroAllAsset()).toString();
+        let kvDataList = [{
+            key: "score",
+            value: money
+        }, {
+            key: "city",
+            value: (PlayerMgr.Ins.Info.wxUserInfo ? PlayerMgr.Ins.Info.wxUserInfo.city : '火星')
+        }, {
+            key: "userId",
+            value: PlayerMgr.Ins.Info.userId
+        }];
+        wx.setUserCloudStorage({
+            KVDataList: kvDataList,
+            success: function (src) {
+                console.log("setUserCloudStorage success", src)
+            },
+            fail: function (src) {
+                console.log("setUserCloudStorage fail", src)
+            }
         })
     }
 

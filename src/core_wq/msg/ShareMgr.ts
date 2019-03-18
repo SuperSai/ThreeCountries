@@ -7,6 +7,7 @@ import PlayerMgr from "../player/PlayerMgr";
 import EventsMgr from "../event/EventsMgr";
 import EventType from "../event/EventType";
 import SDKMgr from "./SDKMgr";
+import AppConfig from "../config/AppConfig";
 
 export default class ShareMgr extends Laya.Script {
 
@@ -22,6 +23,10 @@ export default class ShareMgr extends Laya.Script {
 
     /** 请求分享/视频 */
     public showShareOrAdv(callback: any = null, type: number = 0, isTask: boolean = false, isGroupShare: boolean = false): number {
+        if (AppConfig.isDebug) {
+            callback && callback();
+            return;
+        }
         if (this._isOpenShareAd) {
             return 0;
         }

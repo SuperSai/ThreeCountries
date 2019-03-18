@@ -16,12 +16,13 @@ export default class SoundBG extends BaseSound {
      * 停止当前音乐
      */
     public stop(): void {
-        if (this._currSoundChannel) {
-            this._currSoundChannel.stop();
+        let self = this;
+        if (self._currSoundChannel) {
+            self._currSoundChannel.stop();
         }
-        this._currSoundChannel = null;
-        this._currSound = null;
-        this._currBg = "";
+        self._currSoundChannel = null;
+        self._currSound = null;
+        self._currBg = "";
     }
 
     /**
@@ -29,13 +30,14 @@ export default class SoundBG extends BaseSound {
      * @param effectName
      */
     public play(effectName: string): void {
-        if (this._currBg == effectName)
+        let self = this;
+        if (self._currBg == effectName)
             return;
-        this.stop();
-        this._currBg = effectName;
-        var sound: Laya.Sound = this.getSound(effectName);
+        self.stop();
+        self._currBg = effectName;
+        var sound: Laya.Sound = self.getSound(effectName);
         if (sound) {
-            this.playSound(sound);
+            self.playSound(self.soundPath);
         }
     }
 
@@ -43,10 +45,10 @@ export default class SoundBG extends BaseSound {
      * 播放
      * @param sound
      */
-    private playSound(sound: Laya.Sound): void {
-        this._currSound = sound;
-        this._currSoundChannel = this._currSound.play();
-        this._currSoundChannel.volume = this._volume;
+    private playSound(soundPath: string): void {
+        let self = this;
+        self._currSoundChannel = Laya.SoundManager.playMusic(soundPath, 0);
+        if (self._currSoundChannel) self._currSoundChannel.volume = this._volume;
     }
 
     /**
@@ -54,9 +56,10 @@ export default class SoundBG extends BaseSound {
      * @param volume
      */
     public setVolume(volume: number): void {
-        this._volume = volume;
-        if (this._currSoundChannel) {
-            this._currSoundChannel.volume = this._volume;
+        let self = this;
+        self._volume = volume;
+        if (self._currSoundChannel) {
+            self._currSoundChannel.volume = self._volume;
         }
     }
 
@@ -65,10 +68,11 @@ export default class SoundBG extends BaseSound {
      * @param key
      */
     public loadedPlay(key: string, soundPath: string): void {
-        if (this._currBg == key) {
-            let sound: Laya.Sound = Laya.loader.getRes(soundPath);
+        let self = this;
+        if (self._currBg == key) {
+            var sound: Laya.Sound = Laya.loader.getRes(soundPath);
             if (sound) {
-                this.playSound(sound);
+                self.playSound(soundPath);
             }
         }
     }
@@ -79,6 +83,7 @@ export default class SoundBG extends BaseSound {
      * @returns {boolean}
      */
     public checkCanClear(key: string): boolean {
-        return this._currBg != key;
+        let self = this;
+        return self._currBg != key;
     }
 }

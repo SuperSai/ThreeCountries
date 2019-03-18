@@ -15,11 +15,11 @@ export default class HallModel extends Laya.Script {
     /** 每屏 */
     public foregroundIndex: number = 0;
     /** 前景每屏宽度 */
-    public foregroundWidth: number = 3034;
+    public foregroundWidth: number = 1991;//3034
     /** 每屏 */
     public fargroundIndex: number = 0;
     /** 远景每屏宽度 */
-    public fargroundWidth: number = 2135;
+    public fargroundWidth: number = 1986;//2135
     /** 滚屏(最前景) */
     public topForegroundIndex: number = 0;
     /** 每屏宽度 */
@@ -177,6 +177,22 @@ export default class HallModel extends Laya.Script {
         }
         heroPrice = Math.ceil(heroPrice); //四舍五入
         return heroPrice;
+    }
+
+    /** 计算英雄总资产（基础价格） */
+    public heroAllAsset(): number {
+        let allAsset = 0;
+        if (this._allHeros && this._allHeros.length > 0) {
+            this._allHeros.forEach(element => {
+                if (element && element.heroId > 0) {
+                    let vo: HeroConfigVO = GlobalData.getData(GlobalData.HeroConfigVO, element.heroId);
+                    if (vo) {
+                        allAsset += this.getHeroBuyPrice(vo.buyPrice, this.queryBuyHeroRecord(vo.id));
+                    }
+                }
+            });
+        }
+        return allAsset;
     }
 
     set AllHeros(value: any[]) { this._allHeros = value; }

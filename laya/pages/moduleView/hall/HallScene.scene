@@ -2,11 +2,11 @@
     "x":0,
     "type":"Scene",
     "selectedBox":2,
-    "selecteID":41,
+    "selecteID":9,
     "searchKey":"Scene",
     "props":{"width":750,"sceneColor":"#000000","runtime":"module/hall/view/HallScene.ts","height":1334,"drawCallOptimize":true},
     "nodeParent":-1,
-    "maxID":116,
+    "maxID":118,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -21,16 +21,17 @@
             "props":{"y":0,"x":0,"var":"box_farground"},
             "nodeParent":2,
             "label":"box_farground",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":5,
             "child":[
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,fargroundOne",
-                    "props":{"y":0,"x":0,"width":2136,"var":"fargroundOne","texture":"images/map/map1_rolling_b.jpg","height":367},
+                    "props":{"y":0,"x":0,"var":"fargroundOne","texture":"images/map/map1_rolling_b.jpg","height":367},
                     "nodeParent":5,
                     "label":"fargroundOne",
                     "isDirectory":false,
@@ -41,9 +42,10 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,fargroundTwo",
-                    "props":{"y":0,"x":750,"width":2136,"var":"fargroundTwo","texture":"images/map/map1_rolling_b.jpg","height":367},
+                    "props":{"y":0,"x":750,"var":"fargroundTwo","texture":"images/map/map1_rolling_b.jpg","height":367},
                     "nodeParent":5,
                     "label":"fargroundTwo",
                     "isDirectory":false,
@@ -53,7 +55,7 @@
                     "child":[
                         ]
                 }],
-            "$LOCKED":true
+            "$LOCKED":false
         },
         {
             "x":15,
@@ -62,16 +64,17 @@
             "props":{"y":0,"x":0,"var":"box_foreground"},
             "nodeParent":2,
             "label":"box_foreground",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":9,
             "child":[
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,foregroundOne",
-                    "props":{"y":0,"x":0,"width":3035,"var":"foregroundOne","texture":"images/map/map1_rolling_a.png","height":777},
+                    "props":{"y":0,"x":0,"var":"foregroundOne","texture":"images/map/map1_rolling_a.png","height":777},
                     "nodeParent":9,
                     "label":"foregroundOne",
                     "isDirectory":false,
@@ -82,9 +85,10 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,foregroundTwo",
-                    "props":{"y":0,"x":750,"width":3035,"var":"foregroundTwo","texture":"images/map/map1_rolling_a.png","height":777},
+                    "props":{"y":0,"x":750,"var":"foregroundTwo","texture":"images/map/map1_rolling_a.png","height":777},
                     "nodeParent":9,
                     "label":"foregroundTwo",
                     "isDirectory":false,
@@ -92,9 +96,11 @@
                     "hasChild":false,
                     "compId":8,
                     "child":[
-                        ]
+                        ],
+                    "$HIDDEN":false
                 }],
-            "$LOCKED":true
+            "$LOCKED":true,
+            "$HIDDEN":false
         },
         {
             "x":15,
@@ -124,7 +130,7 @@
             "compId":11,
             "child":[
                 ],
-            "$LOCKED":false
+            "$LOCKED":true
         },
         {
             "x":15,
@@ -435,7 +441,7 @@
             "type":"UIView",
             "source":"moduleView/hall/CurrencyView.scene",
             "searchKey":"UIView",
-            "props":{"y":0,"x":0,"runtime":"module/hall/view/CurrencyView.ts"},
+            "props":{"y":0,"x":117,"runtime":"module/hall/view/CurrencyView.ts"},
             "nodeParent":2,
             "label":"UIView",
             "isDirectory":false,
@@ -773,6 +779,20 @@
                     "child":[
                         ]
                 }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,imgHead",
+            "props":{"width":100,"var":"imgHead","height":100},
+            "nodeParent":2,
+            "label":"imgHead",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":116,
+            "child":[
+                ]
         }],
     "animations":[
         {

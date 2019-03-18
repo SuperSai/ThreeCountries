@@ -7,6 +7,7 @@ import Hero from "../../hero/Hero";
 import HallControl from "../../HallControl";
 import PlayerMgr from "../../../../core_wq/player/PlayerMgr";
 import GuideMgr from "../../../../core_wq/guide/GuideMgr";
+import EffectUtil from "../../../../core_wq/utils/EffectUtil";
 
 export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
 
@@ -73,6 +74,7 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
     /** 更新血量 */
     public updateHp(value: number = 1) {
         if (GuideMgr.Ins.isGuide) return;
+        EffectUtil.playBoneEffect("hit_01", { x: this._battleHero.x, y: this._battleHero.y + 100 });
         this._battleHero.hp = this._battleHero.hp - value;
         this.hpBar.value = this._battleHero.hp / this._battleHero.maxHp;
         if (this.hpBar.value <= 0) {
@@ -94,13 +96,16 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
             this.reviveBar.visible = false;
             this.reviveBar.value = 0;
             this._reviveTime = 0;
-            this._battleHero.hp = this._battleHero.maxHp;
-            this.hpBar.value = this._battleHero.maxHp;
-            this.hpBar.visible = true;
-            this._battleHero.visible = true;
-            this._battleHero.IsInPosition = true;
-            HallControl.Ins.setBattleHeroCount(PlayerMgr.Ins.Info.userRuncarCount + 1);
-            this.isDie = false;
+            EffectUtil.playBoneEffect("ui_born", { x: this._battleHero.x - 20, y: this._battleHero.y + 200 });
+            this.timerOnce(100, this, () => {
+                this._battleHero.hp = this._battleHero.maxHp;
+                this.hpBar.value = this._battleHero.maxHp;
+                this.hpBar.visible = true;
+                this._battleHero.visible = true;
+                this._battleHero.IsInPosition = true;
+                HallControl.Ins.setBattleHeroCount(PlayerMgr.Ins.Info.userRuncarCount + 1);
+                this.isDie = false;
+            })
         }
     }
 

@@ -22,6 +22,8 @@ import ViewConst from "../../../core_wq/view/const/ViewConst";
 import HeadItem from "./item/HeadItem";
 import PointUtils from "../../../core_wq/utils/PointUtils";
 import GuideMgr from "../../../core_wq/guide/GuideMgr";
+import SDKMgr from "../../../core_wq/msg/SDKMgr";
+import AppConfig from "../../../core_wq/config/AppConfig";
 
 export default class HallScene extends ui.moduleView.hall.HallSceneUI {
 
@@ -35,6 +37,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
     constructor() { super(); }
 
     onAwake(): void {
+        SDKMgr.Ins.wxShowUpdateVersionTips();
     }
 
     onEnable(): void {
@@ -60,6 +63,9 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
 
     /** 初始化用户数据 */
     private initUserData(): void {
+        if (PlayerMgr.Ins.Info.wxUserInfo) {
+            this.imgHead.skin = PlayerMgr.Ins.Info.wxUserInfo.avatarUrl;
+        }
         this._control.setUserLevel(PlayerMgr.Ins.Info.userLevel);//用户等级
         this._control.setUserExp(PlayerMgr.Ins.Info.userExp);//用户经验
         EventsMgr.Ins.dispatch(EventType.UPDATE_INCOME, PlayerMgr.Ins.Info.userIncomeSec);//用户每秒可获得的金币
@@ -411,7 +417,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         if (this._control.Model.userAcceTime > 0) {
             this._control.Model.userAcceTime--;
             StorageUtil.saveAcceLeftTime(this._control.Model.userAcceTime);
-            EffectUtil.playCoinRainEffect(this, "images/common/coin.png");
+            EffectUtil.playCoinRainEffect("images/common/coin.png");
         } else {
             this._control.setBattleHeroAcce(1);
             this.clearTimer(this, this.refreshAcceTime);

@@ -8,10 +8,10 @@ export default class HttpRequestHelper {
 	constructor(_url) {
 		this.baseUrl = _url;
 	}
-	//http请求
+
+	/** http请求 */
 	request(_params: any, _noToken: boolean = false) {
-		if (!Laya.Browser.onWeiXin) return;
-		console.log("http request==>>", _params.url)
+		console.log("@David http request==>>", _params.url)
 		var that = this;
 		if (!_params.method) {
 			_params.method = 'Get'
@@ -32,7 +32,7 @@ export default class HttpRequestHelper {
 			console.log(e);
 		});
 		hr.once(Laya.Event.ERROR, that, (e: any) => {
-			console.log("Laya.Event.ERROR:", e)
+			console.log("@David Laya.Event.ERROR:", e)
 			if (e.indexOf('401') > 0) {
 				if (!_noToken) {
 					SDKMgr.Ins.wxHttpToken(that.baseUrl, (token) => {
@@ -55,7 +55,7 @@ export default class HttpRequestHelper {
 					}, true);
 				};
 			} else if (res == '500') {
-				console.log("request-err: ", _params.url);
+				console.log("@David request-err: ", _params.url);
 			} else if (_params.success) {
 				var dataJson = res;
 				var jsonObj = dataJson;

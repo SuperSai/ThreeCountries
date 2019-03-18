@@ -22,6 +22,7 @@ export default class GuideMask extends Laya.Sprite {
     private init(): void {
         //绘制一个蓝色方块，不被抠图
         var gameContainer: Laya.Sprite = new Laya.Sprite();
+        gameContainer.alpha = 0;
         gameContainer.loadImage("images/component/tip_bg.png");
         this.addChild(gameContainer);
 

@@ -16,16 +16,16 @@ export default class LoginScene extends ui.moduleView.login.LoginSceneUI {
     }
 
     private initData(): void {
-        StorageUtil.versionCheck(() => {
-            GlobalData.Ins.setup(() => {
-                StorageUtil.loadStorage((isOK: boolean) => {
-                    if (isOK) {
-                        this.addEvents();
-                        this.btn_login.visible = true;
-                    }
-                })
-            })
+        // StorageUtil.versionCheck(() => {
+        GlobalData.Ins.setup(() => {
+            // StorageUtil.loadStorage((isOK: boolean) => {
+            // if (isOK) {
+            this.addEvents();
+            this.btn_login.visible = true;
+            // }
+            // })
         })
+        // })
     }
 
     /** 显示开机图 */
@@ -51,7 +51,14 @@ export default class LoginScene extends ui.moduleView.login.LoginSceneUI {
     }
 
     private onEnterHall(): void {
-        AppConfig.HallScene && Laya.Scene.open(AppConfig.HallScene);
+        if (Laya.Browser.onWeiXin) {
+            SDKMgr.Ins.wxLogin(() => {
+                SDKMgr.Ins.initWX();
+                AppConfig.HallScene && Laya.Scene.open(AppConfig.HallScene);
+            })
+        } else {
+            AppConfig.HallScene && Laya.Scene.open(AppConfig.HallScene);
+        }
     }
 
     onDisable(): void {

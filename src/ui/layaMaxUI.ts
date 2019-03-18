@@ -157,6 +157,7 @@ export module ui.moduleView.hall {
 		public btn_proposal:Laya.Button;
 		public map_name:Laya.Image;
 		public txt_mapName:Laya.Label;
+		public imgHead:Laya.Image;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

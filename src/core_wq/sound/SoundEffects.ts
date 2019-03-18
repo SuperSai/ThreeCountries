@@ -13,7 +13,7 @@ export default class SoundEffects extends BaseSound {
     public play(effectId: string): void {
         let sound: Laya.Sound = this.getSound(effectId);
         if (sound) {
-            this.playSound(sound);
+            this.playSound(this.soundPath);
         }
     }
 
@@ -21,10 +21,9 @@ export default class SoundEffects extends BaseSound {
      * 播放
      * @param sound
      */
-    private playSound(sound: Laya.Sound): void {
-        if (!sound) return;
-        let channel: Laya.SoundChannel = sound.play(0, 1);
-        channel.volume = this._volume;
+    private playSound(soundPath: string): void {
+        let channel: Laya.SoundChannel = Laya.SoundManager.playSound(soundPath, 1);
+        if (channel) channel.volume = this._volume;
     }
 
     /**
@@ -42,7 +41,7 @@ export default class SoundEffects extends BaseSound {
     public loadedPlay(key: string, soundPath: string): void {
         let sound: Laya.Sound = Laya.loader.getRes(soundPath);
         if (sound) {
-            this.playSound(sound);
+            this.playSound(this.soundPath);
         }
     }
 }

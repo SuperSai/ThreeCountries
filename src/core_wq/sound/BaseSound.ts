@@ -8,25 +8,28 @@ export default class BaseSound {
     private _cache: any;
     private _loadingCache: Array<string>;
     private _key: string;
+    public soundPath: string = "";
 
     constructor() {
-        this._cache = {};
-        this._loadingCache = new Array<string>();
-        Laya.timer.loop(1 * 60 * 1000, this, this.dealSoundTimer);
+        let self = this;
+        self._cache = {};
+        self._loadingCache = new Array<string>();
+        Laya.timer.loop(1 * 60 * 1000, self, self.dealSoundTimer);
     }
 
     /**
      * 处理音乐文件的清理
      */
     private dealSoundTimer(): void {
+        let self = this;
         let currTime: number = Laya.Browser.now();
-        let keys = Object.keys(this._cache);
+        let keys = Object.keys(self._cache);
         for (let i: number = 0, len = keys.length; i < len; i++) {
             let key = keys[i];
-            if (!this.checkCanClear(key))
+            if (!self.checkCanClear(key))
                 continue;
-            if (currTime - this._cache[key] >= SoundMgr.CLEAR_TIME) {
-                delete this._cache[key];
+            if (currTime - self._cache[key] >= SoundMgr.CLEAR_TIME) {
+                delete self._cache[key];
                 Laya.loader.clearRes(key);
             }
         }
@@ -38,26 +41,27 @@ export default class BaseSound {
      * @returns {egret.Sound}
      */
     public getSound(key: string): Laya.Sound {
-        this._key = key;
+        let self = this;
+        self._key = key;
         let vo: SoundVO = GlobalData.getData(GlobalData.SoundVO, Number(key));
         if (vo == null) return null;
-        let soundPath: string = PathConfig.SOUND_PATH.replace("{0}", vo.file);
-        let sound: Laya.Sound = Laya.loader.getRes(soundPath);
+        self.soundPath = PathConfig.SOUND_PATH.replace("{0}", vo.file);
+        let sound: Laya.Sound = Laya.loader.getRes(self.soundPath);
         if (sound) {
-            if (this._cache[soundPath]) {
-                this._cache[soundPath] = Laya.Browser.now();
+            if (self._cache[self.soundPath]) {
+                self._cache[self.soundPath] = Laya.Browser.now();
             }
         } else {
-            if (this._loadingCache.indexOf(soundPath) != -1) {
+            if (self._loadingCache.indexOf(self.soundPath) != -1) {
                 return sound;
             }
-            this._loadingCache.push(soundPath);
-            Laya.loader.load([{ url: soundPath, type: Laya.Loader.SOUND }], Laya.Handler.create(this, () => {
-                let index: number = this._loadingCache.indexOf(soundPath);
+            self._loadingCache.push(self.soundPath);
+            Laya.loader.load([{ url: self.soundPath, type: Laya.Loader.SOUND }], Laya.Handler.create(self, () => {
+                let index: number = self._loadingCache.indexOf(self.soundPath);
                 if (index != -1) {
-                    this._loadingCache.splice(index, 1);
-                    this._cache[soundPath] = Laya.Browser.now();
-                    this.loadedPlay(this._key, soundPath);
+                    self._loadingCache.splice(index, 1);
+                    self._cache[self.soundPath] = Laya.Browser.now();
+                    self.loadedPlay(self._key, self.soundPath);
                 }
             }, null, false));
         }

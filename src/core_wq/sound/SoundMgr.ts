@@ -5,26 +5,26 @@ export default class SoundMgr {
 
     /** 音乐文件清理时间 */
     public static CLEAR_TIME: number = 3 * 60 * 1000;
-    private effect: SoundEffects;
-    private bg: SoundBG;
-    private effectOn: boolean;
-    private bgOn: boolean;
-    private currBg: string;
-    private bgVolume: number;
-    private effectVolume: number;
+    private _effect: SoundEffects;
+    private _bg: SoundBG;
+    private _effectOn: boolean;
+    private _bgOn: boolean;
+    private _currBg: string;
+    private _bgVolume: number;
+    private _effectVolume: number;
 
     constructor() {
-        this.bgOn = true;
-        this.effectOn = true;
+        this._bgOn = true;
+        this._effectOn = true;
 
-        this.bgVolume = 0.5;
-        this.effectVolume = 0.5;
+        this._bgVolume = 0.5;
+        this._effectVolume = 0.5;
 
-        this.bg = new SoundBG();
-        this.bg.setVolume(this.bgVolume);
+        this._bg = new SoundBG();
+        this._bg.setVolume(this._bgVolume);
 
-        this.effect = new SoundEffects();
-        this.effect.setVolume(this.effectVolume);
+        this._effect = new SoundEffects();
+        this._effect.setVolume(this._effectVolume);
     }
 
     /**
@@ -32,8 +32,8 @@ export default class SoundMgr {
      * @param effectName
      */
     public playEffect(effectId: string): void {
-        if (!this.effectOn) return;
-        this.effect.play(effectId);
+        if (!this._effectOn) return;
+        this._effect.play(effectId);
     }
 
     /**
@@ -41,16 +41,16 @@ export default class SoundMgr {
      * @param key
      */
     public playBg(bgName: string): void {
-        this.currBg = bgName;
-        if (!this.bgOn) return;
-        this.bg.play(bgName);
+        this._currBg = bgName;
+        if (!this._bgOn) return;
+        this._bg.play(bgName);
     }
 
     /**
      * 停止背景音乐
      */
     public stopBg(): void {
-        this.bg.stop();
+        this._bg.stop();
     }
 
     /**
@@ -58,7 +58,7 @@ export default class SoundMgr {
      * @param $isOn
      */
     public setEffectOn($isOn: boolean): void {
-        this.effectOn = $isOn;
+        this._effectOn = $isOn;
     }
 
     /**
@@ -66,12 +66,12 @@ export default class SoundMgr {
      * @param $isOn
      */
     public setBgOn($isOn: boolean): void {
-        this.bgOn = $isOn;
-        if (!this.bgOn) {
+        this._bgOn = $isOn;
+        if (!this._bgOn) {
             this.stopBg();
         } else {
-            if (this.currBg) {
-                this.playBg(this.currBg);
+            if (this._currBg) {
+                this.playBg(this._currBg);
             }
         }
     }
@@ -83,8 +83,8 @@ export default class SoundMgr {
     public setBgVolume(volume: number): void {
         volume = Math.min(volume, 1);
         volume = Math.max(volume, 0);
-        this.bgVolume = volume;
-        this.bg.setVolume(this.bgVolume);
+        this._bgVolume = volume;
+        this._bg.setVolume(this._bgVolume);
     }
 
     /**
@@ -92,7 +92,7 @@ export default class SoundMgr {
      * @returns {number}
      */
     public getBgVolume(): number {
-        return this.bgVolume;
+        return this._bgVolume;
     }
 
     /**
@@ -102,8 +102,8 @@ export default class SoundMgr {
     public setEffectVolume(volume: number): void {
         volume = Math.min(volume, 1);
         volume = Math.max(volume, 0);
-        this.effectVolume = volume;
-        this.effect.setVolume(this.effectVolume);
+        this._effectVolume = volume;
+        this._effect.setVolume(this._effectVolume);
     }
 
     /**
@@ -111,7 +111,15 @@ export default class SoundMgr {
      * @returns {number}
      */
     public getEffectVolume(): number {
-        return this.effectVolume;
+        return this._effectVolume;
+    }
+
+    public get bgOn(): boolean {
+        return this._bgOn;
+    }
+
+    public get effectOn(): boolean {
+        return this._effectOn;
     }
 
     private static _instance: SoundMgr;
