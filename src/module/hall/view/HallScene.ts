@@ -229,7 +229,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                                     EffectUtil.playHeroMergeEffect(this, heroId, headItem);
                                     //更新英雄等级
                                     if (this._control.updateHeroLevel(nextLevel)) {
-                                        //TODO 升级界面
+                                        ViewMgr.Ins.open(ViewConst.NewHeroView, null, nextLevel);
                                         SoundMgr.Ins.playEffect(SoundType.UNLOCK);
                                     } else {
                                         SoundMgr.Ins.playEffect(SoundType.MAKE_HERO);

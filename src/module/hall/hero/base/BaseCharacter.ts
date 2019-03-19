@@ -1,13 +1,9 @@
 export default class BaseCharacter extends Laya.Sprite {
 
-    /** 是否移动中 */
-    protected isMove: boolean = false;
     /** 移动方向(默认右,1为左) */
     protected moveDir: number = 0;
     /** 延迟移动时间 */
     protected delayMoveTime: number = 5;
-    /** 移动函数 */
-    protected moveLoopFun: any = null;
     /** 移动速度倍率 */
     protected moveSpeedRatio: number = 1;
     /** 移动速度加速 */
@@ -60,24 +56,13 @@ export default class BaseCharacter extends Laya.Sprite {
         if (this.orginalX > Laya.stage.width / 2) {
             //后退
             let actionSp: BaseCharacter = this;
-            let timeLine = new Laya.TimeLine();
             this.orginalX = Laya.stage.width / 2 - Math.random() * 100;
-            timeLine.addLabel("tl1", 0).to(actionSp, { x: this.orginalX }, Math.abs(actionSp.x - this.orginalX) * 15, Laya.Ease.linearNone)
-            timeLine.on(Laya.Event.COMPLETE, actionSp, () => {
+            Laya.Tween.to(actionSp, { x: this.orginalX }, Math.abs(actionSp.x - this.orginalX) * 15, Laya.Ease.linearNone, Laya.Handler.create(this, () => {
+                Laya.Tween.clearTween(actionSp);
                 this.isInPosition = true;
-            });
-            timeLine.play(0, false);
+            }))
         } else {
             this.isInPosition = true;
-        }
-    }
-
-    /** 停止移动 */
-    public stopMoveAction(): void {
-        this.isMove = false;
-        if (this.moveLoopFun) {
-            this.clearTimer(this, this.moveLoopFun);
-            this.moveLoopFun = null;
         }
     }
 

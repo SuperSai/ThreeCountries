@@ -2,7 +2,7 @@
     "x":0,
     "type":"Scene",
     "selectedBox":2,
-    "selecteID":118,
+    "selecteID":11,
     "searchKey":"Scene",
     "props":{"width":750,"sceneColor":"#000000","runtime":"module/hall/view/HallScene.ts","height":1334,"drawCallOptimize":true},
     "nodeParent":-1,
@@ -21,14 +21,13 @@
             "props":{"y":0,"x":0,"var":"box_farground"},
             "nodeParent":2,
             "label":"box_farground",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":5,
             "child":[
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,fargroundOne",
                     "props":{"y":0,"x":0,"var":"fargroundOne","texture":"images/map/map1_rolling_b.jpg","height":367},
@@ -42,7 +41,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,fargroundTwo",
                     "props":{"y":0,"x":750,"var":"fargroundTwo","texture":"images/map/map1_rolling_b.jpg","height":367},
@@ -64,14 +62,13 @@
             "props":{"y":0,"x":0,"var":"box_foreground"},
             "nodeParent":2,
             "label":"box_foreground",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":9,
             "child":[
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,foregroundOne",
                     "props":{"y":0,"x":0,"var":"foregroundOne","texture":"images/map/map1_rolling_a.png","height":777},
@@ -85,7 +82,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,foregroundTwo",
                     "props":{"y":0,"x":750,"var":"foregroundTwo","texture":"images/map/map1_rolling_a.png","height":777},
@@ -101,36 +97,6 @@
                 }],
             "$LOCKED":true,
             "$HIDDEN":false
-        },
-        {
-            "x":15,
-            "type":"Sprite",
-            "searchKey":"Sprite",
-            "props":{"y":777,"x":0,"texture":"images/hall/bg.jpg"},
-            "nodeParent":2,
-            "label":"Sprite",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":12,
-            "child":[
-                ],
-            "$HIDDEN":false
-        },
-        {
-            "x":15,
-            "type":"View",
-            "searchKey":"View,beginEventView",
-            "props":{"y":407,"x":0,"width":750,"var":"beginEventView","height":370},
-            "nodeParent":2,
-            "label":"beginEventView",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":11,
-            "child":[
-                ],
-            "$LOCKED":true
         },
         {
             "x":15,
@@ -168,6 +134,77 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":31,
+                    "child":[
+                        ]
+                }]
+        },
+        {
+            "x":15,
+            "type":"View",
+            "searchKey":"View,beginEventView",
+            "props":{"y":407,"x":0,"width":750,"var":"beginEventView","height":370},
+            "nodeParent":2,
+            "label":"beginEventView",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":11,
+            "child":[
+                ],
+            "$LOCKED":false
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite",
+            "props":{"y":777,"x":0,"texture":"images/hall/bg.jpg"},
+            "nodeParent":2,
+            "label":"Sprite",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":12,
+            "child":[
+                ],
+            "$HIDDEN":false
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite,imgDelete",
+            "props":{"y":689,"x":662,"var":"imgDelete","texture":"images/hall/game_deleteBtn.png","alpha":0.5},
+            "nodeParent":2,
+            "label":"imgDelete",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":28,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,map_name",
+            "props":{"y":215,"x":212,"width":326,"var":"map_name","skin":"images/hall/battle_title_bg.png","sizeGrid":"19,94,15,99","height":67},
+            "nodeParent":2,
+            "label":"map_name",
+            "isOpen":false,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":114,
+            "child":[
+                {
+                    "type":"Label",
+                    "searchKey":"Label,txt_mapName",
+                    "props":{"y":13,"x":59,"width":208,"var":"txt_mapName","text":"洛阳","strokeColor":"#734f4f","stroke":2,"fontSize":40,"color":"#ffffff","align":"center"},
+                    "nodeParent":114,
+                    "label":"txt_mapName",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":115,
                     "child":[
                         ]
                 }]
@@ -237,6 +274,76 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":60,
+                    "child":[
+                        ]
+                }]
+        },
+        {
+            "x":15,
+            "type":"Button",
+            "searchKey":"Button,btn_heroStore",
+            "props":{"y":705,"x":117,"visible":false,"var":"btn_heroStore","stateNum":"1","skin":"images/hall/box_lucky.png"},
+            "nodeParent":2,
+            "label":"btn_heroStore",
+            "isOpen":null,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":64,
+            "child":[
+                {
+                    "type":"Script",
+                    "switchAble":true,
+                    "source":"src/module/common/component/ScaleAnimScript.ts",
+                    "searchKey":"Script,ScaleAnimScript",
+                    "removeAble":true,
+                    "props":{},
+                    "nodeParent":64,
+                    "label":"ScaleAnimScript",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":65,
+                    "child":[
+                        ]
+                }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,imgBattleCount",
+            "props":{"y":743,"x":0,"var":"imgBattleCount","skin":"images/hall/game_running_num1.png"},
+            "nodeParent":2,
+            "label":"imgBattleCount",
+            "isOpen":false,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":41,
+            "child":[
+                {
+                    "type":"Label",
+                    "searchKey":"Label,txt_battleCount",
+                    "props":{"y":5,"x":16,"width":83,"var":"txt_battleCount","text":"0","height":24,"fontSize":24,"color":"#000000","align":"center"},
+                    "nodeParent":41,
+                    "label":"txt_battleCount",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":42,
+                    "child":[
+                        ]
+                },
+                {
+                    "type":"Sprite",
+                    "searchKey":"Sprite,imgBattleGold",
+                    "props":{"y":-2,"x":82.5,"var":"imgBattleGold","texture":"images/common/coin.png","scaleY":0.7,"scaleX":0.7},
+                    "nodeParent":41,
+                    "label":"imgBattleGold",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":43,
                     "child":[
                         ]
                 }]
@@ -341,7 +448,7 @@
             "x":15,
             "type":"Button",
             "searchKey":"Button,btn_shop",
-            "props":{"y":1243.5,"x":486,"var":"btn_shop","stateNum":"1","skin":"images/component/anjian_003.png"},
+            "props":{"y":1244,"x":486,"var":"btn_shop","stateNum":"1","skin":"images/component/anjian_003.png"},
             "nodeParent":2,
             "label":"btn_shop",
             "isOpen":false,
@@ -382,57 +489,29 @@
         },
         {
             "x":15,
-            "type":"List",
-            "searchKey":"List,lists_head",
-            "props":{"y":813,"x":16,"width":720,"var":"lists_head","spaceY":13,"spaceX":22,"selectEnable":true,"repeatY":3,"repeatX":5,"height":414,"drawCallOptimize":true},
+            "type":"Image",
+            "searchKey":"Image",
+            "props":{"y":971,"x":-78,"visible":false,"skin":"images/guide/guide_jiantou2.png","anchorY":0.5,"anchorX":0.5},
             "nodeParent":2,
-            "label":"lists_head",
-            "isOpen":false,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":21,
-            "child":[
-                {
-                    "type":"Box",
-                    "searchKey":"Box",
-                    "props":{"renderType":"render"},
-                    "nodeParent":21,
-                    "label":"Box",
-                    "isOpen":true,
-                    "isDirectory":true,
-                    "isAniNode":false,
-                    "hasChild":true,
-                    "compId":27,
-                    "child":[
-                        {
-                            "type":"UIView",
-                            "source":"moduleView/hall/item/HeadItem.scene",
-                            "searchKey":"UIView,hero",
-                            "props":{"y":0,"x":0,"runtime":"module/hall/view/item/HeadItem.ts","name":"hero"},
-                            "nodeParent":27,
-                            "label":"hero",
-                            "isDirectory":false,
-                            "isAniNode":false,
-                            "hasChild":false,
-                            "compId":25,
-                            "child":[
-                                ]
-                        }]
-                }],
-            "$LOCKED":true
-        },
-        {
-            "x":15,
-            "type":"Sprite",
-            "searchKey":"Sprite,imgDelete",
-            "props":{"y":689,"x":662,"var":"imgDelete","texture":"images/hall/game_deleteBtn.png","alpha":0.5},
-            "nodeParent":2,
-            "label":"imgDelete",
+            "label":"Image",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
-            "compId":28,
+            "compId":107,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,imgHead",
+            "props":{"y":0,"x":0,"width":100,"var":"imgHead","height":100},
+            "nodeParent":2,
+            "label":"imgHead",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":116,
             "child":[
                 ]
         },
@@ -449,77 +528,8 @@
             "hasChild":false,
             "compId":40,
             "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,imgBattleCount",
-            "props":{"y":743,"x":0,"var":"imgBattleCount","skin":"images/hall/game_running_num1.png"},
-            "nodeParent":2,
-            "label":"imgBattleCount",
-            "isOpen":false,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":41,
-            "child":[
-                {
-                    "type":"Label",
-                    "searchKey":"Label,txt_battleCount",
-                    "props":{"y":5,"x":16,"width":83,"var":"txt_battleCount","text":"0","height":24,"fontSize":24,"color":"#000000","align":"center"},
-                    "nodeParent":41,
-                    "label":"txt_battleCount",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":42,
-                    "child":[
-                        ]
-                },
-                {
-                    "type":"Sprite",
-                    "searchKey":"Sprite,imgBattleGold",
-                    "props":{"y":-2,"x":82.5,"var":"imgBattleGold","texture":"images/common/coin.png","scaleY":0.7,"scaleX":0.7},
-                    "nodeParent":41,
-                    "label":"imgBattleGold",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":43,
-                    "child":[
-                        ]
-                }]
-        },
-        {
-            "x":15,
-            "type":"Button",
-            "searchKey":"Button,btn_heroStore",
-            "props":{"y":705,"x":117,"visible":false,"var":"btn_heroStore","stateNum":"1","skin":"images/hall/box_lucky.png"},
-            "nodeParent":2,
-            "label":"btn_heroStore",
-            "isOpen":null,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":64,
-            "child":[
-                {
-                    "type":"Script",
-                    "switchAble":true,
-                    "source":"src/module/common/component/ScaleAnimScript.ts",
-                    "searchKey":"Script,ScaleAnimScript",
-                    "removeAble":true,
-                    "props":{},
-                    "nodeParent":64,
-                    "label":"ScaleAnimScript",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":65,
-                    "child":[
-                        ]
-                }]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
@@ -740,59 +750,45 @@
         },
         {
             "x":15,
-            "type":"Image",
-            "searchKey":"Image",
-            "props":{"y":971,"x":-78,"visible":false,"skin":"images/guide/guide_jiantou2.png","anchorY":0.5,"anchorX":0.5},
+            "type":"List",
+            "searchKey":"List,lists_head",
+            "props":{"y":813,"x":16,"width":720,"var":"lists_head","spaceY":13,"spaceX":22,"selectEnable":true,"repeatY":3,"repeatX":5,"height":414,"drawCallOptimize":true},
             "nodeParent":2,
-            "label":"Image",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":107,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,map_name",
-            "props":{"y":215,"x":212,"width":326,"var":"map_name","skin":"images/hall/battle_title_bg.png","sizeGrid":"19,94,15,99","height":67},
-            "nodeParent":2,
-            "label":"map_name",
-            "isOpen":true,
+            "label":"lists_head",
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
-            "compId":114,
+            "compId":21,
             "child":[
                 {
-                    "x":30,
-                    "type":"Label",
-                    "searchKey":"Label,txt_mapName",
-                    "props":{"y":13,"x":59,"width":208,"var":"txt_mapName","text":"洛阳","strokeColor":"#734f4f","stroke":2,"fontSize":40,"color":"#ffffff","align":"center"},
-                    "nodeParent":114,
-                    "label":"txt_mapName",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":115,
+                    "type":"Box",
+                    "searchKey":"Box",
+                    "props":{"renderType":"render"},
+                    "nodeParent":21,
+                    "label":"Box",
+                    "isOpen":false,
+                    "isDirectory":true,
+                    "isAniNode":false,
+                    "hasChild":true,
+                    "compId":27,
                     "child":[
-                        ]
-                }]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,imgHead",
-            "props":{"width":100,"var":"imgHead","height":100},
-            "nodeParent":2,
-            "label":"imgHead",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":116,
-            "child":[
-                ]
+                        {
+                            "type":"UIView",
+                            "source":"moduleView/hall/item/HeadItem.scene",
+                            "searchKey":"UIView,hero",
+                            "props":{"y":0,"x":0,"runtime":"module/hall/view/item/HeadItem.ts","name":"hero"},
+                            "nodeParent":27,
+                            "label":"hero",
+                            "isDirectory":false,
+                            "isAniNode":false,
+                            "hasChild":false,
+                            "compId":25,
+                            "child":[
+                                ]
+                        }]
+                }],
+            "$LOCKED":false
         }],
     "animations":[
         {

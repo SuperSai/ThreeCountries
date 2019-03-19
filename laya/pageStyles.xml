@@ -11,4 +11,6 @@
    <item name="moduleView/common/GoldNotEnoughView.scene" props="" ifExport="默认" aName="金币不足界面"/>
    <item name="moduleView/common/DiamondBuyView.scene" props="" ifExport="默认" aName="钻石购买界面"/>
    <item name="moduleView/hall/HeroTips.scene" props="" ifExport="默认" aName="英雄信息TIPS"/>
+   <item name="moduleView/hall/UserInfoView.scene" props="" ifExport="默认" aName="用户信息界面"/>
+   <item name="moduleView/hall/NewHeroView.scene" props="" ifExport="默认" aName="新英雄界面"/>
 </page>

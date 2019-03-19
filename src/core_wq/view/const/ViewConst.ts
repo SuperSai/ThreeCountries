@@ -21,6 +21,10 @@ export default class ViewConst {
     public static LevelRewardView: number = 10009;
     /** 离线奖励界面 */
     public static OffLineRewardView: number = 10010;
+    /** 用户信息界面 */
+    public static UserInfoView: number = 10011;
+    /** 新武将界面 */
+    public static NewHeroView: number = 10012;
 
 
 }

@@ -10,6 +10,8 @@ import RankView from "../../module/rank/view/RankView";
 import GoldNotEnoughView from "../../module/common/view/GoldNotEnoughView";
 import LevelRewardView from "../../module/common/view/LevelRewardView";
 import OffLineRewardView from "../../module/common/view/OffLineRewardView";
+import UserInfoView from "../../module/hall/view/UserInfoView";
+import NewHeroView from "../../module/hall/view/NewHeroView";
 
 /**
  * 界面注册类
@@ -29,6 +31,8 @@ export default class ViewRegisterMgr {
         ViewMgr.Ins.register(ViewConst.GoldNotEnoughView, new GoldNotEnoughView());
         ViewMgr.Ins.register(ViewConst.LevelRewardView, new LevelRewardView());
         ViewMgr.Ins.register(ViewConst.OffLineRewardView, new OffLineRewardView());
+        ViewMgr.Ins.register(ViewConst.UserInfoView, new UserInfoView());
+        ViewMgr.Ins.register(ViewConst.NewHeroView, new NewHeroView());
 
     }
 

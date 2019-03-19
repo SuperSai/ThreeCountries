@@ -5,6 +5,8 @@ import PlayerMgr from "../../../core_wq/player/PlayerMgr";
 import PlayerInfo from "../../../core_wq/player/data/PlayerInfo";
 import MathUtil from "../../../core_wq/utils/MathUtil";
 import StorageUtil from "../../../core_wq/utils/StorageUtil";
+import ViewMgr from "../../../core_wq/view/ViewMgr";
+import ViewConst from "../../../core_wq/view/const/ViewConst";
 
 /**
  * 货币界面
@@ -22,6 +24,7 @@ export default class CurrencyView extends ui.moduleView.hall.CurrencyViewUI {
         EventsMgr.Ins.addListener(EventType.UPDATE_CURRENCY, this.onUpdateCurrency, this);
         EventsMgr.Ins.addListener(EventType.UPDATE_USER_EXP, this.onUpdateUserExp, this);
         EventsMgr.Ins.addListener(EventType.UPDATE_INCOME, this.onUpdateIncome, this);
+        this.btn_user.on(Laya.Event.CLICK, this, this.onShowUserInfoView);
     }
 
     /** 更新用户等级 */
@@ -52,6 +55,11 @@ export default class CurrencyView extends ui.moduleView.hall.CurrencyViewUI {
                 this.updateDiamond(value, isTotal);
                 break;
         }
+    }
+
+    /** 显示用户信息界面 */
+    private onShowUserInfoView(): void {
+        ViewMgr.Ins.open(ViewConst.UserInfoView);
     }
 
     private updateGold(value: number, isTotal: boolean): void {

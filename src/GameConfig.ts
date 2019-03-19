@@ -3,8 +3,8 @@ import ScaleAnimScript from "./module/common/component/ScaleAnimScript"
 import DaySignItem from "./module/daySign/view/DaySignItem"
 import GuideSpeakView from "./module/guide/view/GuideSpeakView"
 import HallScene from "./module/hall/view/HallScene"
-import HeadItem from "./module/hall/view/item/HeadItem"
 import CurrencyView from "./module/hall/view/CurrencyView"
+import HeadItem from "./module/hall/view/item/HeadItem"
 import LoginScene from "./module/login/view/LoginScene"
 import RankItem from "./module/rank/view/RankItem"
 import ShopItem from "./module/shop/view/ShopItem"
@@ -32,8 +32,8 @@ export default class GameConfig{
         reg("module/daySign/view/DaySignItem.ts",DaySignItem);
         reg("module/guide/view/GuideSpeakView.ts",GuideSpeakView);
         reg("module/hall/view/HallScene.ts",HallScene);
-        reg("module/hall/view/item/HeadItem.ts",HeadItem);
         reg("module/hall/view/CurrencyView.ts",CurrencyView);
+        reg("module/hall/view/item/HeadItem.ts",HeadItem);
         reg("module/login/view/LoginScene.ts",LoginScene);
         reg("module/rank/view/RankItem.ts",RankItem);
         reg("module/shop/view/ShopItem.ts",ShopItem);

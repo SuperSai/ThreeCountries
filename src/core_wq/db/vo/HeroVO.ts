@@ -2,6 +2,7 @@ export default class HeroVO {
 
     public id: number = 0;
     public type: number = 0;
+    public name: string = "";
     /** 头像图片 */
     public imgUrl: string = "";
     /** 对白 */

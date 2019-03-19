@@ -123,7 +123,6 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
     public removeBattleHero(): void {
         if (this._battleHero) {
             this._battleHero.removeAttackTarget();
-            this._battleHero.stopMoveAction();
             this._battleHero.removeSelf();
             this._battleHero = null;
         }

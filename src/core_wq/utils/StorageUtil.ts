@@ -20,7 +20,7 @@ import AppConfig from "../config/AppConfig";
 export default class StorageUtil extends Laya.Script {
 
     private static storage_user_old: string = 'user_data'; //保存本地v1.0
-    private static storage_user: string = 'user_data_110'; //保存本地
+    private static storage_user: string = 'user_data_111'; //保存本地
     private static hero_store_key: string = "car_store_key"; //本地保存兵营车辆
     private static s_version_clear = 's_version_clear'; //版本清理
     private static s_offlinePrize_time = 's_offlinePrize_time'; //离线奖励时间

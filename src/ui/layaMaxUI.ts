@@ -107,13 +107,14 @@ export module ui.moduleView.guide {
 }
 export module ui.moduleView.hall {
     export class CurrencyViewUI extends Laya.View {
+		public btn_user:Laya.Image;
 		public txt_level:Laya.Label;
+		public txt_Income:Laya.Label;
 		public imgGold:Laya.Sprite;
 		public txt_gold:Laya.Label;
-		public expBar:Laya.ProgressBar;
-		public txt_Income:Laya.Label;
 		public imgDiamond:Laya.Sprite;
 		public txt_diamond:Laya.Label;
+		public expBar:Laya.ProgressBar;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
@@ -128,25 +129,27 @@ export module ui.moduleView.hall {
 		public box_foreground:Laya.Box;
 		public foregroundOne:Laya.Sprite;
 		public foregroundTwo:Laya.Sprite;
-		public beginEventView:Laya.View;
 		public box_obstacle:Laya.Box;
 		public obstacleOne:Laya.Sprite;
 		public obstacleTwo:Laya.Sprite;
+		public beginEventView:Laya.View;
+		public imgDelete:Laya.Sprite;
+		public map_name:Laya.Image;
+		public txt_mapName:Laya.Label;
 		public btn_recruit:Laya.Button;
 		public txt_price:Laya.Label;
 		public txt_level:Laya.Label;
+		public btn_heroStore:Laya.Button;
+		public imgBattleCount:Laya.Image;
+		public txt_battleCount:Laya.Label;
+		public imgBattleGold:Laya.Sprite;
 		public btn_acc:Laya.Button;
 		public imgAccTips:Laya.Sprite;
 		public imgAcce:Laya.Sprite;
 		public txt_accTimes:Laya.Label;
 		public imgAccAdv:Laya.Sprite;
 		public btn_shop:Laya.Button;
-		public lists_head:Laya.List;
-		public imgDelete:Laya.Sprite;
-		public imgBattleCount:Laya.Image;
-		public txt_battleCount:Laya.Label;
-		public imgBattleGold:Laya.Sprite;
-		public btn_heroStore:Laya.Button;
+		public imgHead:Laya.Image;
 		public systemBtns:Laya.Box;
 		public btn_daySign:Laya.Button;
 		public btn_rank:Laya.Button;
@@ -155,9 +158,7 @@ export module ui.moduleView.hall {
 		public btn_invitation:Laya.Button;
 		public btn_follow:Laya.Button;
 		public btn_proposal:Laya.Button;
-		public map_name:Laya.Image;
-		public txt_mapName:Laya.Label;
-		public imgHead:Laya.Image;
+		public lists_head:Laya.List;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
@@ -177,15 +178,42 @@ export module ui.moduleView.hall {
         }
     }
     REG("ui.moduleView.hall.HeroTipsUI",HeroTipsUI);
+    export class NewHeroViewUI extends Laya.View {
+		public txt_name:Laya.Label;
+		public txt_exp:Laya.Label;
+		public txt_income:Laya.Label;
+		public btn_reward:Laya.Button;
+		public txt_price:Laya.Label;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("moduleView/hall/NewHeroView");
+        }
+    }
+    REG("ui.moduleView.hall.NewHeroViewUI",NewHeroViewUI);
+    export class UserInfoViewUI extends Laya.View {
+		public expBar:Laya.ProgressBar;
+		public txt_exp:Laya.Label;
+		public txt_price:Laya.Label;
+		public txt_heroCount:Laya.Label;
+		public txt_battleCount:Laya.Label;
+		public txt_userId:Laya.Label;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("moduleView/hall/UserInfoView");
+        }
+    }
+    REG("ui.moduleView.hall.UserInfoViewUI",UserInfoViewUI);
 }
 export module ui.moduleView.hall.item {
     export class HeadItemUI extends Laya.View {
 		public imgHead:Laya.Image;
-		public boxLevel:Laya.Sprite;
-		public txt_level:Laya.Label;
 		public imgLock:Laya.Sprite;
 		public reviveBar:Laya.ProgressBar;
 		public hpBar:Laya.ProgressBar;
+		public boxLevel:Laya.Sprite;
+		public txt_level:Laya.Label;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

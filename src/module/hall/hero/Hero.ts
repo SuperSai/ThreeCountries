@@ -251,7 +251,6 @@ export default class Hero extends BaseCharacter {
     /** 移除攻击对象 */
     public removeAttackTarget(isKill: boolean = false): void {
         if (this.attackSprite) {
-            this.attackSprite.stopMoveAction();
             if (isKill) {
                 let heroSp = this.attackSprite.getChildByName(this._heroKey) as Laya.Skeleton;
                 if (heroSp) {
