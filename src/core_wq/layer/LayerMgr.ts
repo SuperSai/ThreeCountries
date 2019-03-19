@@ -28,12 +28,10 @@ export default class LayerMgr {
             target.height * LayerMgr.adaptScale);
 
         let scaleFactor: number = Laya.stage.designWidth / Laya.Browser.clientWidth;
-
         rect.x = Math.round(rect.x / scaleFactor);
         rect.y = Math.round(rect.y / scaleFactor);
         rect.width = Math.round(rect.width / scaleFactor);
         rect.height = Math.round(rect.height / scaleFactor);
-
         return rect;
     }
 
@@ -200,8 +198,8 @@ export default class LayerMgr {
         this.debugLayer = this.createLayer(idx++, "debugLayer", container);
 
         for (let layer of this._layers) {
-            layer.pos(left, top);
-            layer.scale(adaptScale, adaptScale);
+            layer.pos(left, 0);
+            layer.scale(adaptScaleX, adaptScaleY);
         }
     }
     private createLayer(index: number, name: string, container: Laya.Sprite): Layer {

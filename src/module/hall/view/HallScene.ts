@@ -24,6 +24,7 @@ import PointUtils from "../../../core_wq/utils/PointUtils";
 import GuideMgr from "../../../core_wq/guide/GuideMgr";
 import SDKMgr from "../../../core_wq/msg/SDKMgr";
 import AppConfig from "../../../core_wq/config/AppConfig";
+import HeroTips from "./HeroTips";
 
 export default class HallScene extends ui.moduleView.hall.HallSceneUI {
 
@@ -33,6 +34,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
     private _copyHeadItem: HeadItem;
     private _currBuyHeroInfo: HeroConfigVO;
     private _battleHeroIndex: number = 0;
+    private _heroTips: HeroTips;
 
     constructor() { super(); }
 
@@ -42,7 +44,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
 
     onEnable(): void {
         LayerMgr.Ins.initLayer(Laya.stage, GameConfig.width, GameConfig.height);
-        this.scale(LayerMgr.adaptScale, LayerMgr.adaptScale);
+        this.scale(LayerMgr.adaptScaleX, LayerMgr.adaptScaleY);
         ViewRegisterMgr.Ins.initRegisterView();
         this.init();
         this.initUserData();
@@ -164,10 +166,13 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                 if (headItem && headItem.IsBattle && !headItem.IsBox && this._control.isHit(headItem)) {
                     headItem.setStage(2);
                     this._currHeadItem = headItem;
-                    this._copyHeadItem = new HeadItem();
+                    this._currHeadItem.visible = false;
+                    this._copyHeadItem = Laya.Pool.getItemByClass("copyHeadItem", HeadItem);// new HeadItem();
                     this._copyHeadItem.updateHeadSkin(headItem.Info.heroId, index);
-                    this._copyHeadItem.pivot(104 / 2, 146 / 2);
+                    this._copyHeadItem.pivot(126 / 2, 127 / 2);
+                    this._copyHeadItem.zOrder = 999;
                     this.addChild(this._copyHeadItem);
+                    this.showHeroTips();
                     this._copyHeadItem.pos(this.mouseX, this.mouseY);
                     this.imgDelete.alpha = 1.0;
                     this.on(Laya.Event.MOUSE_MOVE, this, this.onMouseHeadItemMove);
@@ -265,7 +270,10 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                     }
                 }
             }
+            this.removeHeroTips();
+            this._currHeadItem.visible = true;
             this._copyHeadItem.removeSelf();
+            Laya.Pool.recover("copyHeadItem", this._copyHeadItem);
             this._copyHeadItem = null;
         }
     }
@@ -368,17 +376,20 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
             let info = this.lists_head.array[index];
             headItem.dataSource = info;
             if (info.heroId > 0) {
-                Laya.timer.frameOnce(index + (Math.random() * 15), this, () => {
+                Laya.timer.frameOnce(index + (Math.random() * 45), this, () => {
                     this._battleHeroIndex++;
                     let startPos = {
                         x: 50 + this.width * 0.5 * Math.random(),
                         y: this.beginEventView.y - 150 + (this.beginEventView.height - 30) / (this.lists_head.array.length) * this._battleHeroIndex
                     };
-                    headItem.createBattleHero(this, startPos); //汽车放入跑道
-                    headItem.setStage(2);
-                    this._control.Model.is_reset_zorder = true;
-                    //刷新战斗英雄的数量
-                    this._control.setBattleHeroCount(PlayerMgr.Ins.Info.userRuncarCount + 1);
+                    EffectUtil.playBoneEffect("ui_born", { x: startPos.x - 20, y: startPos.y + 200 });
+                    this.timerOnce(100, this, () => {
+                        headItem.createBattleHero(this, startPos); //汽车放入跑道
+                        headItem.setStage(1);
+                        this._control.Model.is_reset_zorder = true;
+                        //刷新战斗英雄的数量
+                        this._control.setBattleHeroCount(PlayerMgr.Ins.Info.userRuncarCount + 1);
+                    })
                 });
             }
         }
@@ -479,6 +490,25 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                     MsgMgr.Ins.showMsg("获得离线奖励:" + MathUtil.unitConversion(gold));
                 }
             }
+        }
+    }
+
+    /** 显示英雄信息Tips */
+    private showHeroTips(): void {
+        if (this._heroTips == null) {
+            this._heroTips = Laya.Pool.getItemByClass("HeroTips", HeroTips);
+            this._heroTips.dataSource = this._currHeadItem;
+            this._copyHeadItem.addChild(this._heroTips);
+        }
+    }
+
+    /** 移除英雄信息Tips */
+    private removeHeroTips(): void {
+        this.clearTimer(this, this.showHeroTips);
+        if (this._heroTips) {
+            this._heroTips.removeTips();
+            Laya.Pool.recover("HeroTips", this._heroTips);
+            this._heroTips = null;
         }
     }
 }

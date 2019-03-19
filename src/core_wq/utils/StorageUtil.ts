@@ -11,6 +11,8 @@ import ShareMgr from "../msg/ShareMgr";
 import EventsMgr from "../event/EventsMgr";
 import EventType from "../event/EventType";
 import TimeUtil from "./TimeUtil";
+import GuideMgr from "../guide/GuideMgr";
+import AppConfig from "../config/AppConfig";
 
 /**
  * 缓存工具
@@ -32,6 +34,10 @@ export default class StorageUtil extends Laya.Script {
     /** 新老版本更新检测（防止老数据覆盖） */
     public static versionCheck(callback: any): void {
         let that = this;
+        if (AppConfig.isDebug) {
+            callback && callback();
+            return;
+        }
         let storage = window.localStorage;
         HttpMgr.Ins.requestVersionCheck((_res: any) => {
             if (_res && _res.clear_flag) {
@@ -55,7 +61,7 @@ export default class StorageUtil extends Laya.Script {
 
     /** 保存缓存到本地 */
     public static saveStorageToLocal(upload: boolean = false): void {
-        if (this._isLoadStorage == false) {
+        if (StorageUtil._isLoadStorage == false) {
             console.log("@David 未同步本地/服务器数据");
             return;
         } else if (HallControl.Ins.IsGuide) {
@@ -71,24 +77,25 @@ export default class StorageUtil extends Laya.Script {
         localData["AllHeros"] = HallControl.Ins.Model.AllHeros;
         localData["heroLevel"] = HallControl.Ins.Model.heroLevel;
         localData["heroCount"] = HallControl.Ins.Model.heroCount;
+        localData["guideStep"] = GuideMgr.Ins.guideStep;
         let dataJson = JSON.stringify(localData);
         if (dataJson) {
             let storage = window.localStorage;
-            storage.setItem(this.storage_user, dataJson);
+            storage.setItem(StorageUtil.storage_user, dataJson);
         }
 
         if (upload) {
-            this.requestSaveHerosData();
-            this.requestSaveHeroShopData();
-            this.requestSaveUserInfoData();
+            StorageUtil.requestSaveHerosData();
+            StorageUtil.requestSaveHeroShopData();
+            StorageUtil.requestSaveUserInfoData();
         }
     }
 
     /** 取出本地数据 */
     public static loadStorage(callback: any): void {
-        this._isLoadStorage = true;
+        StorageUtil._isLoadStorage = true;
         let storage = window.localStorage;
-        let dataJson = storage.getItem(this.storage_user);
+        let dataJson = storage.getItem(StorageUtil.storage_user);
         if (dataJson) {
             let jsonObj = JSON.parse(dataJson);
             if (jsonObj) {
@@ -98,9 +105,9 @@ export default class StorageUtil extends Laya.Script {
                 PlayerMgr.Ins.Info.userExp = jsonObj["userExp"];
                 HallControl.Ins.Model.AllHeros = jsonObj["AllHeros"];
                 HallControl.Ins.Model.BuyHerosRecord = jsonObj["BuyHerosRecord"];
-                HallControl.Ins.Model.AllHeros = jsonObj["AllHeros"];
                 HallControl.Ins.Model.heroLevel = jsonObj["heroLevel"];
                 HallControl.Ins.Model.heroCount = jsonObj["heroCount"];
+                GuideMgr.Ins.guideStep = jsonObj["guideStep"];
             }
             callback && callback(true);
         } else {
@@ -111,6 +118,7 @@ export default class StorageUtil extends Laya.Script {
             //从服务器同步数据
             let serverDataProgress = 3;
             HttpMgr.Ins.requestCarparkData((res: any) => {
+                HallControl.Ins.Model.AllHeros = res;
                 serverDataProgress--;
                 if (serverDataProgress < 1) {
                     callback && callback(true);
@@ -118,6 +126,7 @@ export default class StorageUtil extends Laya.Script {
             });
             HttpMgr.Ins.requestCarshopData((res: any) => {
                 serverDataProgress--;
+                HallControl.Ins.Model.BuyHerosRecord = res;
                 if (serverDataProgress < 1) {
                     callback && callback(true);
                 }
@@ -129,7 +138,8 @@ export default class StorageUtil extends Laya.Script {
                     PlayerMgr.Ins.Info.userDiamond = MathUtil.parseStringNum(res.diamond);
                     PlayerMgr.Ins.Info.userLevel = MathUtil.parseInt(res.level);
                     PlayerMgr.Ins.Info.userExp = MathUtil.parseStringNum(res.exp);
-                    HallControl.Ins.Model.heroLevel = res.car_level;
+                    HallControl.Ins.Model.heroLevel = MathUtil.parseInt(res.car_level);
+                    // GuideMgr.Ins.guideStep = MathUtil.parseInt(res.guideStep);
                 }
                 serverDataProgress--;
                 if (serverDataProgress < 1) {
@@ -140,7 +150,7 @@ export default class StorageUtil extends Laya.Script {
             Laya.stage.timerOnce(12000, this, () => {
                 console.log("@David 超时尝试重新请求:", serverDataProgress);
                 if (serverDataProgress > 0) {
-                    this.loadStorage(callback);
+                    StorageUtil.loadStorage(callback);
                 }
             });
         }
@@ -169,15 +179,16 @@ export default class StorageUtil extends Laya.Script {
 
     /** 英雄数据 */
     private static requestSaveHerosData(): void {
+        let self = this;
         let dataJson = JSON.stringify(HallControl.Ins.Model.AllHeros);
         //非法数据过滤
         if (dataJson == null || dataJson.length < 1 || HallControl.Ins.Model.AllHeros.length < 1) {
             return;
-        } else if (this.carparkJsonRecord == dataJson) {
+        } else if (self.carparkJsonRecord == dataJson) {
             console.log("carparkJsonRecord数据未刷新");
             return;
         }
-        this.carparkJsonRecord = dataJson;
+        self.carparkJsonRecord = dataJson;
         let dataString = 'info=' + dataJson;
         console.log("requestSaveCarparkData:", dataString);
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);

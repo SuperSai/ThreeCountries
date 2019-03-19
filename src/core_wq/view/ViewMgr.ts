@@ -1,4 +1,5 @@
 import IBaseView from "./base/IBaseView";
+import SmallLoading from "../../module/loading/view/SmallLoading";
 
 export default class ViewMgr {
 
@@ -68,17 +69,19 @@ export default class ViewMgr {
             view.initData();
         }
         else {
+            SmallLoading.Ins.showLoading();
             view.loadResource(function () {
                 view.setVisible(false);
                 // view.initUIView();
                 view.addToParent();
             }.bind(this), function () {
                 view.callback = callback;
-                view.setVisible(true);
                 view.initUI();
                 view.addEvents();
                 view.open.apply(view, param);
                 view.initData();
+                view.setVisible(true);
+                SmallLoading.Ins.hideLoading();
             }.bind(this));
         }
 

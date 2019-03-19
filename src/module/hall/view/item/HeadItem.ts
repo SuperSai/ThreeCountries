@@ -28,6 +28,10 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
 
     set dataSource(value: any) {
         this._info = value;
+        this.imgHead.visible = false;
+        if (this._info && this._info.heroId > 0) {
+            this.updateHeadSkin(this._info.heroId);
+        }
     }
 
     /** 更新头像 */
@@ -40,8 +44,10 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
         if (heroId > 0) {
             if (this._info) this._info.heroId = heroId;
             this._heroVO = GlobalData.getData(GlobalData.HeroVO, heroId);
-            this.imgHead.skin = PathConfig.HEAD_PATH + this._heroVO.imgUrl;
-            this.txt_level.text = this._heroVO.id + "";
+            if (this._heroVO) {
+                this.imgHead.skin = PathConfig.HEAD_PATH + this._heroVO.imgUrl;
+                this.txt_level.text = this._heroVO.id + "";
+            }
         }
     }
 
@@ -96,16 +102,20 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
             this.reviveBar.visible = false;
             this.reviveBar.value = 0;
             this._reviveTime = 0;
-            EffectUtil.playBoneEffect("ui_born", { x: this._battleHero.x - 20, y: this._battleHero.y + 200 });
+            if (this._battleHero) {
+                EffectUtil.playBoneEffect("ui_born", { x: this._battleHero.x - 20, y: this._battleHero.y + 200 });
+            }
             this.timerOnce(100, this, () => {
-                this._battleHero.hp = this._battleHero.maxHp;
-                this.hpBar.value = this._battleHero.maxHp;
+                if (this._battleHero) {
+                    this._battleHero.hp = this._battleHero.maxHp;
+                    this.hpBar.value = this._battleHero.maxHp;
+                    this._battleHero.visible = true;
+                    this._battleHero.IsInPosition = true;
+                }
                 this.hpBar.visible = true;
-                this._battleHero.visible = true;
-                this._battleHero.IsInPosition = true;
                 HallControl.Ins.setBattleHeroCount(PlayerMgr.Ins.Info.userRuncarCount + 1);
                 this.isDie = false;
-            })
+            });
         }
     }
 
@@ -185,6 +195,9 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
     /** 0空,1战斗中,2拖动,3宝箱 */
     get HeroStage(): number { return this._stage; }
     get Info(): { id: number, heroId: number, isRunning: boolean } { return this._info; }
+    public get heroVO(): HeroVO {
+        return this._heroVO;
+    }
 }
 
 enum HEAD_ITEM_STAGE {

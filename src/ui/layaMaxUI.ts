@@ -165,6 +165,18 @@ export module ui.moduleView.hall {
         }
     }
     REG("ui.moduleView.hall.HallSceneUI",HallSceneUI);
+    export class HeroTipsUI extends Laya.View {
+		public txt_name:Laya.Label;
+		public txt_secCoin:Laya.Label;
+		public txt_sellPrice:Laya.Label;
+		public txt_speed:Laya.Label;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("moduleView/hall/HeroTips");
+        }
+    }
+    REG("ui.moduleView.hall.HeroTipsUI",HeroTipsUI);
 }
 export module ui.moduleView.hall.item {
     export class HeadItemUI extends Laya.View {
@@ -184,9 +196,9 @@ export module ui.moduleView.hall.item {
 }
 export module ui.moduleView.login {
     export class LoginSceneUI extends Laya.Scene {
-		public btn_login:Laya.Button;
 		public txt_pro:Laya.Label;
 		public imgStart:Laya.Sprite;
+		public txt_tips:Laya.Label;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

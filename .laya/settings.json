@@ -1,3 +1,4 @@
 {
-    "git.path": "F:/system/Git/bin/git.exe"
+    "git.path": "F:/system/Git/bin/git.exe",
+    "files.autoSave": "afterDelay"
 }

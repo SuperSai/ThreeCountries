@@ -24,6 +24,7 @@ export default class GuideMgr {
 
     public setup(): void {
         this._guideLen = GlobalData.getAllValue(GlobalData.GuideVO).length;
+        if (this._guideStep < 0 || this._guideStep > this._guideLen) return;
         this._maskView = new GuideMask();
         this._maskView.visible = false;
         LayerMgr.Ins.guideLayer.addChild(this._maskView);
@@ -92,6 +93,15 @@ export default class GuideMgr {
                 return false;
         }
         return false;
+    }
+
+
+    public get guideStep(): number {
+        return this._guideStep;
+    }
+
+    public set guideStep(value: number) {
+        this._guideStep = value;
     }
 
     public static get Ins(): GuideMgr {

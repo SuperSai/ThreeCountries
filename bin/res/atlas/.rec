@@ -27,6 +27,7 @@ P A3DE9626 game_hearIcon_big.png
 P A9091FC8 home_level_prizeItem1.png
 P 62AEE8E3 home_level_prizeItem2.png
 P 27B52F14 home_level_prizeItem3.png
+P 94E07F2F load_Reel.png
 P D3219A4C red_point_big.png
 P 198CC2C3 share_cell_diamond.png
 P 3E330B46 star2.png
@@ -47,6 +48,7 @@ P BD09727F game_diamond_buy_bg.png
 P A31CBEC9 game_diamond_buy_btn.png
 P 2C00E9D2 off.png
 P DE6003C0 tip_bg.png
+P 75AE39D2 tipskuang.png
 P 3861454A title_bg_01.png
 D images/daySign
 P 2EE41DB0 day_prize_bg.png
@@ -96,6 +98,7 @@ P A8A9121A jptj.png
 P 238EB4AA lv_001.png
 P B1475557 revive_pro$bar.png
 P 81CCB972 revive_pro.png
+P BB06309E ui_wenhaol.png
 P F48DB650 zhaomu.png
 P 689B383F zjm_di01.png
 D images/headImg

@@ -87,6 +87,7 @@ export default class Hero extends BaseCharacter {
                     heroSp.zOrder = 1;
                     heroSp.playbackRate(frameRate);
                     this.addChild(heroSp);
+                    console.log("@David 创建战斗英雄");
                     heroSp.pos(spPos.x, spPos.y);
                     if (this._horsePath == null || this._horsePath.length < 1) {
                         //没坐骑,坐标下调
@@ -107,6 +108,7 @@ export default class Hero extends BaseCharacter {
                     horseSp.name = this._horseKey;
                     horseSp.playbackRate(frameRate);
                     this.addChild(horseSp);
+                    console.log("@David 创建战斗英雄坐骑");
                     horseSp.pos(spPos.x, spPos.y);
                     horseSp.play(animName, isLoop);
                 });
@@ -264,16 +266,6 @@ export default class Hero extends BaseCharacter {
                 let targetPos: any = PointUtils.localToGlobal(actionSp);
                 EffectUtil.playBoneEffect("ui_hit_03", { x: targetPos.x, y: targetPos.y + 100 });
                 this.frameLoop(1, this, this.attackTargetFly, [actionSp]);
-                // let timeLine = new Laya.TimeLine();
-                // timeLine.addLabel("tl11", 0).from(actionSp, { alpha: 1 }, 200, Laya.Ease.linearNone)
-                //     .addLabel("tl1", 200).from(actionSp, { alpha: 0 }, 100, Laya.Ease.linearNone)
-                //     .addLabel("tl2", 100).to(actionSp, { alpha: 0.8 }, 200, Laya.Ease.linearNone)
-                //     .addLabel("tl3", 200).to(actionSp, { alpha: 0 }, 100, Laya.Ease.linearNone)
-                // timeLine.on(Laya.Event.COMPLETE, actionSp, () => {
-                //     actionSp.removeSelf();
-                //     this.attackSprite = null;
-                // });
-                // timeLine.play(0, false);
             } else {
                 this.attackSprite.removeSelf();
                 this.attackSprite = null;

@@ -1,4 +1,5 @@
 import SDKMgr from "../msg/SDKMgr";
+import AppConfig from "../config/AppConfig";
 
 //数据缓存
 var requestCache = {}
@@ -10,68 +11,68 @@ export default class HttpRequestHelper {
 	}
 
 	/** http请求 */
-	request(_params: any, _noToken: boolean = false) {
-		console.log("@David http request==>>", _params.url)
-		var that = this;
-		if (!_params.method) {
-			_params.method = 'Get'
+	request(params: any, noToken: boolean = false): void {
+		console.log("@David http request==>>", params.url);
+		let self = this;
+		if (!params.method) {
+			params.method = 'Get'
 		};
 		//仅缓存Get数据
-		if (_params.cache && _params.method == 'Get') {
-			var res = requestCache[_params.url];
-			if (res && _params.success) {
-				console.log("cache:" + _params.url);
-				_params.success(res)
+		if (params.cache && params.method == 'Get') {
+			var res = requestCache[params.url];
+			if (res && params.success) {
+				console.log("cache:" + params.url);
+				params.success(res)
 				return;
 			};
 		};
 
 		var hr = new Laya.HttpRequest();
 		hr.http.timeout = 10000;
-		hr.on(Laya.Event.PROGRESS, that, (e: any) => {
+		hr.on(Laya.Event.PROGRESS, self, (e: any) => {
 			console.log(e);
 		});
-		hr.once(Laya.Event.ERROR, that, (e: any) => {
+		hr.once(Laya.Event.ERROR, self, (e: any) => {
 			console.log("@David Laya.Event.ERROR:", e)
 			if (e.indexOf('401') > 0) {
-				if (!_noToken) {
-					SDKMgr.Ins.wxHttpToken(that.baseUrl, (token) => {
-						that.request(_params, true)
+				if (!noToken) {
+					SDKMgr.Ins.wxHttpToken(self.baseUrl, (token) => {
+						self.request(params, true)
 					}, true);
 				};
 			} else {
 				var res = hr.data;
-				if (_params && _params.fail) {
-					_params.fail(res)
+				if (params && params.fail) {
+					params.fail(res)
 				}
 			}
 		});
-		hr.once(Laya.Event.COMPLETE, that, (e: any) => {
+		hr.once(Laya.Event.COMPLETE, self, (e: any) => {
 			var res = hr.data;
 			if (res == '401') {
-				if (!_noToken) {
-					SDKMgr.Ins.wxHttpToken(that.baseUrl, (token) => {
-						that.request(_params)
+				if (!noToken) {
+					SDKMgr.Ins.wxHttpToken(self.baseUrl, (token) => {
+						self.request(params)
 					}, true);
 				};
 			} else if (res == '500') {
-				console.log("@David request-err: ", _params.url);
-			} else if (_params.success) {
+				console.log("@David request-err: ", params.url);
+			} else if (params.success) {
 				var dataJson = res;
 				var jsonObj = dataJson;
 				if (dataJson) {
 					jsonObj = JSON.parse(dataJson);
 				}
-				requestCache[_params.url] = jsonObj;
-				_params.success(jsonObj)
+				requestCache[params.url] = jsonObj;
+				params.success(jsonObj)
 			};
 		});
-		var token = SDKMgr.Ins.wxHttpToken(that.baseUrl);
+		var token = SDKMgr.Ins.wxHttpToken(self.baseUrl);
 		var header = ["Content-Type", "application/x-www-form-urlencoded;charset=utf-8", "token", token];
-		if (_params.method == 'Post') {
-			hr.send(that.baseUrl + _params.url, _params.data, 'POST', 'jsonp', header);
+		if (params.method == 'Post') {
+			hr.send(self.baseUrl + params.url, params.data, 'POST', 'jsonp', header);
 		} else {
-			hr.send(that.baseUrl + _params.url, null, 'GET', 'jsonp', header);
+			hr.send(self.baseUrl + params.url, null, 'GET', 'jsonp', header);
 		}
 	}
 }

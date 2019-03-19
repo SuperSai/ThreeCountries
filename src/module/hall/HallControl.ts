@@ -28,6 +28,7 @@ export default class HallControl extends Laya.Script {
     /** 兵营满席动画 */
     private _battleHeroTimeLine: Laya.TimeLine = null;
     private _battleHeroIndex: number = 0;
+    private _startPos: { x: number, y: number };
 
     constructor() {
         super();
@@ -80,20 +81,20 @@ export default class HallControl extends Laya.Script {
                     headItem.setStage(1);
                     //设置战斗中的英雄
                     this._battleHeroIndex++;
-                    let startPos = {
+                    this._startPos = {
                         x: 50 + this.hallScene.width * 0.5 * Math.random(),
                         y: this.hallScene.beginEventView.y - 150 + (this.hallScene.beginEventView.height - 30) / this.hallScene.lists_head.array.length * this._battleHeroIndex
                     };
+                    EffectUtil.playBoneEffect("ui_born", { x: this._startPos.x - 20, y: this._startPos.y + 200 });
                     if (this._battleHeroIndex >= this.hallScene.lists_head.array.length) {
                         this._battleHeroIndex = 0;
                     }
-                    EffectUtil.playBoneEffect("ui_born", { x: startPos.x - 20, y: startPos.y + 200 });
-                    this._hallScene.timerOnce(100, this, () => {
-                        this.createHeroBone(headItem, startPos);
+                    this._model.heroCount += 1;
+                    this.hallScene.timerOnce(100, this.hallScene, () => {
+                        this.createHeroBone(headItem, this._startPos);
                         this.setBattleHeroCount(PlayerMgr.Ins.Info.userRuncarCount + 1);
                         SoundMgr.Ins.playEffect(SoundType.SUMMON_HERO);
                     })
-                    this._model.heroCount += 1;
                     this.setSaveHeroData(headItem);
                     GuideMgr.Ins.onNextStep();
                     return headItem;
@@ -108,6 +109,7 @@ export default class HallControl extends Laya.Script {
 
     /** 创建英雄龙骨动画 */
     public createHeroBone(headItem: HeadItem, startPos: { x: number, y: number }): void {
+        headItem.removeBattleHero();
         headItem.createBattleHero(this.hallScene, startPos);
         this._model.is_reset_zorder = true;
         if (this._model.userAcceValue > 1) {
@@ -270,7 +272,9 @@ export default class HallControl extends Laya.Script {
                 if (headItem && !headItem.IsEmpty && !headItem.IsBox && !headItem.IsLock) {
                     let heroData = {
                         heroId: headItem.Info.heroId,
-                        carStage: headItem.HeroStage,
+                        heroStage: headItem.HeroStage,
+                        battleHero: headItem.BattleHero,
+                        currHp: headItem.hpBar.value
                     };
                     if (index < 1) {
                         heroSortList.push(heroData)
@@ -299,7 +303,12 @@ export default class HallControl extends Laya.Script {
                     } else {
                         let heroData = heroSortList[heroIndex];
                         headItem.updateHeadSkin(heroData.heroId);
-                        headItem.setStage(heroData.carStage);
+                        headItem.setStage(heroData.heroStage);
+                        if (headItem.BattleHero == null) {
+                            headItem.BattleHero = heroData.battleHero;
+                            headItem.hpBar.value = heroData.currHp;
+                            headItem.hpBar.visible = true;
+                        }
                         heroIndex++;
                     }
                     this.setSaveHeroData(headItem);

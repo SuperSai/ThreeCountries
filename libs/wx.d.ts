@@ -5643,4 +5643,15 @@ declare namespace wx {
   export function onShow(callback: Function): void;
 
   export function onHide(callback: Function): void;
+
+  export function createUserInfoButton(object: Object);
+
+  export function createOpenSettingButton(object: Object);
+
+  export function onMemoryWarning(callback: Function): void;
+
+  export function triggerGC(): void;
+
+  export function getLaunchOptionsSync();
+
 }

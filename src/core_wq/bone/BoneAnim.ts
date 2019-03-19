@@ -1,3 +1,5 @@
+import PathConfig from "../config/PathConfig";
+
 /** 龙骨动画 */
 export default class BoneAnim extends Laya.Sprite {
 
@@ -9,10 +11,14 @@ export default class BoneAnim extends Laya.Sprite {
     private _currIndex: number = 0;
     private _isLoop: boolean = false;
 
-    constructor(boneName: string, isLoop: boolean = false) {
+    constructor(boneName: string, isLoop: boolean = false, isHeroBone: boolean = false) {
         super();
         this._isLoop = isLoop;
-        this._aniPath = "images/boneAnim/common/" + boneName + ".sk";
+        if (isHeroBone) {
+            this._aniPath = PathConfig.BONE_PATH.replace("{0}", boneName);
+        } else {
+            this._aniPath = "images/boneAnim/common/" + boneName + ".sk";
+        }
         this._factory = new Laya.Templet();
         this.addEvents();
         this._factory.loadAni(this._aniPath);

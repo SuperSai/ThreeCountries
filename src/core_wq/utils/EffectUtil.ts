@@ -256,6 +256,6 @@ export default class EffectUtil extends Laya.Script {
         }
         bone.x = pos.x;
         bone.y = pos.y;
-        LayerMgr.Ins.screenEffectLayer.addChild(bone);
+        LayerMgr.Ins.flyLayer.addChild(bone);
     }
 }

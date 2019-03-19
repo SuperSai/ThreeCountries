@@ -18,5 +18,4 @@ export default class HeroConfigVO {
     public unlockNeedId: number;
     /** 合成经验 */
     public syntheticExp: number;
-    public des: string;
 }

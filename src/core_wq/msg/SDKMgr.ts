@@ -6,12 +6,14 @@ import SoundType from "../sound/SoundType";
 import MsgMgr from "./MsgMgr";
 import StorageUtil from "../utils/StorageUtil";
 import HallControl from "../../module/hall/HallControl";
+import LayerMgr from "../layer/LayerMgr";
 
 export default class SDKMgr extends Laya.Script {
 
     public bannerAd: any; //bannerAd
     public isForbidBannerAd: boolean; //是否禁止播放bannerAd
     public videoAd: any; //videoAd
+    private _authenticLoginBtn: any = null; //授权/登录专用
 
     constructor() { super(); }
 
@@ -20,6 +22,7 @@ export default class SDKMgr extends Laya.Script {
         if (!Laya.Browser.onWeiXin) return;
         this.wxOnShow();
         this.wxOnHide();
+        this.wxMemoryWarning();
         this.wxSetKeepScreenOn();
     }
 
@@ -140,7 +143,7 @@ export default class SDKMgr extends Laya.Script {
 
     /** 获取微信token */
     public wxHttpToken(baseUrl: any, callBack: Function = null, forceNew: boolean = false): any {
-        let token = wx ? wx.getStorageSync("token") : "";
+        let token = window["wx"] ? wx.getStorageSync("token") : "";
         if (token && forceNew == false) {
             callBack && callBack(token);
         } else {
@@ -152,36 +155,56 @@ export default class SDKMgr extends Laya.Script {
     }
 
     /** 微信登陆 */
-    public wxLogin(success: Function): void {
+    public wxLogin(statusCallback: Function): void {
         wx.getSetting({
             success: (result: _getSettingSuccessObject) => {
                 if (result.authSetting['scope.userInfo']) { //授权成功
+                    statusCallback && statusCallback(1);
                     wx.getUserInfo({
-                        /**
-                         * 是否带上登录态信息
-                         */
-                        withCredentials: false,
-                        /**
-                         * 指定返回用户信息的语言，zh_CN 简体中文，zh_TW 繁体中文，en 英文。默认为en。
-                         */
+                        /** 是否带上登录态信息 */
+                        withCredentials: true,
                         lang: "zh_CN",
                         success: (result: _getUserInfoSuccessObject) => {
+                            // 获取用户信息
+                            if (this._authenticLoginBtn) {
+                                this._authenticLoginBtn.destroy();
+                                this._authenticLoginBtn = null;
+                            }
                             console.log("@David userInfo:", result.userInfo);
                             PlayerMgr.Ins.Info.wxUserInfo = result.userInfo;
-                            success && success();
+                            statusCallback && statusCallback(2);
                         },
                         fail: () => { },
                         complete: () => { }
                     })
                 } else { //没有授权
-                    wx.authorize({
-                        scope: "scope.userInfo",
-                        success: (result: _authorizeSuccessObject) => {
-                            this.wxLogin(success);
-                        },
-                        fail: () => { console.log("@David 用户授权失败！"); },
-                        complete: () => { },
-                    });
+                    statusCallback && statusCallback(3);
+                    if (this._authenticLoginBtn) {
+                        this._authenticLoginBtn.show();
+                        return;
+                    }
+                    if (this._authenticLoginBtn == null) {
+                        let button = wx.createUserInfoButton({
+                            type: 'text',
+                            text: '', //'获取用户信息',
+                            style: {
+                                left: 0,
+                                top: 0,
+                                width: Laya.stage.width,
+                                height: Laya.stage.height,
+                                lineHeight: 40,
+                                textAlign: 'center',
+                                fontSize: 16,
+                                borderRadius: 4
+                            }
+                        });
+                        button.onTap((res1) => {
+                            button.hide();
+                            //重新验证
+                            this.wxLogin(statusCallback);
+                        })
+                        this._authenticLoginBtn = button;
+                    }
                 }
             },
             fail: () => {
@@ -207,52 +230,62 @@ export default class SDKMgr extends Laya.Script {
     }
 
     private wxCreateToken(url: string, callback: Function = null): void {
-        let channel: string = "";
-        if (PlayerMgr.Ins.Info.wxLaunch) {
-            channel = "0_" + PlayerMgr.Ins.Info.wxLaunch.scene;
-            if (PlayerMgr.Ins.Info.wxLaunch.query && PlayerMgr.Ins.Info.wxLaunch.query.channel) {
-                channel = "" + PlayerMgr.Ins.Info.wxLaunch.query.channel + "_" + PlayerMgr.Ins.Info.wxLaunch.scene;
-            } else if (PlayerMgr.Ins.Info.wxLaunch.referrerInfo) {
-                if (PlayerMgr.Ins.Info.wxLaunch.referrerInfo.extraData && PlayerMgr.Ins.Info.wxLaunch.referrerInfo.extraData.channel) {
-                    channel = "" + PlayerMgr.Ins.Info.wxLaunch.referrerInfo.extraData.channel + "_" + PlayerMgr.Ins.Info.wxLaunch.scene;
-                } else {
-                    if (PlayerMgr.Ins.Info.wxLaunch.referrerInfo.appId) {
-                        channel = PlayerMgr.Ins.Info.wxLaunch.referrerInfo.appId + "_" + PlayerMgr.Ins.Info.wxLaunch.scene;
-                    }
+        let launchOptions = window["wx"] ? wx.getLaunchOptionsSync() : "";
+        // 获取⼴告id
+        let aid = 0;
+        let channel = "0_" + launchOptions.scene;
+        if (launchOptions && launchOptions.query && launchOptions.query.channel) {
+            let gdt_vid = launchOptions.query.gdt_vid;
+            let weixinadinfo = launchOptions.query.weixinadinfo;
+            if (weixinadinfo) {
+                let weixinadinfoArr = weixinadinfo.split(".");
+                aid = weixinadinfoArr[0];
+            }
+            channel = "" + launchOptions.query.channel + "_" + launchOptions.scene;
+        } else if (launchOptions && launchOptions.referrerInfo) {
+            if (launchOptions.referrerInfo.extraData && launchOptions.referrerInfo.extraData.channel) {
+                channel = "" + launchOptions.referrerInfo.extraData.channel + "_" + launchOptions.scene;
+            } else {
+                if (launchOptions.referrerInfo.appId) {
+                    channel = launchOptions.referrerInfo.appId + "_" + launchOptions.scene;
                 }
             }
         }
-        wx.login({
-            success: (result: _loginSuccessObject) => {
-                wx.request({
-                    url: url + "v1/token/user",
-                    data: {
-                        code: result.code,
-                        channel
-                    },
-                    header: {
-                        'content-type': 'application/json' // 默认值
-                    },
-                    method: 'POST',
-                    dataType: "json",
-                    responseType: "text",
-                    success: (result: _requestSuccessObject) => {
-                        wx.setStorage({
-                            key: "token",
-                            data: result.data.token,
-                            success: () => { },
-                            fail: () => { },
-                            complete: () => { }
-                        });
-                        callback && callback(result.data.token);
-                    },
-                    fail: () => { },
-                    complete: () => { }
-                })
-            },
-            fail: () => { },
-            complete: () => { }
-        })
+        if (window["wx"]) {
+            wx.login({
+                success: (result: _loginSuccessObject) => {
+                    wx.request({
+                        url: url + "v1/token/user",
+                        data: {
+                            code: result.code,
+                            channel: channel,
+                            aid: aid
+                        },
+                        header: {
+                            'content-type': 'application/json' // 默认值
+                        },
+                        method: 'POST',
+                        dataType: "json",
+                        responseType: "text",
+                        success: (result: _requestSuccessObject) => {
+                            console.log("@David TOKEN:", result);
+                            wx.setStorage({
+                                key: "token",
+                                data: result.data.token,
+                                success: () => { },
+                                fail: () => { },
+                                complete: () => { }
+                            });
+                            callback && callback(result.data.token);
+                        },
+                        fail: () => { },
+                        complete: () => { }
+                    })
+                },
+                fail: () => { },
+                complete: () => { }
+            })
+        }
     }
 
     /** 游戏新版本提示 */
@@ -345,6 +378,14 @@ export default class SDKMgr extends Laya.Script {
                 console.log("setUserCloudStorage fail", src)
             }
         })
+    }
+
+    /** 内存警告 */
+    public wxMemoryWarning(): void {
+        wx.onMemoryWarning(() => {
+            console.log("@David 内存过高警告！！！");
+            wx.triggerGC();
+        });
     }
 
     private static _instance: SDKMgr;

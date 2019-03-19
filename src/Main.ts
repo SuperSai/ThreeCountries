@@ -8,7 +8,7 @@ class Main {
 		else Laya.init(GameConfig.width, GameConfig.height, Laya["WebGL"]);
 		Laya["Physics"] && Laya["Physics"].enable();
 		Laya["DebugPanel"] && Laya["DebugPanel"].enable();
-		Laya.stage.scaleMode = GameConfig.scaleMode;
+		Laya.stage.scaleMode = Laya.Stage.SCALE_EXACTFIT;
 		Laya.stage.screenMode = GameConfig.screenMode;
 		//兼容微信不支持加载scene后缀场景
 		Laya.URL.exportSceneToJson = GameConfig.exportSceneToJson;
@@ -18,7 +18,7 @@ class Main {
 		if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
 		if (GameConfig.stat) Laya.Stat.show();
 		Laya.alertGlobalError = true;
-		if (!AppConfig.isDebug) { //是否读取外部地址的资源
+		if (!AppConfig.isDebug || Laya.Browser.onMiniGame) { //是否读取外部地址的资源
 			Laya.URL.basePath = PathConfig.AppResUrl;
 		}
 		//激活资源版本控制，version.json由IDE发布功能自动生成，如果没有也不影响后续流程
