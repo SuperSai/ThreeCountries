@@ -49,6 +49,8 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         this.init();
         this.initUserData();
         this.haveStoreHero();
+        this.showFeedback();
+        this.showSurpassView();
         this.addEvents();
     }
 
@@ -511,4 +513,22 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
             this._heroTips = null;
         }
     }
+
+    /** 显示超越好友 */
+    private showSurpassView(): void {
+        if (window["wx"]) {
+            SDKMgr.Ins.wxSetUserCloudStorage();
+            this.surpassView.postMsg({ message: "showSurpassFriend" });
+        }
+    }
+
+    /** 投诉建议 */
+    private showFeedback(): void {
+        let pos = PointUtils.localToGlobal(this.btn_feedback);
+        SDKMgr.Ins.wxCreateFeedbackButton({
+            x: pos.x, y: pos.y,
+            width: this.btn_feedback.width, height: this.btn_feedback.height
+        });
+    }
+
 }

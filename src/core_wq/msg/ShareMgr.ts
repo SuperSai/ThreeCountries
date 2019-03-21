@@ -215,7 +215,7 @@ export default class ShareMgr extends Laya.Script {
                 }
             }, this);
 
-            platform.onShare({
+            SDKMgr.Ins.wxOnShare({
                 title: shareCfg.content,
                 imageUrl: shareCfg.imageUrl,
                 query: queryData,
@@ -225,7 +225,7 @@ export default class ShareMgr extends Laya.Script {
                 fail: function () {
                     console.log("转发失败!!!");
                 }
-            });
+            })
         })
     }
 

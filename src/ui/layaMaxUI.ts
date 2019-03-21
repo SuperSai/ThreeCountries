@@ -152,13 +152,14 @@ export module ui.moduleView.hall {
 		public imgHead:Laya.Image;
 		public systemBtns:Laya.Box;
 		public btn_daySign:Laya.Button;
-		public btn_rank:Laya.Button;
 		public btn_luckPrize:Laya.Button;
 		public btn_task:Laya.Button;
 		public btn_invitation:Laya.Button;
 		public btn_follow:Laya.Button;
-		public btn_proposal:Laya.Button;
+		public btn_feedback:Laya.Button;
+		public btn_rank:Laya.Button;
 		public lists_head:Laya.List;
+		public surpassView:laya.ui.WXOpenDataViewer;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
@@ -269,7 +270,7 @@ export module ui.moduleView.rank {
 		public txt_position:Laya.Label;
 		public txt_name:Laya.Label;
 		public txt_score:Laya.Label;
-		public imgRank:Laya.Sprite;
+		public imgRank:Laya.Image;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
@@ -283,7 +284,6 @@ export module ui.moduleView.rank {
 		public imgMyRank:Laya.Sprite;
 		public txt_myRank:Laya.Label;
 		public txt_noRank:Laya.Label;
-		public friendRank:Laya.Box;
 		public tab_rank:Laya.Tab;
         constructor(){ super()}
         createChildren():void {

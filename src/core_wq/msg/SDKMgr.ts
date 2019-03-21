@@ -14,6 +14,7 @@ export default class SDKMgr extends Laya.Script {
     public isForbidBannerAd: boolean; //是否禁止播放bannerAd
     public videoAd: any; //videoAd
     private _authenticLoginBtn: any = null; //授权/登录专用
+    private _isSharing = false; //是否正在分享（离线奖励）
 
     constructor() { super(); }
 
@@ -26,19 +27,12 @@ export default class SDKMgr extends Laya.Script {
         this.wxSetKeepScreenOn();
     }
 
-    /**
-     * 跳转小程序
-     * 
-     * @param {string} _miniCode 
-     * @param {string} _miniPagePath 
-     * @returns {void} 
-     * @memberof SDKMgr
-     */
+    /** 跳转小程序 */
     public onMiniProgram(_miniCode: string, _miniPagePath: string): void {
         if (_miniCode == null || _miniCode.length < 1) {
             return;
         }
-        platform.navigateToMiniProgram({
+        this.wxNavigateToMiniProgram({
             // appId: 'wx10e1554b604d7568',
             appId: _miniCode,
             path: _miniPagePath,
@@ -56,12 +50,12 @@ export default class SDKMgr extends Laya.Script {
 
     /** 显示banner广告 */
     public showBannerAd(_force: boolean = false, _offsetY: number = 0): void {
-        console.log("showBannerAd");
+        console.log("@David 显示banner广告");
         if (this.isForbidBannerAd && _force == false) {
             return;
         }
         this.closeBannerAd();
-        let bannerAd = platform.createBannerAd({
+        let bannerAd = this.wxCreateBannerAd({
             adUnitId: 'adunit-ac9d79e1b7532c21',
             top: (1334 + _offsetY)
         });
@@ -83,13 +77,10 @@ export default class SDKMgr extends Laya.Script {
         }
     }
 
+    /** 显示激励视频 */
     public showVideoAd(_callback: any, _noAdCallback: any = null, _shareEnabled: boolean = true): void {
-        if (this.videoAd) {
-            return;
-        }
-        let videoAd = platform.createRewardedVideoAd({
-            adUnitId: 'adunit-1847f3675e9f5699'
-        });
+        if (this.videoAd) return;
+        let videoAd = this.wxCreateRewardedVideoAd({ adUnitId: 'adunit-1847f3675e9f5699' });
         if (videoAd) {
             this.videoAd = videoAd;
             videoAd.load().then(() => videoAd.show());
@@ -117,28 +108,13 @@ export default class SDKMgr extends Laya.Script {
         }
     }
 
-    /** 开发域的好友排行榜 */
-    public wxFriendRank(friendView: any, width: number, height: number): void {
-        let openDataContext: any = platform.getOpenDataContext();
-        if (openDataContext) {
-            let sharedCanvas = openDataContext.canvas
-            sharedCanvas.width = width;
-            sharedCanvas.height = height;
+    public wxGetOpenDataContext() {
+        return window["wx"] ? wx.getOpenDataContext() : null;
+    }
 
-            let rankSprite = new Laya.Sprite();
-            friendView.removeChildren();
-            friendView.addChild(rankSprite);
-            rankSprite.zOrder = 1;
-            Laya.timer.once(40, this, function () {
-                let rankTexture = new Laya.Texture(sharedCanvas);
-                rankTexture.bitmap.alwaysChange = true;//小游戏使用，非常费，每帧刷新
-                rankSprite.graphics.drawTexture(rankTexture, 0, 0, sharedCanvas.width, sharedCanvas.height);
-            });
-
-            platform.postMessage({
-                message: "showFriendRanking"
-            });
-        }
+    /** 通知域刷新 */
+    public wxPostMessage(data) {
+        wx.postMessage(data);
     }
 
     /** 获取微信token */
@@ -356,21 +332,21 @@ export default class SDKMgr extends Laya.Script {
     }
 
     /** 上传数据到开放域 */
-    private wxSetUserCloudStorage(): void {
+    public wxSetUserCloudStorage(): void {
         //上传微信云
         let money = Math.floor(PlayerMgr.Ins.Info.userGold + HallControl.Ins.Model.heroAllAsset()).toString();
         let kvDataList = [{
-            key: "score",
-            value: money
+            "key": "score",
+            "value": money
         }, {
-            key: "city",
-            value: (PlayerMgr.Ins.Info.wxUserInfo ? PlayerMgr.Ins.Info.wxUserInfo.city : '火星')
+            "key": "city",
+            "value": (PlayerMgr.Ins.Info.wxUserInfo ? PlayerMgr.Ins.Info.wxUserInfo.city : '火星')
         }, {
-            key: "userId",
-            value: PlayerMgr.Ins.Info.userId
+            "key": "userId",
+            "value": PlayerMgr.Ins.Info.userId.toString()
         }];
         wx.setUserCloudStorage({
-            KVDataList: kvDataList,
+            "KVDataList": kvDataList,
             success: function (src) {
                 console.log("setUserCloudStorage success", src)
             },
@@ -385,6 +361,154 @@ export default class SDKMgr extends Laya.Script {
         wx.onMemoryWarning(() => {
             console.log("@David 内存过高警告！！！");
             wx.triggerGC();
+        });
+    }
+
+    public wxOnShare(_data): void {
+        if (this._isSharing) {
+            return
+        }
+        this._isSharing = true;
+        setTimeout(() => {
+            this._isSharing = false;
+        }, 350);
+        // 群分享设置withShareTicket:true 
+        if (_data.isGroupShare) {
+            wx.updateShareMenu({
+                withShareTicket: true,
+                success: () => { }, fail: () => { }, complete: () => { }
+            });
+        } else {
+            wx.updateShareMenu({
+                withShareTicket: false,
+                success: () => { }, fail: () => { }, complete: () => { }
+            });
+        }
+        setTimeout(() => {
+            wx.shareAppMessage({
+                title: _data.title,
+                imageUrl: _data.imageUrl,
+                query: _data.query, //"必须是 key1=val1&key2=val2 的格式"
+                success: function (res) {
+                    if (_data.isGroupShare) {
+                        wx.getSystemInfo({
+                            success: (result: _getSystemInfoSuccessObject) => {
+                                if (result.platform == 'android') {
+                                    //获取群详细信息
+                                    wx.getShareInfo({
+                                        shareTicket: res.shareTickets,
+                                        success: (result: _getShareInfoSuccessObject) => {
+                                            //这里写你分享到群之后要做的事情，比如增加次数什么的
+                                            _data.success && _data.success(result);
+                                        },
+                                        fail: () => {
+                                            _data.success && _data.success(false);
+                                        },
+                                        complete: () => { },
+                                    });
+                                }
+                                if (result.platform == 'ios') {//如果用户的设备是IOS
+                                    if (res.shareTickets != undefined) {
+                                        // console.log("分享的是群:", res);
+                                        wx.getShareInfo({
+                                            shareTicket: res.shareTickets,
+                                            success: (result: _getShareInfoSuccessObject) => {
+                                                //分享到群之后你要做的事情
+                                                _data.success && _data.success(res);
+                                            },
+                                            fail: () => { },
+                                            complete: () => { },
+                                        });
+                                    } else {//分享到个人要做的事情，我给的是一个提示
+                                        // console.log("分享的是个人");
+                                        _data.success && _data.success(false);
+                                    }
+                                }
+                            },
+                            fail: () => { },
+                            complete: () => { }
+                        });
+                    } else {
+                        _data.success && _data.success(res)
+                    }
+                },
+                fail: function (res) {
+                    _data.fail && _data.fail(res)
+                },
+                complete: function (res) {
+                    this._isSharing = true;
+                    setTimeout(() => {
+                        this._isSharing = false;
+                    }, 350)
+                }
+            })
+        }, 1)
+    }
+
+    /** 创建激励视频 */
+    private wxCreateRewardedVideoAd(param) {
+        let video1 = wx.createRewardedVideoAd({ adUnitId: param.adUnitId })
+        return video1;
+    }
+
+    /** 创建Banner广告 */
+    private wxCreateBannerAd(_param) {
+        let systemInfo = wx.getSystemInfoSync();
+        let pRatio = systemInfo.windowWidth / 750.0;
+        let bannerY = 1334 * pRatio;
+        if (_param.top) {
+            bannerY = _param.top * pRatio;
+        }
+        let bannerAd = wx.createBannerAd({
+            adUnitId: _param.adUnitId,
+            style: {
+                left: (systemInfo.screenWidth - 300) / 2,
+                top: bannerY - 100,
+                width: 300,
+                height: 100,
+            }
+        });
+        if (bannerAd) {
+            let isResize = false;
+            bannerAd.onResize(res => {
+                //适配
+                if (isResize == false) {
+                    isResize = true;
+                    bannerAd.style.top = bannerY - res.height;
+                }
+            });
+        }
+        return bannerAd;
+    }
+
+    /** 跳转小程序 */
+    private wxNavigateToMiniProgram(data) {
+        wx.navigateToMiniProgram(data);
+    }
+
+    /** 客服 */
+    public wxOpenCustomerService(param) {
+        wx.openCustomerServiceConversation(param);
+    }
+
+    /** 投诉建议按钮 */
+    public wxCreateFeedbackButton(btnVect) {
+        let systemInfo = wx.getSystemInfoSync();
+        let pRatio = systemInfo.windowWidth / 750.0;
+        let button = wx.createFeedbackButton({
+            type: 'text',
+            text: '', //打开意见反馈页面
+            style: {
+                left: btnVect.x * pRatio,
+                top: btnVect.y * pRatio,
+                width: btnVect.width * pRatio,
+                height: btnVect.height * pRatio,
+                lineHeight: 40,
+                textAlign: 'center',
+                fontSize: 16,
+                borderRadius: 4,
+                opacity: 0.1
+            }
         });
     }
 

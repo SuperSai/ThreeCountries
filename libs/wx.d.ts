@@ -5625,12 +5625,12 @@ declare namespace wx {
   /**
    * 拉取当前用户所有同玩好友的托管数据。该接口只可在开放数据域下使用
    */
-  export function getFriendCloudStorage(object): void;
+  export function getFriendCloudStorage(object: Object): void;
   /**
    * 对用户托管数据进行写数据操作。允许同时写多组 KV 数据。
    * @param object 
    */
-  export function setUserCloudStorage(object): void;
+  export function setUserCloudStorage(object: Object): void;
   /**
    * 向低功耗蓝牙设备特征值中写入二进制数据。注意：必须设备的特征值支持`write`才可以成功调用，具体参照 characteristic 的 properties 属性
    */
@@ -5653,5 +5653,19 @@ declare namespace wx {
   export function triggerGC(): void;
 
   export function getLaunchOptionsSync();
+
+  export function getOpenDataContext();
+
+  export function postMessage(object: Object);
+
+  export function shareAppMessage(object: Object);
+
+  export function createRewardedVideoAd(object: Object);
+
+  export function createBannerAd(object: Object);
+
+  export function openCustomerServiceConversation(object: Object);
+
+  export function createFeedbackButton(object: Object);
 
 }

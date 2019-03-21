@@ -2,11 +2,11 @@
     "x":0,
     "type":"Scene",
     "selectedBox":2,
-    "selecteID":11,
+    "selecteID":80,
     "searchKey":"Scene",
     "props":{"width":750,"sceneColor":"#000000","runtime":"module/hall/view/HallScene.ts","height":1334,"drawCallOptimize":true},
     "nodeParent":-1,
-    "maxID":119,
+    "maxID":125,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -538,13 +538,14 @@
             "props":{"y":115,"x":6,"var":"systemBtns","drawCallOptimize":true},
             "nodeParent":2,
             "label":"systemBtns",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":80,
             "child":[
                 {
+                    "x":30,
                     "type":"Button",
                     "searchKey":"Button,btn_daySign",
                     "props":{"y":3,"var":"btn_daySign","stateNum":"1","skin":"images/hall/game_dailyPrizeBtn.png"},
@@ -574,38 +575,10 @@
                         }]
                 },
                 {
-                    "type":"Button",
-                    "searchKey":"Button,btn_rank",
-                    "props":{"y":3,"x":99,"var":"btn_rank","stateNum":"1","skin":"images/hall/game_rankingBtn.png"},
-                    "nodeParent":80,
-                    "label":"btn_rank",
-                    "isOpen":null,
-                    "isDirectory":true,
-                    "isAniNode":true,
-                    "hasChild":true,
-                    "compId":68,
-                    "child":[
-                        {
-                            "type":"Script",
-                            "switchAble":true,
-                            "source":"src/module/common/component/ScaleAnimScript.ts",
-                            "searchKey":"Script,ScaleAnimScript",
-                            "removeAble":true,
-                            "props":{},
-                            "nodeParent":68,
-                            "label":"ScaleAnimScript",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":69,
-                            "child":[
-                                ]
-                        }]
-                },
-                {
+                    "x":30,
                     "type":"Button",
                     "searchKey":"Button,btn_luckPrize",
-                    "props":{"x":198,"var":"btn_luckPrize","stateNum":"1","skin":"images/hall/game_luckPrizeBtn.png"},
+                    "props":{"y":3,"x":197,"var":"btn_luckPrize","stateNum":"1","skin":"images/hall/game_luckPrizeBtn.png"},
                     "nodeParent":80,
                     "label":"btn_luckPrize",
                     "isOpen":null,
@@ -632,9 +605,10 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Button",
                     "searchKey":"Button,btn_task",
-                    "props":{"x":296,"var":"btn_task","stateNum":"1","skin":"images/hall/game_taskBtn.png"},
+                    "props":{"y":4,"x":296,"var":"btn_task","stateNum":"1","skin":"images/hall/game_taskBtn.png"},
                     "nodeParent":80,
                     "label":"btn_task",
                     "isOpen":null,
@@ -661,9 +635,10 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Button",
                     "searchKey":"Button,btn_invitation",
-                    "props":{"y":1,"x":394,"var":"btn_invitation","stateNum":"1","skin":"images/hall/game_shareBtn.png"},
+                    "props":{"y":5,"x":394,"var":"btn_invitation","stateNum":"1","skin":"images/hall/game_shareBtn.png"},
                     "nodeParent":80,
                     "label":"btn_invitation",
                     "isOpen":null,
@@ -690,9 +665,10 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Button",
                     "searchKey":"Button,btn_follow",
-                    "props":{"x":493,"var":"btn_follow","stateNum":"1","skin":"images/hall/game_followPrizeBtn.png"},
+                    "props":{"y":4,"x":493,"var":"btn_follow","stateNum":"1","skin":"images/hall/game_followPrizeBtn.png"},
                     "nodeParent":80,
                     "label":"btn_follow",
                     "isOpen":null,
@@ -719,11 +695,12 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Button",
-                    "searchKey":"Button,btn_proposal",
-                    "props":{"y":104,"var":"btn_proposal","stateNum":"1","skin":"images/hall/feedback_btn.png"},
+                    "searchKey":"Button,btn_feedback",
+                    "props":{"y":104,"var":"btn_feedback","stateNum":"1","skin":"images/hall/feedback_btn.png"},
                     "nodeParent":80,
-                    "label":"btn_proposal",
+                    "label":"btn_feedback",
                     "isOpen":null,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -743,6 +720,36 @@
                             "isAniNode":true,
                             "hasChild":false,
                             "compId":79,
+                            "child":[
+                                ]
+                        }]
+                },
+                {
+                    "x":30,
+                    "type":"Button",
+                    "searchKey":"Button,btn_rank",
+                    "props":{"y":3,"x":99,"var":"btn_rank","stateNum":"1","skin":"images/hall/game_rankingBtn.png"},
+                    "nodeParent":80,
+                    "label":"btn_rank",
+                    "isOpen":null,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":123,
+                    "child":[
+                        {
+                            "type":"Script",
+                            "switchAble":true,
+                            "source":"src/module/common/component/ScaleAnimScript.ts",
+                            "searchKey":"Script,ScaleAnimScript",
+                            "removeAble":true,
+                            "props":{},
+                            "nodeParent":123,
+                            "label":"ScaleAnimScript",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":124,
                             "child":[
                                 ]
                         }]
@@ -789,6 +796,20 @@
                         }]
                 }],
             "$LOCKED":false
+        },
+        {
+            "x":15,
+            "type":"WXOpenDataViewer",
+            "searchKey":"WXOpenDataViewer,surpassView",
+            "props":{"y":110,"x":670,"width":80,"var":"surpassView","iconSign":"wx","height":150,"drawCallOptimize":true},
+            "nodeParent":2,
+            "label":"surpassView",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":120,
+            "child":[
+                ]
         }],
     "animations":[
         {
