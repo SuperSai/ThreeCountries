@@ -20,6 +20,7 @@ import ViewConst from "../../core_wq/view/const/ViewConst";
 import EffectUtil from "../../core_wq/utils/EffectUtil";
 import GuideMgr from "../../core_wq/guide/GuideMgr";
 import MapVO from "../../core_wq/db/vo/MapVO";
+import SystemVO from "../../core_wq/db/vo/SystemVO";
 
 export default class HallControl extends Laya.Script {
 
@@ -134,6 +135,7 @@ export default class HallControl extends Laya.Script {
     public setUserLevel(level: number): void {
         PlayerMgr.Ins.Info.userLevel = level;
         EventsMgr.Ins.dispatch(EventType.UPDATE_USER_LEVEL);
+        EventsMgr.Ins.dispatch(EventType.UPDATE_SYSTEM_BTN);
         this.refreshUserData();
     }
 
@@ -403,6 +405,18 @@ export default class HallControl extends Laya.Script {
             }
         }
         this.refreshIncomeSec();
+    }
+
+    /** 获取功能开放列表 */
+    public getSystemBtnList(): SystemVO[] {
+        let datas: SystemVO[] = GlobalData.getDataByCondition(GlobalData.SystemVO, (item: SystemVO) => {
+            return PlayerMgr.Ins.Info.userLevel >= item.openLevel;
+        });
+        if (datas && datas.length > 0) {
+            datas.sort((item1: SystemVO, item2: SystemVO) => item1.sort - item2.sort);
+            return datas;
+        }
+        return null;
     }
 
     set Model(value: HallModel) { this._model = value; }

@@ -20,4 +20,21 @@ export default class EventType {
     public static SHOW_OFFLINE_REWARD: string = "SHOW_OFFLINE_REWARD";
     /** 新手下一步 */
     public static GUIDE_NEXT_STEP: string = "GUIDE_NEXT_STEP";
+    /** 打开功能界面 */
+    public static OPEN_VIEW: string = "OPEN_VIEW";
+    /** 移除商店红点 */
+    public static REMOVE_SHOP_REN_POINT: string = "REMOVE_SHOP_REN_POINT";
+    /** 移除任务红点 */
+    public static REMOVE_TASK_REN_POINT: string = "REMOVE_TASK_REN_POINT";
+    /** 移除转盘红点 */
+    public static REMOVE_LUCK_PRIZE_REN_POINT: string = "REMOVE_LUCK_PRIZE_REN_POINT";
+    /** 移除签到红点 */
+    public static REMOVE_SIGN_REN_POINT: string = "REMOVE_SIGN_REN_POINT";
+    /** 移除关注红点 */
+    public static REMOVE_FOLLOW_REN_POINT: string = "REMOVE_FOLLOW_REN_POINT";
+    /** 更新系统功能红点 */
+    public static UPDATE_SYSTEM_RED_POINT: string = "UPDATE_SYSTEM_RED_POINT";
+    /** 更新系统功能按钮 */
+    public static UPDATE_SYSTEM_BTN: string = "UPDATE_SYSTEM_BTN";
+
 }

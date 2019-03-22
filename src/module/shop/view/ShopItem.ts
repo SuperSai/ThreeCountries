@@ -58,6 +58,9 @@ export default class ShopItem extends ui.moduleView.shop.ShopItemUI {
             }
             if (this._firstLockId > 0) {
                 this.btn_buyDiamond.visible = this._firstLockId == this._config.unlockNeedId;
+                if (this.btn_buyDiamond.visible) {
+                    this.updateAdvBtn();
+                }
             } else {
                 this.btn_buyDiamond.visible = false;
             }

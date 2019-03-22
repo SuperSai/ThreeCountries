@@ -7,6 +7,7 @@ import HeroConfigVO from "../../../core_wq/db/vo/HeroConfigVO";
 import PointUtils from "../../../core_wq/utils/PointUtils";
 import MathUtil from "../../../core_wq/utils/MathUtil";
 import ItemExplode from "../../../core_wq/effect/ItemExplode";
+import PoolMgr from "../../../core_wq/msg/PoolMgr";
 
 export default class Hero extends BaseCharacter {
 
@@ -265,7 +266,10 @@ export default class Hero extends BaseCharacter {
                 let actionSp: Hero = this.attackSprite as Hero;
                 let targetPos: any = PointUtils.localToGlobal(actionSp);
                 EffectUtil.playBoneEffect("ui_hit_03", { x: targetPos.x, y: targetPos.y + 100 });
-                actionSp.parent.addChild(new ItemExplode().play(actionSp.x, actionSp.y + 100).scale(0.8, 0.8));
+                let explode = new ItemExplode();
+                if (explode) {
+                    actionSp.parent.addChild(explode.play(actionSp.x, actionSp.y + 100).scale(0.8, 0.8));
+                }
                 this.frameLoop(1, this, this.attackTargetFly, [actionSp]);
             } else {
                 this.attackSprite.removeSelf();

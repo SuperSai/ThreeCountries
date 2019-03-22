@@ -17,13 +17,13 @@ export default class DaySignItem extends ui.moduleView.daySign.DaySignItemUI {
 
     set dataSource(value: any) {
         this._day = value;
-        this._diamond = DaySignView.SignData.prize["day" + this._day]
+        this._diamond = DaySignView.SignData.prize["day_" + this._day];
         this.txt_title.text = "第" + this._day + "天";
         this.txt_diamond.text = "x" + this._diamond;
-        if (this._day <= DaySignView.SignData.day) {
+        if (this._day <= DaySignView.SignData.sign.day) {
             this.btn_get.skin = "images/daySign/day_prize_item1.png";
             this.imgGet.skin = "images/daySign/day_prize_get.png";
-            if (this._day == DaySignView.SignData.day && DaySignView.SignData.status == 0) {
+            if (this._day == DaySignView.SignData.sign.day && DaySignView.SignData.sign.status == 0) {
                 this.imgGet.visible = false;
                 this.btn_get.on(Laya.Event.CLICK, this, this.onGetReward);
                 EventsMgr.Ins.addListener(EventType.DAYSIGN_REWARD_COMPLETE, this.onRewardGetComplete, this);

@@ -7,6 +7,7 @@ import LevelVO from "./vo/LevelVO";
 import SoundVO from "./vo/SoundVO";
 import GuideVO from "./vo/GuideVO";
 import MapVO from "./vo/MapVO";
+import SystemVO from "./vo/SystemVO";
 
 export default class GlobalData extends Laya.Script {
 
@@ -39,6 +40,8 @@ export default class GlobalData extends Laya.Script {
     public static GuideVO: string = "Guide_json";
     /** 地图表 */
     public static MapVO: string = "Map_json";
+    /** 功能开放表 */
+    public static SystemVO: string = "System_json";
 
     private initModel(): void {
         this._totalStepCsvList.Add(GlobalData.HeroVO, HeroVO);
@@ -47,6 +50,7 @@ export default class GlobalData extends Laya.Script {
         this._totalStepCsvList.Add(GlobalData.SoundVO, SoundVO);
         this._totalStepCsvList.Add(GlobalData.GuideVO, GuideVO);
         this._totalStepCsvList.Add(GlobalData.MapVO, MapVO);
+        this._totalStepCsvList.Add(GlobalData.SystemVO, SystemVO);
     }
 
     // 解析初始数据表

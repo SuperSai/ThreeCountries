@@ -29,7 +29,7 @@ export default class DaySignView extends BaseView {
             if (DaySignView.SignData) {
                 this.ui.lists.array = [1, 2, 3, 4, 5, 6];
                 this.ui.lists.renderHandler = Laya.Handler.create(this, this.onListRender, null, false);
-                this.ui.txt_diamond.text = "x" + DaySignView.SignData.prize["day7"];
+                this.ui.txt_diamond.text = "x" + DaySignView.SignData.prize["day_7"];
                 if (7 <= DaySignView.SignData.sign.day) {
                     this.ui.btn_lastGet.skin = "images/daySign/day_prize_item2.png";
                     this.ui.imgGet.skin = "images/daySign/day_prize_get.png";

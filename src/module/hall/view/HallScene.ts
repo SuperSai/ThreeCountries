@@ -25,6 +25,10 @@ import GuideMgr from "../../../core_wq/guide/GuideMgr";
 import SDKMgr from "../../../core_wq/msg/SDKMgr";
 import AppConfig from "../../../core_wq/config/AppConfig";
 import HeroTips from "./HeroTips";
+import RedPointMgr from "../../../core_wq/msg/RedPointMgr";
+import SystemBtn from "./item/SystemBtn";
+import SystemVO from "../../../core_wq/db/vo/SystemVO";
+import SystemConfig from "../config/SystemConfig";
 
 export default class HallScene extends ui.moduleView.hall.HallSceneUI {
 
@@ -49,8 +53,9 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         this.init();
         this.initUserData();
         this.haveStoreHero();
-        this.showFeedback();
         this.showSurpassView();
+        this.initSystemBtn();
+        this.initRedPoint();
         this.addEvents();
     }
 
@@ -62,6 +67,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         this.lists_head.renderHandler = Laya.Handler.create(this, this.onListRender, null, false);
         this.foregroundTwo.x = this._control.Model.foregroundWidth;
         this.fargroundTwo.x = this._control.Model.fargroundWidth;
+        this.list_btn.renderHandler = Laya.Handler.create(this, this.onRenderSystem, null, false);
         SoundMgr.Ins.playBg(SoundType.BG_MUSIC);
     }
 
@@ -82,21 +88,59 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         GuideMgr.Ins.setup();
     }
 
+    /** 初始化红点 */
+    private initRedPoint(): void {
+        this.imgFree.visible = RedPointMgr.Ins.isShowShopRedPoint;
+    }
+
+    /** 初始化功能按钮 */
+    private initSystemBtn(): void {
+        let datas = this._control.getSystemBtnList();
+        if (datas && datas.length > 0 && (this.list_btn.array == null || datas.length > this.list_btn.array.length)) {
+            this.list_btn.visible = true;
+            this.list_btn.array = datas;
+            RedPointMgr.Ins.updateRedPoint();
+        }
+    }
+
     private addEvents(): void {
         this.btn_recruit.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
         this.btn_acc.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
         this.btn_shop.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
         this.btn_heroStore.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
-        this.btn_daySign.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
-        this.btn_luckPrize.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
-        this.btn_task.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
-        this.btn_follow.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
-        this.btn_rank.on(Laya.Event.CLICK, this, this.onClickBtnHandler);
         this.lists_head.on(Laya.Event.MOUSE_DOWN, this, this.onHeroSelect);
 
         EventsMgr.Ins.addListener(EventType.HERO_BOX, this.onShowHeroBox, this);
         EventsMgr.Ins.addListener(EventType.GAME_ACCE_START, this.onGameAcce, this);
         EventsMgr.Ins.addListener(EventType.SHOW_OFFLINE_REWARD, this.onOffLineReward, this);
+        EventsMgr.Ins.addListener(EventType.UPDATE_SYSTEM_BTN, this.onUpdateSystemBtn, this);
+        EventsMgr.Ins.addListener(EventType.OPEN_VIEW, this.onOpenSystemView, this);
+    }
+
+    private onOpenSystemView(id: number): void {
+        switch (id) {
+            case SystemConfig.SIGN:
+                ViewMgr.Ins.open(ViewConst.DaySignView);
+                break;
+            case SystemConfig.RANK:
+                ViewMgr.Ins.open(ViewConst.RankView);
+                break;
+            case SystemConfig.LUCK_PRIZE:
+                ViewMgr.Ins.open(ViewConst.LuckPrizeView);
+                break;
+            case SystemConfig.TASK:
+                ViewMgr.Ins.open(ViewConst.TaskView);
+                break;
+            case SystemConfig.INVITE:
+
+                break;
+            case SystemConfig.FOLLOW:
+                ViewMgr.Ins.open(ViewConst.FollowView);
+                break;
+            case SystemConfig.FEEDBACK:
+
+                break;
+        }
     }
 
     private onClickBtnHandler(e: Laya.Event): void {
@@ -113,21 +157,6 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                     break;
                 case this.btn_heroStore://英雄保存箱
                     this.popHeroStore();
-                    break;
-                case this.btn_daySign://每日签到
-                    ViewMgr.Ins.open(ViewConst.DaySignView);
-                    break;
-                case this.btn_luckPrize://幸运转盘
-                    ViewMgr.Ins.open(ViewConst.LuckPrizeView);
-                    break;
-                case this.btn_task://任务
-                    ViewMgr.Ins.open(ViewConst.TaskView);
-                    break;
-                case this.btn_follow://关注有礼
-                    ViewMgr.Ins.open(ViewConst.FollowView);
-                    break;
-                case this.btn_rank://排行榜
-                    ViewMgr.Ins.open(ViewConst.RankView);
                     break;
             }
         }
@@ -455,6 +484,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
             }
         }
     }
+    
     /** 是否拥有缓存的英雄 */
     private haveStoreHero(): void {
         this.btn_heroStore.visible = StorageUtil.popHeroStore() > 0;
@@ -522,13 +552,19 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         }
     }
 
-    /** 投诉建议 */
-    private showFeedback(): void {
-        let pos = PointUtils.localToGlobal(this.btn_feedback);
-        SDKMgr.Ins.wxCreateFeedbackButton({
-            x: pos.x, y: pos.y,
-            width: this.btn_feedback.width, height: this.btn_feedback.height
-        });
+    private onRenderSystem(cell: Laya.Box, index: number): void {
+        if (index > this.list_btn.array.length) {
+            return;
+        }
+        let btn: SystemBtn = cell.getChildByName("item") as SystemBtn;
+        if (btn) {
+            btn.dataSource = this.list_btn.array[index];
+        }
+    }
+
+    /** 更新系统功能按钮 */
+    private onUpdateSystemBtn(): void {
+        this.initSystemBtn();
     }
 
 }

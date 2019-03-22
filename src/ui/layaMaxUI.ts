@@ -149,17 +149,11 @@ export module ui.moduleView.hall {
 		public txt_accTimes:Laya.Label;
 		public imgAccAdv:Laya.Sprite;
 		public btn_shop:Laya.Button;
+		public imgFree:Laya.Image;
 		public imgHead:Laya.Image;
-		public systemBtns:Laya.Box;
-		public btn_daySign:Laya.Button;
-		public btn_luckPrize:Laya.Button;
-		public btn_task:Laya.Button;
-		public btn_invitation:Laya.Button;
-		public btn_follow:Laya.Button;
-		public btn_feedback:Laya.Button;
-		public btn_rank:Laya.Button;
 		public lists_head:Laya.List;
 		public surpassView:laya.ui.WXOpenDataViewer;
+		public list_btn:Laya.List;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
@@ -222,6 +216,16 @@ export module ui.moduleView.hall.item {
         }
     }
     REG("ui.moduleView.hall.item.HeadItemUI",HeadItemUI);
+    export class SystemBtnUI extends Laya.View {
+		public btn_system:Laya.Button;
+		public imgRenPoint:Laya.Sprite;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("moduleView/hall/item/SystemBtn");
+        }
+    }
+    REG("ui.moduleView.hall.item.SystemBtnUI",SystemBtnUI);
 }
 export module ui.moduleView.login {
     export class LoginSceneUI extends Laya.Scene {
@@ -265,12 +269,15 @@ export module ui.moduleView.luckPrize {
 }
 export module ui.moduleView.rank {
     export class RankItemUI extends Laya.View {
-		public txt_rank:Laya.Label;
 		public imgHead:Laya.Image;
+		public imgRank:Laya.Image;
+		public box_price:Laya.Box;
+		public txt_score:Laya.Label;
+		public txt_rank:Laya.Label;
 		public txt_position:Laya.Label;
 		public txt_name:Laya.Label;
-		public txt_score:Laya.Label;
-		public imgRank:Laya.Image;
+		public box_title:Laya.Box;
+		public txt_title:Laya.Label;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

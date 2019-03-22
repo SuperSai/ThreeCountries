@@ -456,14 +456,14 @@ export default class HttpMgr extends Laya.Script {
         });
     }
 
-    //请求世界周排行数据
+    /** 请求世界排行数据 */
     public requestWorldRankingData(callback: any): void {
         var that = this;
         var HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
             url: 'v1/rank/week',
             success: function (res) {
-                console.log("@David 请求世界周排行数据:", res);
+                console.log("@David 请求世界排行数据:", res);
                 callback && callback(res);
             },
             fail: function (res) {
@@ -472,14 +472,46 @@ export default class HttpMgr extends Laya.Script {
         });
     }
 
-    //请求我的世界周排行数据
-    public requestMyWorldRankingData(callback: any): void {
+    /** 请求我的世界排行数据 */
+    public requestMyWorldRankData(callback: any): void {
         var that = this;
         var HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
             url: 'v1/rank/my',
             success: function (res) {
-                console.log("@David 请求我的世界周排行数据:", res);
+                console.log("@David 请求我的世界排行数据:", res);
+                callback && callback(res);
+            },
+            fail: function (res) {
+                console.log(res);
+            }
+        });
+    }
+
+    /** 请求收益周排行数据 */
+    public requestIncomeRankingData(callback: any): void {
+        var that = this;
+        var HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
+        HttpReqHelper.request({
+            url: 'v1/rank/week',
+            success: function (res) {
+                console.log("@David 请求收益周排行数据:", res);
+                callback && callback(res);
+            },
+            fail: function (res) {
+                console.log(res);
+            }
+        });
+    }
+
+    /** 请求我的收益周排行数据 */
+    public requestMyIncomeRankData(callback: any): void {
+        var that = this;
+        var HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
+        HttpReqHelper.request({
+            url: 'v1/rank/my',
+            success: function (res) {
+                console.log("@David 请求我的收益周排行数据:", res);
                 callback && callback(res);
             },
             fail: function (res) {

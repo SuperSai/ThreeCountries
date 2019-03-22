@@ -33,7 +33,7 @@ export default class GuideMgr {
     }
 
     public onNextStep(): void {
-        if (this._guideStep < 0 || this._guideStep > this._guideLen) {
+        if (this._maskView == null || this._guideStep < 0 || this._guideStep > this._guideLen) {
             this.isGuide = false;
             if (this._maskView) this._maskView.reset();
             return;

@@ -5,6 +5,7 @@ import GuideSpeakView from "./module/guide/view/GuideSpeakView"
 import HallScene from "./module/hall/view/HallScene"
 import CurrencyView from "./module/hall/view/CurrencyView"
 import HeadItem from "./module/hall/view/item/HeadItem"
+import SystemBtn from "./module/hall/view/item/SystemBtn"
 import LoginScene from "./module/login/view/LoginScene"
 import RankItem from "./module/rank/view/RankItem"
 import ShopItem from "./module/shop/view/ShopItem"
@@ -34,6 +35,7 @@ export default class GameConfig{
         reg("module/hall/view/HallScene.ts",HallScene);
         reg("module/hall/view/CurrencyView.ts",CurrencyView);
         reg("module/hall/view/item/HeadItem.ts",HeadItem);
+        reg("module/hall/view/item/SystemBtn.ts",SystemBtn);
         reg("module/login/view/LoginScene.ts",LoginScene);
         reg("module/rank/view/RankItem.ts",RankItem);
         reg("module/shop/view/ShopItem.ts",ShopItem);

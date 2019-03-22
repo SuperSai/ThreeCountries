@@ -4,16 +4,19 @@ import { ui } from "../../../ui/layaMaxUI";
 import HttpMgr from "../../../core_wq/net/HttpMgr";
 import MathUtil from "../../../core_wq/utils/MathUtil";
 import RankItem from "./RankItem";
-import SDKMgr from "../../../core_wq/msg/SDKMgr";
-import HallControl from "../../hall/HallControl";
+import PathConfig from "../../../core_wq/config/PathConfig";
 
 /**
  * 排行榜
  */
 export default class RankView extends BaseView {
 
-    private _friendRank: Laya.WXOpenDataViewer;
     private curSelectedIndex: number = -1;
+    private isWorldRanking: boolean = false;
+    /** 收益榜数据 */
+    private _incomeRankData: any;
+    /** 世界榜数据 */
+    private _worldRankData: any;
 
     constructor() {
         super(LayerMgr.Ins.frameLayer, ui.moduleView.rank.RankViewUI);
@@ -21,34 +24,62 @@ export default class RankView extends BaseView {
 
     public initUI(): void {
         super.initUI();
-        this.ui.txt_noRank.visible = true;
-        this.ui.lists.visible = false;
+        this.ui.lists.renderHandler = Laya.Handler.create(this, this.onListRender, null, false);
+    }
+
+    /** 初始化世界榜 */
+    private initWorldRank(): void {
         HttpMgr.Ins.requestWorldRankingData((data: any) => {
-            if (data) {
-                this.initWorldRank(data);
+            this._worldRankData = data;
+            if (this._worldRankData) {
+                this.updateRankList(this._worldRankData);
             }
+            this.showMyWorldRank();
+        })
+    }
+
+    /** 显示我的世界榜排名 */
+    private showMyWorldRank(): void {
+        HttpMgr.Ins.requestMyWorldRankData((rankNum: any) => {
+            if (rankNum) {
+                this.ui.txt_myRank.text = rankNum + "";
+            }
+        })
+    }
+
+    /** 初始化收益排行榜 */
+    private initIncomeRank(): void {
+        HttpMgr.Ins.requestIncomeRankingData((data: any) => {
+            this._incomeRankData = data;
+            if (this._incomeRankData) {
+                if (this._incomeRankData && this._incomeRankData.length > 0) {
+                    this._incomeRankData.forEach(element => {
+                        let asset: number = MathUtil.parseStringNum(element.week_output);
+                        if (asset < 0) element.week_output = 0;
+                    });
+                }
+                this.updateRankList(this._incomeRankData);
+            }
+            this.showMyIncomeRank();
         });
     }
 
-    /** 初始化世界排行榜 */
-    private initWorldRank(data: any): void {
-        if (data && data.length > 0) {
+    /** 显示我的收益榜排名 */
+    private showMyIncomeRank(): void {
+        HttpMgr.Ins.requestMyIncomeRankData((rankNum: any) => {
+            if (rankNum) {
+                this.ui.txt_myRank.text = rankNum + "";
+            }
+        })
+    }
+
+    private updateRankList(rankData: any): void {
+        this.ui.txt_noRank.visible = true;
+        this.ui.lists.visible = false;
+        if (rankData && rankData.length > 0) {
             this.ui.txt_noRank.visible = false;
             this.ui.lists.visible = true;
-            data.forEach(element => {
-                let asset: number = MathUtil.parseStringNum(element.week_output);
-                if (asset <= 0) {
-                    element.week_output = 0;
-                }
-            });
-            this.ui.lists.array = data;
-            this.ui.lists.renderHandler = Laya.Handler.create(this, this.onListRender, null, false);
-
-            HttpMgr.Ins.requestMyWorldRankingData((rankNum: any) => {
-                if (rankNum) {
-                    this.ui.txt_myRank.text = rankNum + "";
-                }
-            })
+            this.ui.lists.array = rankData;
         }
     }
 
@@ -60,45 +91,31 @@ export default class RankView extends BaseView {
         this.ui.tab_rank.off(Laya.Event.CLICK, this, this.onRankTab);
     }
 
+    /** tab选择 0世界榜/1收益榜 */
     private onRankTab(): void {
-        if (this.curSelectedIndex == this.ui.tab_rank.selectedIndex) {
-            return;
-        }
+        if (this.curSelectedIndex == this.ui.tab_rank.selectedIndex) return;
         this.curSelectedIndex = this.ui.tab_rank.selectedIndex;
-        let isWorldRanking = (0 == this.ui.tab_rank.selectedIndex);
-        this.ui.worldRank.visible = isWorldRanking;
-        // if (this._friendRank) this._friendRank.visible = !isWorldRanking;
-        if (!isWorldRanking) {
-
+        this.isWorldRanking = (0 == this.ui.tab_rank.selectedIndex);
+        if (this.isWorldRanking) {  //世界榜
+            this._worldRankData != null ? this.updateRankList(this._worldRankData) : this.initWorldRank();
+        } else {    //收益榜
+            this._incomeRankData != null ? this.updateRankList(this._incomeRankData) : this.initIncomeRank();
         }
     }
 
     private onListRender(cell: Laya.Box, index: number): void {
-        if (index > this.ui.lists.array.length) {
-            return;
-        }
+        if (index > this.ui.lists.array.length) return;
         let item: RankItem = cell.getChildByName("item") as RankItem;
         if (item) {
             item.dataSource = this.ui.lists.array[index];
+            item.box_title.visible = this.isWorldRanking;
+            item.box_price.visible = !this.isWorldRanking;
             item.imgRank.visible = index < 3;
-            if (index < 1) {
-                item.imgRank.skin = "images/rank/cell_top1.png";
-            } else if (index < 2) {
-                item.imgRank.skin = "images/rank/cell_top2.png";
-            } else if (index < 3) {
-                item.imgRank.skin = "images/rank/cell_top3.png";
+            if (item.imgRank.visible) {
+                item.imgRank.skin = PathConfig.RANK_PATH.replace("{0}", (index + 1) + "");
             } else {
                 item.txt_rank.text = (index + 1) + "";
             }
-        }
-    }
-
-    public close(...param: any[]): void {
-        super.close(param);
-        if (this._friendRank) {
-            this._friendRank.destroy();
-            this._friendRank.removeSelf();
-            this._friendRank = null;
         }
     }
 }

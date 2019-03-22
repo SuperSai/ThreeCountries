@@ -493,23 +493,25 @@ export default class SDKMgr extends Laya.Script {
 
     /** 投诉建议按钮 */
     public wxCreateFeedbackButton(btnVect) {
-        let systemInfo = wx.getSystemInfoSync();
-        let pRatio = systemInfo.windowWidth / 750.0;
-        let button = wx.createFeedbackButton({
-            type: 'text',
-            text: '', //打开意见反馈页面
-            style: {
-                left: btnVect.x * pRatio,
-                top: btnVect.y * pRatio,
-                width: btnVect.width * pRatio,
-                height: btnVect.height * pRatio,
-                lineHeight: 40,
-                textAlign: 'center',
-                fontSize: 16,
-                borderRadius: 4,
-                opacity: 0.1
-            }
-        });
+        if (window["wx"]) {
+            let systemInfo = wx.getSystemInfoSync();
+            let pRatio = systemInfo.windowWidth / 750.0;
+            let button = wx.createFeedbackButton({
+                type: 'text',
+                text: '', //打开意见反馈页面
+                style: {
+                    left: btnVect.x * pRatio,
+                    top: btnVect.y * pRatio,
+                    width: btnVect.width * pRatio,
+                    height: btnVect.height * pRatio,
+                    lineHeight: 40,
+                    textAlign: 'center',
+                    fontSize: 16,
+                    borderRadius: 4,
+                    opacity: 0.1
+                }
+            });
+        }
     }
 
     private static _instance: SDKMgr;
