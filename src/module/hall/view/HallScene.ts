@@ -338,7 +338,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                                 if (attackSp) {
                                     headItem.updateHp();
                                     txtPos = { x: attackSp.x - 50, y: attackSp.y + 50 }
-                                    battleHero.removeAttackTarget(true);
+                                    battleHero.removeEnemy(true);
                                 }
                                 let obtainMoney: number = this._control.getHeroIncomeTotalGold(headItem.Info.heroId) * PlayerMgr.Ins.Info.userExtraIncome * PlayerMgr.Ins.Info.userLevelExtraIncome;
                                 //飘数字
@@ -410,8 +410,8 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                 Laya.timer.frameOnce(index + (Math.random() * 45), this, () => {
                     this._battleHeroIndex++;
                     let startPos = {
-                        x: 50 + this.width * 0.5 * Math.random(),
-                        y: this.beginEventView.y - 150 + (this.beginEventView.height - 30) / (this.lists_head.array.length) * this._battleHeroIndex
+                        x: MathUtil.rangeInt(10, 50) + this.width * 0.5 * Math.random(),
+                        y: this.beginEventView.y + MathUtil.rangeInt(-150, 200)//- 150 + (this.beginEventView.height - 30) / (this.lists_head.array.length) * this._battleHeroIndex
                     };
                     EffectUtil.playBoneEffect("ui_born", { x: startPos.x - 20, y: startPos.y + 200 });
                     this.timerOnce(100, this, () => {
@@ -484,7 +484,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
             }
         }
     }
-    
+
     /** 是否拥有缓存的英雄 */
     private haveStoreHero(): void {
         this.btn_heroStore.visible = StorageUtil.popHeroStore() > 0;

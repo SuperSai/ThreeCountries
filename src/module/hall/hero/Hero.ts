@@ -23,16 +23,21 @@ export default class Hero extends BaseCharacter {
     private _heroPath: string = '';
     /** 坐骑模型路径 */
     private _horsePath: string = '';
+
+    private _heroBone: Laya.Skeleton = null;
+    private _horseBone: Laya.Skeleton = null;
     /** 攻击动画key */
     private _atkAnimKey: string = 'attack';
+    private _walkKey: string = "walk";
     private _heroKey: string = "hero_key";
     private _horseKey: string = "horse_key";
     /** 骨骼动画模板 */
     private _spineFactory: Array<Laya.Templet> = [];
+    private _enemyData: any = null;
     private _enemyModelUrlArray: Array<any> = [
-        { heroUrl: "images/boneAnim/enemy/bubinglv.sk", horseUrl: "" },
-        { heroUrl: "images/boneAnim/enemy/gongbinglv.sk", horseUrl: "" },
-        { heroUrl: "images/boneAnim/enemy/qibinglv.sk", horseUrl: "" },
+        { id: "enemy_1", heroUrl: "images/boneAnim/enemy/bubinglv.sk", horseUrl: "" },
+        { id: "enemy_2", heroUrl: "images/boneAnim/enemy/gongbinglv.sk", horseUrl: "" },
+        { id: "enemy_3", heroUrl: "images/boneAnim/enemy/qibinglv.sk", horseUrl: "" },
     ]; //敌军模型
 
     constructor() { super(); }
@@ -58,65 +63,67 @@ export default class Hero extends BaseCharacter {
             this.removeChildByName(this._heroKey);
             this.removeChildByName(this._horseKey);
             this.state = -1;
+            this.createHeroBone();
+
         }
-        //英雄/坐骑
-        this.playAnimation();
+    }
+
+    /** 创建英雄龙骨动画 */
+    private createHeroBone(): void {
+        this._heroBone = Laya.Pool.getItemByClass("bone" + this.heroId, Laya.Skeleton);
+        if (this._heroBone.name != (this._heroKey + this.heroId)) {
+            if (this._heroPath && this._heroPath.length > 0) {
+                this.createSpineTemplate(this._heroPath, (spineFactory: Laya.Templet) => {
+                    this._heroBone = spineFactory.buildArmature(0);
+                    this._heroBone.name = this._heroKey + this.heroId;
+                    this._heroBone.zOrder = 1;
+                    this._heroBone.playbackRate(0.7);
+                    this.addChild(this._heroBone);
+                    this._heroBone.pos(50, 140);
+                    if (this._horsePath == null || this._horsePath.length < 1) {//没坐骑,坐标下调
+                        this._heroBone.y += 50;
+                    }
+                    this._heroBone.play(this._walkKey, true);
+                });
+            }
+        } else {
+            this.addChild(this._heroBone);
+            this._heroBone.play(this._walkKey, true);
+        }
+    }
+
+    /** 创建坐骑龙骨动画 */
+    private createHorseBone(): void {
+        this._horseBone = Laya.Pool.getItemByClass("horse_bone" + this.heroId, Laya.Skeleton);
+        if (this._horseBone.name != (this._horseKey + this.heroId)) {
+            if (this._horsePath && this._horsePath.length > 0) {
+                this.createSpineTemplate(this._horsePath, (_spineFactory: Laya.Templet) => {
+                    this._horseBone = _spineFactory.buildArmature(0);
+                    this._horseBone.name = this._horseKey + this.heroId;
+                    this._horseBone.playbackRate(0.7);
+                    this.addChild(this._horseBone);
+                    this._horseBone.pos(50, 140);
+                    this._horseBone.play(this._walkKey, true);
+                });
+            }
+        } else {
+            this.addChild(this._horseBone);
+            this._horseBone.play(this._walkKey, true);
+        }
     }
 
     /** 动画播放状态 */
     public playAnimation(state: number = 0, callback: any = null): void {
         if (this.state == state) return;
         this.state = state;
-        let animName: string = 'walk';
-        let isLoop: boolean = true;
-        let frameRate: number = 0.7;
         if (this.state == 1) {
-            animName = this._atkAnimKey;
-            isLoop = false;
             //自动切回步行
             this.timerOnce(180, this, () => {
                 this.playAnimation(0);
-            })
-        }
-        //英雄
-        let spPos = new Laya.Point(50, 140);
-        let heroSp = this.getChildByName(this._heroKey) as Laya.Skeleton;
-        if (heroSp == null) {
-            if (this._heroPath && this._heroPath.length > 0) {
-                this.createSpineTemplate(this._heroPath, (_spineFactory: Laya.Templet) => {
-                    heroSp = _spineFactory.buildArmature(0);
-                    heroSp.name = this._heroKey;
-                    heroSp.zOrder = 1;
-                    heroSp.playbackRate(frameRate);
-                    this.addChild(heroSp);
-                    console.log("@David 创建战斗英雄");
-                    heroSp.pos(spPos.x, spPos.y);
-                    if (this._horsePath == null || this._horsePath.length < 1) {
-                        //没坐骑,坐标下调
-                        heroSp.pos(spPos.x, spPos.y + 50);
-                    }
-                    heroSp.play(animName, isLoop);
-                });
-            }
+            });
+            if (this._heroBone) this._heroBone.play(this._atkAnimKey, false);
         } else {
-            heroSp.play(animName, isLoop);
-        }
-        //坐骑
-        let horseSp = this.getChildByName(this._horseKey) as Laya.Skeleton;
-        if (horseSp == null) {
-            if (this._horsePath && this._horsePath.length > 0) {
-                this.createSpineTemplate(this._horsePath, (_spineFactory: Laya.Templet) => {
-                    horseSp = _spineFactory.buildArmature(0);
-                    horseSp.name = this._horseKey;
-                    horseSp.playbackRate(frameRate);
-                    this.addChild(horseSp);
-                    console.log("@David 创建战斗英雄坐骑");
-                    horseSp.pos(spPos.x, spPos.y);
-                    horseSp.play(animName, isLoop);
-                });
-            }
-        } else {
-            horseSp.play(animName, isLoop);
+            if (this._heroBone) this._heroBone.play(this._walkKey, true);
         }
     }
 
@@ -160,22 +167,16 @@ export default class Hero extends BaseCharacter {
             }
         } else {
             this.delayMoveTime = 50; //停止动画
-            //重置收益
-            this.setIncomeTime();
+            this.setIncomeTime();   //重置收益
             this._isShowDialogue = false;
-            //后退
-            let actionSp: Hero = this;
-            let timeLine = new Laya.TimeLine();
-            timeLine.addLabel("tl1", 0).to(actionSp, { x: (this.orginalX + 180) }, 500, Laya.Ease.linearNone)
-            timeLine.on(Laya.Event.COMPLETE, actionSp, () => {
+            Laya.Tween.to(this, { x: (this.orginalX + 180) }, 500, Laya.Ease.linearNone, Laya.Handler.create(this, () => {
+                Laya.Tween.clearTween(this);
                 this.playAnimation(1);
                 actCallback && actCallback();
-                //恢复初始位置
-                let timeLine = new Laya.TimeLine();
-                timeLine.addLabel("tl1", 0).to(actionSp, { x: this.orginalX }, Math.abs(actionSp.x - this.orginalX) * 15, Laya.Ease.linearNone)
-                timeLine.play(0, false);
-            });
-            timeLine.play(0, false);
+                Laya.Tween.to(this, { x: this.orginalX }, Math.abs(this.x - this.orginalX) * 15, Laya.Ease.linearNone, Laya.Handler.create(this, () => {
+                    Laya.Tween.clearTween(this);
+                }))
+            }));
             return true;
         }
         return false;
@@ -188,53 +189,45 @@ export default class Hero extends BaseCharacter {
             hero.size(100, 100);
             hero.pivot(50, 50);
             hero.scaleX = -1;
-            let enemyHeroPath: string = PathConfig.BONE_MONSTER_PATH.replace("{0}", "bubinglv");
-            let enemyHorsePath: string = "";
-            let enemyData = this._enemyModelUrlArray[Math.floor(Math.random() * 10) % this._enemyModelUrlArray.length];
-            if (enemyData) {
-                enemyHeroPath = enemyData.heroUrl;
-                enemyHorsePath = enemyData.horseUrl;
-            }
+            this._enemyData = this._enemyModelUrlArray[Math.floor(Math.random() * 10) % this._enemyModelUrlArray.length];
             let animName: string = 'walk';
             let isLoop: boolean = true;
             let frameRate: number = 0.7;
-            //英雄
-            let spPos = new Laya.Point(50, 150);
-            let heroSp = hero.getChildByName(this._heroKey) as Laya.Skeleton;
-            if (heroSp == null) {
-                if (enemyHeroPath && enemyHeroPath.length > 0) {
-                    this.createSpineTemplate(enemyHeroPath, (_spineFactory: Laya.Templet) => {
-                        heroSp = _spineFactory.buildArmature(0);
-                        heroSp.name = this._heroKey;
-                        heroSp.zOrder = 1;
-                        heroSp.playbackRate(frameRate);
-                        hero.addChild(heroSp);
-                        heroSp.pos(spPos.x, spPos.y);
-                        if (enemyHorsePath == null || enemyHorsePath.length < 1) {
-                            //没坐骑,坐标下调
-                            heroSp.pos(spPos.x, spPos.y + 50);
+            let enemy = Laya.Pool.getItemByClass(this._enemyData.id, Laya.Skeleton);
+            if (enemy.name != this._enemyData.id) {
+                if (this._enemyData.heroUrl != "") {
+                    this.createSpineTemplate(this._enemyData.heroUrl, (_spineFactory: Laya.Templet) => {
+                        enemy = _spineFactory.buildArmature(0);
+                        enemy.name = this._enemyData.id;
+                        enemy.zOrder = 1;
+                        enemy.playbackRate(frameRate);
+                        hero.addChild(enemy);
+                        enemy.pos(50, 200);
+                        if (this._enemyData.horseUrl != "") {//有坐骑,坐标下调
+                            enemy.y -= 50;
                         }
-                        heroSp.play(animName, isLoop);
+                        enemy.play(animName, isLoop);
                     });
                 }
             } else {
-                heroSp.play(animName, isLoop);
+                hero.addChild(enemy);
+                enemy.play(animName, isLoop);
             }
-            //坐骑
-            let horseSp = hero.getChildByName(this._horseKey) as Laya.Skeleton;
-            if (horseSp == null) {
-                if (enemyHorsePath && enemyHorsePath.length > 0) {
-                    this.createSpineTemplate(enemyHorsePath, (_spineFactory: Laya.Templet) => {
-                        horseSp = _spineFactory.buildArmature(0);
-                        horseSp.name = this._horseKey;
-                        horseSp.playbackRate(frameRate);
-                        hero.addChild(horseSp);
-                        horseSp.pos(spPos.x, spPos.y);
-                        horseSp.play(animName, isLoop);
+            //敌人坐骑
+            let enemyHorse = hero.getChildByName(this._horseKey) as Laya.Skeleton;
+            if (enemyHorse == null) {
+                if (this._enemyData.horseUrl != "") {
+                    this.createSpineTemplate(this._enemyData.horseUrl, (_spineFactory: Laya.Templet) => {
+                        enemyHorse = _spineFactory.buildArmature(0);
+                        enemyHorse.name = this._horseKey;
+                        enemyHorse.playbackRate(frameRate);
+                        hero.addChild(enemyHorse);
+                        enemyHorse.pos(50, 150);
+                        enemyHorse.play(animName, isLoop);
                     });
                 }
             } else {
-                horseSp.play(animName, isLoop);
+                enemyHorse.play(animName, isLoop);
             }
             if (parentNode) {
                 parentNode.addChild(hero);
@@ -250,46 +243,43 @@ export default class Hero extends BaseCharacter {
         return this.attackSprite;
     }
 
-    /** 移除攻击对象 */
-    public removeAttackTarget(isKill: boolean = false): void {
+    /** 移除敌人 */
+    public removeEnemy(isKill: boolean = false): void {
         if (this.attackSprite) {
             if (isKill) {
-                let heroSp = this.attackSprite.getChildByName(this._heroKey) as Laya.Skeleton;
-                if (heroSp) {
-                    heroSp.stop();
-                }
+                let heroSp = this.attackSprite.getChildByName(this._enemyData.id) as Laya.Skeleton;
+                if (heroSp) heroSp.stop();
                 let horseSp = this.attackSprite.getChildByName(this._horseKey) as Laya.Skeleton;
-                if (horseSp) {
-                    horseSp.stop();
-                }
+                if (horseSp) horseSp.stop();
                 //渐隐
-                let actionSp: Hero = this.attackSprite as Hero;
-                let targetPos: any = PointUtils.localToGlobal(actionSp);
+                let targetPos: any = PointUtils.localToGlobal(this.attackSprite);
                 EffectUtil.playBoneEffect("ui_hit_03", { x: targetPos.x, y: targetPos.y + 100 });
                 let explode = new ItemExplode();
-                if (actionSp && actionSp.parent && explode) {
-                    actionSp.parent.addChild(explode.play(actionSp.x, actionSp.y + 100).scale(0.8, 0.8));
+                if (this.attackSprite && this.attackSprite.parent && explode) {
+                    this.attackSprite.parent.addChild(explode.play(this.attackSprite.x, this.attackSprite.y + 100).scale(0.8, 0.8));
                 }
-                this.frameLoop(1, this, this.attackTargetFly, [actionSp]);
-            } else {
-                this.attackSprite.removeSelf();
-                this.attackSprite = null;
+                this.frameLoop(1, this, this.onRemoveEnemyFly);
             }
         }
     }
 
-    private attackTargetFly(actionSp: Hero): void {
-        actionSp.rotation += 7;
-        actionSp.x += MathUtil.rangeInt(5, 20);
-        actionSp.y -= MathUtil.rangeInt(5, 10);
-        if (actionSp.y <= -actionSp.height) {
-            this.clearTimer(this, this.attackTargetFly);
-            actionSp.removeSelf();
+    private onRemoveEnemyFly(): void {
+        this.attackSprite.rotation += 7;
+        this.attackSprite.x += MathUtil.rangeInt(5, 20);
+        this.attackSprite.y -= MathUtil.rangeInt(5, 10);
+        if (this.attackSprite.y <= -this.attackSprite.height) {
+            this.clearTimer(this, this.onRemoveEnemyFly);
+            this.attackSprite.removeSelf();
+            Laya.Pool.recover(this._enemyData.id, this.attackSprite.getChildByName(this._enemyData.id));
             this.attackSprite = null;
         }
     }
 
     public get heroKey(): string {
         return this._heroKey;
+    }
+
+    public get heroBone(): Laya.Skeleton {
+        return this._heroBone;
     }
 }

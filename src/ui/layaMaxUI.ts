@@ -340,6 +340,7 @@ export module ui.moduleView.task {
 		public txt_title:Laya.Label;
 		public txt_diamond:Laya.Label;
 		public txt_extra:Laya.Label;
+		public btn_go:Laya.Label;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

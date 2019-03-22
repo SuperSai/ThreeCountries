@@ -8,6 +8,8 @@ import HallControl from "../../HallControl";
 import PlayerMgr from "../../../../core_wq/player/PlayerMgr";
 import GuideMgr from "../../../../core_wq/guide/GuideMgr";
 import EffectUtil from "../../../../core_wq/utils/EffectUtil";
+import HallScene from "../HallScene";
+import PoolMgr from "../../../../core_wq/msg/PoolMgr";
 
 export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
 
@@ -52,7 +54,7 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
     }
 
     /** 创建战斗中的英雄 */
-    public createBattleHero(parentNode: Laya.Node, startPos: { x: number, y: number }): Hero {
+    public createBattleHero(parentNode: HallScene, startPos: { x: number, y: number }): Hero {
         if (this._battleHero == null) {
             let hero = new Hero();
             hero.setCharacterBone(this._info.heroId);
@@ -122,8 +124,9 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
     /** 移除战斗中的英雄 */
     public removeBattleHero(): void {
         if (this._battleHero) {
-            this._battleHero.removeAttackTarget();
+            this._battleHero.removeEnemy();
             this._battleHero.removeSelf();
+            Laya.Pool.recover("bone" + this._battleHero.heroId, this._battleHero.heroBone);
             this._battleHero = null;
         }
     }

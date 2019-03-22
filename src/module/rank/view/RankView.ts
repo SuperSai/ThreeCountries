@@ -101,9 +101,11 @@ export default class RankView extends BaseView {
         this.isWorldRanking = (0 == this.ui.tab_rank.selectedIndex);
         if (this.isWorldRanking) {  //世界榜
             this.ui.lists.height = 465;
+            this.ui.lists.y = 454;
             this._worldRankData != null ? this.updateRankList(this._worldRankData) : this.initWorldRank();
         } else {    //收益榜
             this.ui.lists.height = 735;
+            this.ui.lists.y = 185;
             this._incomeRankData != null ? this.updateRankList(this._incomeRankData) : this.initIncomeRank();
         }
     }

@@ -46,7 +46,7 @@ export default class BaseCharacter extends Laya.Sprite {
     }
 
     /** 移除攻击对象 */
-    public removeAttackTarget(isKill: boolean = false): void {
+    public removeEnemy(isKill: boolean = false): void {
 
     }
 

@@ -27,8 +27,13 @@ export default class TaskItem extends ui.moduleView.task.TaskItemUI {
             } else {
                 this.btn_get.disabled = true;
             }
-            this.btn_get.on(Laya.Event.CLICK, this, this.onGetReward);
+            this.addEvents();
         }
+    }
+
+    private addEvents(): void {
+        this.btn_get.on(Laya.Event.CLICK, this, this.onGetReward);
+        this.btn_go.on(Laya.Event.CLICK, this, this.onGotoView);
     }
 
     private onGetReward(): void {
@@ -40,5 +45,9 @@ export default class TaskItem extends ui.moduleView.task.TaskItemUI {
                 MsgMgr.Ins.showMsg("任务奖励领取成功!");
             }
         });
+    }
+
+    private onGotoView(): void {
+        
     }
 }

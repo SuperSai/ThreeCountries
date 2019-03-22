@@ -6,7 +6,7 @@
     "searchKey":"View",
     "props":{"width":590,"sceneColor":"#000000","height":114},
     "nodeParent":-1,
-    "maxID":12,
+    "maxID":13,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -139,6 +139,20 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":10,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Label",
+            "searchKey":"Label,btn_go",
+            "props":{"y":82,"x":478.5,"var":"btn_go","underline":true,"text":"立刻前往","fontSize":22,"color":"#2b8147"},
+            "nodeParent":2,
+            "label":"btn_go",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":12,
             "child":[
                 ]
         }],
