@@ -12,13 +12,13 @@ R 8A09E663 summonhero.mp3
 R DCB3F965 unlock.mp3
 R 5D23A9A8 upgradecar.mp3
 D config/csvJson
-R 76F5FE6A Guide.json
-R 72EF6ED0 Hero.json
-R 7AFAD894 HeroConfig.json
-R D37FA3F0 Level.json
-R A108018C Map.json
-R B0141593 Sound.json
-R 50A81745 System.json
+R 9C6303D0 Guide.json
+R 75434A4F Hero.json
+R FCA859D3 HeroConfig.json
+R 0FF9EF4F Level.json
+R 674D6256 Map.json
+R 9A18C9A2 Sound.json
+R 51C59249 System.json
 D images/boneAnim
 D images/common
 P 141CD45F coin.png
@@ -69,7 +69,7 @@ P 8F67A316 icon_duihuakuang4.png
 D images/hall
 P 6252917F acce_effect.png
 P 7D082908 battle_title_bg.png
-P 179E68E7 bg.jpg
+R 179E68E7 bg.jpg
 P 0F56760B box_lucky.png
 P 301E4433 daojishi_di.png
 P F0C6B29B feedback_btn.png

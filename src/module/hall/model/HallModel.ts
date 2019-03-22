@@ -80,7 +80,7 @@ export default class HallModel extends Laya.Script {
     /** 获取当前可以招募英雄的数据 */
     public getRecruitHeroData(): HeroConfigVO {
         let heroDatas = GlobalData.getDataByCondition(GlobalData.HeroConfigVO, (data: HeroConfigVO) => {
-            return this.heroLevel > data.unlockNeedId;
+            return this.heroLevel >= data.unlockNeedId;
         });
         if (heroDatas && heroDatas.length > 0) {
             return heroDatas[heroDatas.length - 1];

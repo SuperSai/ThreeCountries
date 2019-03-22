@@ -267,7 +267,7 @@ export default class Hero extends BaseCharacter {
                 let targetPos: any = PointUtils.localToGlobal(actionSp);
                 EffectUtil.playBoneEffect("ui_hit_03", { x: targetPos.x, y: targetPos.y + 100 });
                 let explode = new ItemExplode();
-                if (explode) {
+                if (actionSp && actionSp.parent && explode) {
                     actionSp.parent.addChild(explode.play(actionSp.x, actionSp.y + 100).scale(0.8, 0.8));
                 }
                 this.frameLoop(1, this, this.attackTargetFly, [actionSp]);

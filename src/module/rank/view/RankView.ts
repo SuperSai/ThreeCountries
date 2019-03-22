@@ -25,6 +25,7 @@ export default class RankView extends BaseView {
     public initUI(): void {
         super.initUI();
         this.ui.lists.renderHandler = Laya.Handler.create(this, this.onListRender, null, false);
+        this.initWorldRank();
     }
 
     /** 初始化世界榜 */
@@ -76,9 +77,11 @@ export default class RankView extends BaseView {
     private updateRankList(rankData: any): void {
         this.ui.txt_noRank.visible = true;
         this.ui.lists.visible = false;
+        this.ui.imgMyRank.visible = false;
         if (rankData && rankData.length > 0) {
             this.ui.txt_noRank.visible = false;
             this.ui.lists.visible = true;
+            this.ui.imgMyRank.visible = true;
             this.ui.lists.array = rankData;
         }
     }
@@ -97,8 +100,10 @@ export default class RankView extends BaseView {
         this.curSelectedIndex = this.ui.tab_rank.selectedIndex;
         this.isWorldRanking = (0 == this.ui.tab_rank.selectedIndex);
         if (this.isWorldRanking) {  //世界榜
+            this.ui.lists.height = 465;
             this._worldRankData != null ? this.updateRankList(this._worldRankData) : this.initWorldRank();
         } else {    //收益榜
+            this.ui.lists.height = 735;
             this._incomeRankData != null ? this.updateRankList(this._incomeRankData) : this.initIncomeRank();
         }
     }

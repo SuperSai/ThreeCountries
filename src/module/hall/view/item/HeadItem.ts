@@ -79,7 +79,7 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
 
     /** 更新血量 */
     public updateHp(value: number = 1) {
-        if (GuideMgr.Ins.isGuide) return;
+        if (GuideMgr.Ins.isGuide || this._battleHero == null) return;
         EffectUtil.playBoneEffect("hit_01", { x: this._battleHero.x, y: this._battleHero.y + 100 });
         this._battleHero.hp = this._battleHero.hp - value;
         this.hpBar.value = this._battleHero.hp / this._battleHero.maxHp;

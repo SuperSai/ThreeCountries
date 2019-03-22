@@ -286,12 +286,12 @@ export module ui.moduleView.rank {
     }
     REG("ui.moduleView.rank.RankItemUI",RankItemUI);
     export class RankViewUI extends Laya.View {
-		public worldRank:Laya.Box;
+		public txt_noRank:Laya.Label;
 		public lists:Laya.List;
+		public tab_rank:Laya.Tab;
 		public imgMyRank:Laya.Sprite;
 		public txt_myRank:Laya.Label;
-		public txt_noRank:Laya.Label;
-		public tab_rank:Laya.Tab;
+		public imgBase:Laya.Sprite;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

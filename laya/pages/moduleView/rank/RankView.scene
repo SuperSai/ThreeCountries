@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":7,
-    "selecteID":5,
+    "selecteID":12,
     "searchKey":"View",
     "props":{"width":660,"sceneColor":"#000000","height":1036},
     "nodeParent":-1,
-    "maxID":18,
+    "maxID":23,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -85,116 +85,59 @@
                 },
                 {
                     "x":30,
-                    "type":"Box",
-                    "searchKey":"Box,worldRank",
-                    "props":{"y":62,"x":0,"width":660,"var":"worldRank","height":968},
+                    "type":"Label",
+                    "searchKey":"Label,txt_noRank",
+                    "props":{"y":504,"x":230,"visible":true,"var":"txt_noRank","text":"暂无排名","fontSize":50,"color":"#ffffff"},
                     "nodeParent":7,
-                    "label":"worldRank",
-                    "isOpen":true,
+                    "label":"txt_noRank",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":16,
+                    "child":[
+                        ],
+                    "$HIDDEN":true
+                },
+                {
+                    "x":30,
+                    "type":"List",
+                    "searchKey":"List,lists",
+                    "props":{"y":454,"x":33,"width":594,"visible":true,"var":"lists","repeatX":1,"height":465},
+                    "nodeParent":7,
+                    "label":"lists",
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
-                    "compId":15,
+                    "compId":9,
                     "child":[
                         {
-                            "x":45,
-                            "type":"List",
-                            "searchKey":"List,lists",
-                            "props":{"y":122,"x":33,"width":594,"var":"lists","repeatX":1,"height":735},
-                            "nodeParent":15,
-                            "label":"lists",
-                            "isOpen":false,
-                            "isDirectory":true,
-                            "isAniNode":true,
-                            "hasChild":true,
-                            "compId":9,
-                            "child":[
-                                {
-                                    "type":"Box",
-                                    "searchKey":"Box",
-                                    "props":{"renderType":"render"},
-                                    "nodeParent":9,
-                                    "label":"Box",
-                                    "isOpen":true,
-                                    "isDirectory":true,
-                                    "isAniNode":false,
-                                    "hasChild":true,
-                                    "compId":11,
-                                    "child":[
-                                        {
-                                            "type":"UIView",
-                                            "source":"moduleView/rank/RankItem.scene",
-                                            "searchKey":"UIView,item",
-                                            "props":{"y":0,"x":0,"name":"item"},
-                                            "nodeParent":11,
-                                            "label":"item",
-                                            "isDirectory":false,
-                                            "isAniNode":false,
-                                            "hasChild":false,
-                                            "compId":10,
-                                            "child":[
-                                                ]
-                                        }]
-                                }]
-                        },
-                        {
-                            "x":45,
-                            "type":"Sprite",
-                            "searchKey":"Sprite,imgMyRank",
-                            "props":{"y":869,"x":197,"var":"imgMyRank","texture":"images/rank/mytop.png"},
-                            "nodeParent":15,
-                            "label":"imgMyRank",
+                            "type":"Box",
+                            "searchKey":"Box",
+                            "props":{"renderType":"render"},
+                            "nodeParent":9,
+                            "label":"Box",
                             "isOpen":true,
                             "isDirectory":true,
-                            "isAniNode":true,
+                            "isAniNode":false,
                             "hasChild":true,
-                            "compId":12,
+                            "compId":11,
                             "child":[
                                 {
-                                    "x":60,
-                                    "type":"Label",
-                                    "searchKey":"Label",
-                                    "props":{"y":9,"x":73,"text":"我的排名","fontSize":30,"color":"#ffe7b3"},
-                                    "nodeParent":12,
-                                    "label":"Label",
+                                    "type":"UIView",
+                                    "source":"moduleView/rank/RankItem.scene",
+                                    "searchKey":"UIView,item",
+                                    "props":{"y":0,"x":0,"name":"item"},
+                                    "nodeParent":11,
+                                    "label":"item",
                                     "isDirectory":false,
-                                    "isAniNode":true,
+                                    "isAniNode":false,
                                     "hasChild":false,
-                                    "compId":13,
-                                    "child":[
-                                        ]
-                                },
-                                {
-                                    "x":60,
-                                    "type":"Label",
-                                    "searchKey":"Label,txt_myRank",
-                                    "props":{"y":39,"x":68,"width":129,"var":"txt_myRank","text":"0","height":30,"fontSize":30,"color":"#ffe7b3","align":"center"},
-                                    "nodeParent":12,
-                                    "label":"txt_myRank",
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":14,
+                                    "compId":10,
                                     "child":[
                                         ]
                                 }]
-                        },
-                        {
-                            "x":45,
-                            "type":"Label",
-                            "searchKey":"Label,txt_noRank",
-                            "props":{"y":442,"x":197,"visible":false,"var":"txt_noRank","text":"暂无排名","fontSize":50,"color":"#ffffff"},
-                            "nodeParent":15,
-                            "label":"txt_noRank",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":16,
-                            "child":[
-                                ],
-                            "$HIDDEN":true
-                        }],
-                    "$HIDDEN":false
+                        }]
                 },
                 {
                     "x":30,
@@ -207,6 +150,60 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":8,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Sprite",
+                    "searchKey":"Sprite,imgMyRank",
+                    "props":{"y":931,"x":197,"visible":false,"var":"imgMyRank","texture":"images/rank/mytop.png"},
+                    "nodeParent":7,
+                    "label":"imgMyRank",
+                    "isOpen":false,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":12,
+                    "child":[
+                        {
+                            "type":"Label",
+                            "searchKey":"Label",
+                            "props":{"y":9,"x":73,"text":"我的排名","fontSize":30,"color":"#ffe7b3"},
+                            "nodeParent":12,
+                            "label":"Label",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":13,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "type":"Label",
+                            "searchKey":"Label,txt_myRank",
+                            "props":{"y":39,"x":68,"width":129,"var":"txt_myRank","text":"0","height":30,"fontSize":30,"color":"#ffe7b3","align":"center"},
+                            "nodeParent":12,
+                            "label":"txt_myRank",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":14,
+                            "child":[
+                                ]
+                        }]
+                },
+                {
+                    "x":30,
+                    "type":"Sprite",
+                    "searchKey":"Sprite,imgBase",
+                    "props":{"y":264,"x":134,"visible":false,"var":"imgBase","texture":"images/rank/rank_king.jpg","scaleY":0.6,"scaleX":0.6},
+                    "nodeParent":7,
+                    "label":"imgBase",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":18,
                     "child":[
                         ]
                 }]
