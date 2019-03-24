@@ -66,7 +66,7 @@ export default class HeadItem extends ui.moduleView.hall.item.HeadItemUI {
                 if (heroInfo) {
                     hero.setMoveSpeedRatio(heroInfo.speed);
                 }
-                this.timerOnce(200, this, () => {
+                this.timerOnce(500, this, () => {
                     hero.playMoveAction();
                 })
             }

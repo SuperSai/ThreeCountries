@@ -50,14 +50,6 @@ export default class Hero extends BaseCharacter {
         if (this._heroVO) {
             //设置独白
             this._dialogueList = [this._heroVO.dialogue];
-            this._heroPath = this._heroVO.modelImgUrl;
-            if (this._heroPath && this._heroPath.length > 0) {
-                this._heroPath = PathConfig.BONE_PATH.replace("{0}", this._heroPath);
-            }
-            this._horsePath = this._heroVO.horse == "0" ? "" : this._heroVO.horse;
-            if (this._horsePath && this._horsePath.length > 0) {
-                this._horsePath = PathConfig.BONE_PATH.replace("{0}", this._horsePath);
-            }
             this._atkAnimKey = this._heroVO.atkAnimKey;
             //移除老模型
             this.removeChildByName(this._heroKey);
@@ -70,6 +62,10 @@ export default class Hero extends BaseCharacter {
 
     /** 创建英雄龙骨动画 */
     private createHeroBone(): void {
+        this._heroPath = this._heroVO.modelImgUrl;
+        if (this._heroPath && this._heroPath.length > 0) {
+            this._heroPath = PathConfig.BONE_PATH.replace("{0}", this._heroPath);
+        }
         this._heroBone = Laya.Pool.getItemByClass("bone" + this.heroId, Laya.Skeleton);
         if (this._heroBone.name != (this._heroKey + this.heroId)) {
             if (this._heroPath && this._heroPath.length > 0) {
@@ -94,6 +90,10 @@ export default class Hero extends BaseCharacter {
 
     /** 创建坐骑龙骨动画 */
     private createHorseBone(): void {
+        this._horsePath = this._heroVO.horse == "0" ? "" : this._heroVO.horse;
+        if (this._horsePath && this._horsePath.length > 0) {
+            this._horsePath = PathConfig.BONE_PATH.replace("{0}", this._horsePath);
+        }
         this._horseBone = Laya.Pool.getItemByClass("horse_bone" + this.heroId, Laya.Skeleton);
         if (this._horseBone.name != (this._horseKey + this.heroId)) {
             if (this._horsePath && this._horsePath.length > 0) {
