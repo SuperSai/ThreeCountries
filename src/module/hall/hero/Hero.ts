@@ -258,6 +258,10 @@ export default class Hero extends BaseCharacter {
                     this.attackSprite.parent.addChild(explode.play(this.attackSprite.x, this.attackSprite.y + 100).scale(0.8, 0.8));
                 }
                 this.frameLoop(1, this, this.onRemoveEnemyFly);
+            } else {
+                this.attackSprite.removeSelf();
+                Laya.Pool.recover(this._enemyData.id, this.attackSprite.getChildByName(this._enemyData.id));
+                this.attackSprite = null;
             }
         }
     }

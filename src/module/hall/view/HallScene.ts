@@ -20,14 +20,11 @@ import ViewRegisterMgr from "../../../core_wq/view/ViewRegisterMgr";
 import ViewMgr from "../../../core_wq/view/ViewMgr";
 import ViewConst from "../../../core_wq/view/const/ViewConst";
 import HeadItem from "./item/HeadItem";
-import PointUtils from "../../../core_wq/utils/PointUtils";
 import GuideMgr from "../../../core_wq/guide/GuideMgr";
 import SDKMgr from "../../../core_wq/msg/SDKMgr";
-import AppConfig from "../../../core_wq/config/AppConfig";
 import HeroTips from "./HeroTips";
 import RedPointMgr from "../../../core_wq/msg/RedPointMgr";
 import SystemBtn from "./item/SystemBtn";
-import SystemVO from "../../../core_wq/db/vo/SystemVO";
 import SystemConfig from "../config/SystemConfig";
 
 export default class HallScene extends ui.moduleView.hall.HallSceneUI {

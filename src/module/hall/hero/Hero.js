@@ -260,6 +260,11 @@ class Hero extends BaseCharacter_1.default {
                 }
                 this.frameLoop(1, this, this.onRemoveEnemyFly);
             }
+            else {
+                this.attackSprite.removeSelf();
+                Laya.Pool.recover(this._enemyData.id, this.attackSprite.getChildByName(this._enemyData.id));
+                this.attackSprite = null;
+            }
         }
     }
     onRemoveEnemyFly() {
