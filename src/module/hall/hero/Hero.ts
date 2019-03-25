@@ -7,7 +7,6 @@ import HeroConfigVO from "../../../core_wq/db/vo/HeroConfigVO";
 import PointUtils from "../../../core_wq/utils/PointUtils";
 import MathUtil from "../../../core_wq/utils/MathUtil";
 import ItemExplode from "../../../core_wq/effect/ItemExplode";
-import PoolMgr from "../../../core_wq/msg/PoolMgr";
 
 export default class Hero extends BaseCharacter {
 

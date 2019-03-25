@@ -1,0 +1,41 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class EventType {
+}
+/** 更新货币 */
+EventType.UPDATE_CURRENCY = "UPDATE_CURRENCY";
+/** 更新用户等级 */
+EventType.UPDATE_USER_LEVEL = "UPDATE_USER_LEVEL";
+/** 更新用户经验 */
+EventType.UPDATE_USER_EXP = "UPDATE_USER_EXP";
+/** 更新每秒收益 */
+EventType.UPDATE_INCOME = "UPDATE_INCOME";
+/** 回到游戏中 */
+EventType.COME_BACK_GAME = "COME_BACK_GAME";
+/** 英雄储存箱 */
+EventType.HERO_BOX = "HERO_BOX";
+/** 加速 */
+EventType.GAME_ACCE_START = "GAME_ACCE_START";
+/** 每日签到奖励领取完毕 */
+EventType.DAYSIGN_REWARD_COMPLETE = "DAYSIGN_REWARD_COMPLETE";
+/** 显示离线奖励 */
+EventType.SHOW_OFFLINE_REWARD = "SHOW_OFFLINE_REWARD";
+/** 新手下一步 */
+EventType.GUIDE_NEXT_STEP = "GUIDE_NEXT_STEP";
+/** 打开功能界面 */
+EventType.OPEN_VIEW = "OPEN_VIEW";
+/** 移除商店红点 */
+EventType.REMOVE_SHOP_REN_POINT = "REMOVE_SHOP_REN_POINT";
+/** 移除任务红点 */
+EventType.REMOVE_TASK_REN_POINT = "REMOVE_TASK_REN_POINT";
+/** 移除转盘红点 */
+EventType.REMOVE_LUCK_PRIZE_REN_POINT = "REMOVE_LUCK_PRIZE_REN_POINT";
+/** 移除签到红点 */
+EventType.REMOVE_SIGN_REN_POINT = "REMOVE_SIGN_REN_POINT";
+/** 移除关注红点 */
+EventType.REMOVE_FOLLOW_REN_POINT = "REMOVE_FOLLOW_REN_POINT";
+/** 更新系统功能红点 */
+EventType.UPDATE_SYSTEM_RED_POINT = "UPDATE_SYSTEM_RED_POINT";
+/** 更新系统功能按钮 */
+EventType.UPDATE_SYSTEM_BTN = "UPDATE_SYSTEM_BTN";
+exports.default = EventType;
