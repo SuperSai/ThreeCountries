@@ -133,6 +133,7 @@ export default class StorageUtil extends Laya.Script {
             });
             HttpMgr.Ins.requestUserInfoData((res: any) => {
                 if (res) {
+                    console.log("@David 用户基础信息：", res);
                     PlayerMgr.Ins.Info.userId = res.id;
                     PlayerMgr.Ins.Info.userGold = MathUtil.parseStringNum(res.money);
                     PlayerMgr.Ins.Info.userDiamond = MathUtil.parseStringNum(res.diamond);

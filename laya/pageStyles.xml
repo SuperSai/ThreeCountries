@@ -14,4 +14,5 @@
    <item name="moduleView/hall/UserInfoView.scene" props="" ifExport="默认" aName="用户信息界面"/>
    <item name="moduleView/hall/NewHeroView.scene" props="" ifExport="默认" aName="新英雄界面"/>
    <item name="moduleView/hall/item/SystemBtn.scene" props="" ifExport="默认" aName="系统功能按钮"/>
+   <item name="moduleView/rank/RankView.scene" props="" ifExport="默认" aName="排行榜"/>
 </page>

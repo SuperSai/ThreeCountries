@@ -365,7 +365,6 @@ export default class HttpMgr extends Laya.Script {
             },
             fail: function (res) {
                 console.log(res);
-                // CommonFun.stopWaitEffect();
                 MsgMgr.Ins.showMsg("网络异常");
             }
         });

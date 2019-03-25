@@ -5,6 +5,9 @@ import HttpMgr from "../../../core_wq/net/HttpMgr";
 import MathUtil from "../../../core_wq/utils/MathUtil";
 import RankItem from "./RankItem";
 import PathConfig from "../../../core_wq/config/PathConfig";
+import BoneAnim from "../../../core_wq/bone/BoneAnim";
+import HeroVO from "../../../core_wq/db/vo/HeroVO";
+import GlobalData from "../../../core_wq/db/GlobalData";
 
 /**
  * 排行榜
@@ -82,7 +85,21 @@ export default class RankView extends BaseView {
             this.ui.txt_noRank.visible = false;
             this.ui.lists.visible = true;
             this.ui.imgMyRank.visible = true;
+            // this.showBaseHero(rankData);
             this.ui.lists.array = rankData;
+        }
+    }
+
+    /** 显示底座上的英雄 */
+    private showBaseHero(rankData): void {
+        for (let index = 0; index < 3; index++) {
+            const data = rankData[index];
+            let vo: HeroVO = GlobalData.getData(GlobalData.HeroVO, data.heroId);
+            if (vo) {
+                let heroBone: BoneAnim = new BoneAnim(vo.modelImgUrl, true, true);
+                this.addChild(heroBone);
+                heroBone.pos(this["pos_" + index].x, this["pos_" + index].y);
+            }
         }
     }
 
@@ -118,6 +135,7 @@ export default class RankView extends BaseView {
             item.box_title.visible = this.isWorldRanking;
             item.box_price.visible = !this.isWorldRanking;
             item.imgRank.visible = index < 3;
+            item.txt_rank.visible = !item.imgRank.visible;
             if (item.imgRank.visible) {
                 item.imgRank.skin = PathConfig.RANK_PATH.replace("{0}", (index + 1) + "");
             } else {

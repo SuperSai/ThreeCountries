@@ -8,6 +8,8 @@ import SoundVO from "./vo/SoundVO";
 import GuideVO from "./vo/GuideVO";
 import MapVO from "./vo/MapVO";
 import SystemVO from "./vo/SystemVO";
+import DropVO from "./vo/DropVO";
+import LotteryRosterVO from "./vo/LotteryRosterVO";
 
 export default class GlobalData extends Laya.Script {
 
@@ -42,6 +44,10 @@ export default class GlobalData extends Laya.Script {
     public static MapVO: string = "Map_json";
     /** 功能开放表 */
     public static SystemVO: string = "System_json";
+    /** 掉落表 */
+    public static DropVO: string = "Drop_json";
+    /** 转盘中奖表 */
+    public static LotteryRosterVO: string = "LotteryRoster_json";
 
     private initModel(): void {
         this._totalStepCsvList.Add(GlobalData.HeroVO, HeroVO);
@@ -51,6 +57,8 @@ export default class GlobalData extends Laya.Script {
         this._totalStepCsvList.Add(GlobalData.GuideVO, GuideVO);
         this._totalStepCsvList.Add(GlobalData.MapVO, MapVO);
         this._totalStepCsvList.Add(GlobalData.SystemVO, SystemVO);
+        this._totalStepCsvList.Add(GlobalData.DropVO, DropVO);
+        this._totalStepCsvList.Add(GlobalData.LotteryRosterVO, LotteryRosterVO);
     }
 
     // 解析初始数据表

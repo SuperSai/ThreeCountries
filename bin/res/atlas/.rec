@@ -1,6 +1,8 @@
 D .
+R 80E33737 .DS_Store
 D config
 D images
+R A75379ED .DS_Store
 D musics
 R 3DC7B3B0 accecar.mp3
 R 4A072D34 bgmusic.mp3
@@ -12,13 +14,15 @@ R 8A09E663 summonhero.mp3
 R DCB3F965 unlock.mp3
 R 5D23A9A8 upgradecar.mp3
 D config/csvJson
-R 9C6303D0 Guide.json
-R 75434A4F Hero.json
-R FCA859D3 HeroConfig.json
-R 0FF9EF4F Level.json
-R 674D6256 Map.json
-R 9A18C9A2 Sound.json
-R 51C59249 System.json
+R B4C1282B Drop.json
+R 76F5FE6A Guide.json
+R 72EF6ED0 Hero.json
+R 7AFAD894 HeroConfig.json
+R D37FA3F0 Level.json
+R D93AAFC7 LotteryRoster.json
+R A108018C Map.json
+R B0141593 Sound.json
+R 50A81745 System.json
 D images/boneAnim
 D images/common
 P 141CD45F coin.png
@@ -33,7 +37,7 @@ P D3219A4C red_point_big.png
 P 198CC2C3 share_cell_diamond.png
 P 3E330B46 star2.png
 P D13C8581 token.png
-P 2C5C7FFF video_icon.png
+P DA1D541D video_icon.png
 D images/component
 P 86678417 anjian_003.png
 P 8CEF7464 anjian_01.png
@@ -69,7 +73,7 @@ P 8F67A316 icon_duihuakuang4.png
 D images/hall
 P 6252917F acce_effect.png
 P 7D082908 battle_title_bg.png
-R 179E68E7 bg.jpg
+P 179E68E7 bg.jpg
 P 0F56760B box_lucky.png
 P 301E4433 daojishi_di.png
 P F0C6B29B feedback_btn.png
@@ -108,17 +112,25 @@ R 84A3E54A loading_bg.jpg
 R 3AB882B6 start_bg.jpg
 P 58E22D3F start_btn.png
 D images/luckPrize
+P B404B0C4 luck_1.png
+P A2959861 luck_2.png
+P D82199B4 luck_8.png
 P 25BB124A luck_go.png
-P 0A3E9924 luck_huanpan.png
+P D4174B4C luck_huanpan.png
 P 594CA87E luck_item_bg.png
-P DBB3C9D0 luck_prize_0.png
+P 105A1C46 luck_item_box.png
+P 82CAD3C0 luck_item_title_2.png
+P 75719957 luck_item_title_8.png
+P 8C571E49 luck_label_bg.png
+P 18F8708B luck_lottery_bg.png
+P F8378FE5 luck_price_bg.png
 P F300E1CC luck_prize_1.png
-P 19734A7B luck_prize_2.png
-P 559ADD3D luck_prize_3.png
+P BAFDE3A9 luck_prize_3.png
 P 6663ADAB luck_prize_4.png
-P 9FE57CF5 luck_prize_5.png
-P C1A0F732 luck_prize_6.png
-P B943634E luck_prize_7.png
+P FBA18928 luck_prize_5.png
+P 9A1C081D luck_prize_6.png
+P AA9A4F98 luck_prize_7.png
+P 29AD4BCD luck_prize_8.png
 D images/map
 D images/rank
 D images/shop

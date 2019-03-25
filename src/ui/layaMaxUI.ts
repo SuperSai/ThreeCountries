@@ -240,6 +240,19 @@ export module ui.moduleView.login {
     }
     REG("ui.moduleView.login.LoginSceneUI",LoginSceneUI);
 }
+export module ui.moduleView.luckPrize.item {
+    export class RollNameItemUI extends Laya.View {
+		public hbox:Laya.HBox;
+		public txt_name:Laya.Label;
+		public txt_reward:Laya.Label;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("moduleView/luckPrize/item/RollNameItem");
+        }
+    }
+    REG("ui.moduleView.luckPrize.item.RollNameItemUI",RollNameItemUI);
+}
 export module ui.moduleView.luckPrize {
     export class LuckPrizeRewardViewUI extends Laya.View {
 		public imgItemBg:Laya.Sprite;
@@ -255,10 +268,12 @@ export module ui.moduleView.luckPrize {
     export class LuckPrizeViewUI extends Laya.View {
 		public imgBg:Laya.Sprite;
 		public btn_start:Laya.Button;
-		public imgDiamond:Laya.Sprite;
+		public imgDiamond:Laya.Image;
 		public txt_diamond:Laya.Label;
-		public txt_des:Laya.Label;
-		public txt_time:Laya.Label;
+		public imgMagnification:Laya.Sprite;
+		public rollBg:Laya.Image;
+		public rollBox:Laya.Box;
+		public txt_myDiamond:Laya.Label;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
@@ -292,6 +307,12 @@ export module ui.moduleView.rank {
 		public imgMyRank:Laya.Sprite;
 		public txt_myRank:Laya.Label;
 		public imgBase:Laya.Sprite;
+		public pos_0:Laya.Sprite;
+		public pos_1:Laya.Sprite;
+		public pos_2:Laya.Sprite;
+		public txt_name1:Laya.Label;
+		public txt_name2:Laya.Label;
+		public txt_name0:Laya.Label;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

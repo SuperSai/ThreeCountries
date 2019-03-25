@@ -8,16 +8,22 @@ import PlayerMgr from "../../../core_wq/player/PlayerMgr";
 import MsgMgr from "../../../core_wq/msg/MsgMgr";
 import ViewMgr from "../../../core_wq/view/ViewMgr";
 import ViewConst from "../../../core_wq/view/const/ViewConst";
+import SDKMgr from "../../../core_wq/msg/SDKMgr";
+import EventsMgr from "../../../core_wq/event/EventsMgr";
+import EventType from "../../../core_wq/event/EventType";
+import PlayerInfo from "../../../core_wq/player/data/PlayerInfo";
+import RollNameItem from "./item/RollNameItem";
+import LotteryRosterVO from "../../../core_wq/db/vo/LotteryRosterVO";
+import GlobalData from "../../../core_wq/db/GlobalData";
 
 export default class LuckPrizeView extends BaseView {
 
-    private costDiamond: number = 120;
-    private freeTimes: number = 0; //免费次数
-    private freeTime: number = 0; //免费时间
-    private nextFreeTime: number = 0; //离下次免费时间
-    private isTryAgain: boolean = false; //再来一次
-    private isFreeDrawing: boolean = false; //是否正在免费抽奖
-    private _currType: number = -1;
+    public static magnification: number = 1;
+
+    private costDiamond: number = 80;
+    /** 视频抽奖次数 */
+    private _videoCount: number = 0;
+    private _freeCount: number = 0;
 
     constructor() {
         super(LayerMgr.Ins.frameLayer, ui.moduleView.luckPrize.LuckPrizeViewUI);
@@ -25,111 +31,104 @@ export default class LuckPrizeView extends BaseView {
 
     public initUI(): void {
         super.initUI();
-        this.luckPrizeInfo(() => {
-            this.initView();
-            this.refreshDiamontTxt();
-            this.timerLoop(1000, this, this.onTimeHandler);
-        })
+        this.initLuckPrizeData();
     }
 
-    private luckPrizeInfo(callBack: Function = null): void {
-        HttpMgr.Ins.requestPrizeInfo((res: any) => {
-            if (res) {
-                if (this.isFreeDrawing == false) {
-                    this.freeTimes = MathUtil.parseInt(res.free_num);
-                    this.freeTime = MathUtil.parseInt(res.remain_time);
-                    this.nextFreeTime = MathUtil.parseInt(res.next_free);
-                }
-                this.costDiamond = MathUtil.parseInt(res.roulette_price);
-                //免费次数已用完
-                if (this.freeTimes < 1) {
-                    this.freeTime = 0;
-                }
-                callBack && callBack();
+    /** 初始化转盘数据 */
+    private initLuckPrizeData(): void {
+        HttpMgr.Ins.requestPrizeInfo((_res: any) => {
+            if (_res) {
+                this._freeCount = _res.roulette_free_num;
+                this._videoCount = _res.roulette_ad_num;
+                LuckPrizeView.magnification = _res.reward_x;
+                console.log("@David 转盘的次数：", this._freeCount, " 视频免费次数--", this._videoCount, " 倍率--", LuckPrizeView.magnification);
+                this.ui.imgMagnification.skin = "images/luckPrize/luck_" + LuckPrizeView.magnification + ".png";
+                this.refreshDiamondText();
+                this.onUpdateDiamond();
+                this.onUpdateRollName();
             }
-        })
+        });
     }
 
-    private initView(): void {
-        this.ui.txt_des.text = "单次抽奖将消耗元宝x" + this.costDiamond;
-    }
-
-    private refreshDiamontTxt(): void {
-        if (this.freeTime > 0 || this.isTryAgain) {
+    private refreshDiamondText(): void {
+        this.ui.imgDiamond.skin = "images/common/game_diamondIcon.png";
+        if (this._freeCount > 0 || this._videoCount > 0) {
             this.ui.txt_diamond.text = "免费";
+            if (this._freeCount <= 0 && this._videoCount > 0) {
+                this.ui.imgDiamond.skin = "images/common/video_icon.png";
+            }
         } else {
-            this.ui.txt_diamond.text = this.costDiamond + "";
+            this.ui.txt_diamond.changeText('' + this.costDiamond);
         }
     }
 
     public addEvents(): void {
         this.ui.btn_start.on(Laya.Event.CLICK, this, this.onStartHandler);
+        EventsMgr.Ins.addListener(EventType.UPDATE_CURRENCY, this.onUpdateCurrency, this);
     }
 
     public removeEvents(): void {
         this.ui.btn_start.off(Laya.Event.CLICK, this, this.onStartHandler);
+        EventsMgr.Ins.addListener(EventType.UPDATE_CURRENCY, this.onUpdateCurrency, this);
     }
 
     /** 开始抽奖 */
     private onStartHandler(): void {
-        this.setStartBtnEnabled(false);
-        if (this.isTryAgain) {//再来一次
-            this.isTryAgain = false;
-            this.luckPrizeDrawPrize(LUCK_TYPE.AGAIN);
-        } else if (this.freeTimes > 0) {
-            this.luckPrizeDrawPrize(LUCK_TYPE.FREE);
-        } else if (PlayerMgr.Ins.Info.userDiamond >= this.costDiamond) {
-            this.luckPrizeDrawPrize(LUCK_TYPE.DIAMOND);
-        } else {
-            MsgMgr.Ins.showMsg("元宝不足,做任务领元宝!");
-            this.setStartBtnEnabled();
+        let that = this;
+        that.startBtnEnabled(false);
+        if (this._freeCount > 0) {   //免费抽奖
+            this.doLotteryByType(LOTTERY_TYPE.FREE);
+        }
+        else if (this._videoCount > 0) { //看视频抽奖
+            this.handlerLookVideoLottery();
+        }
+        else if (PlayerMgr.Ins.Info.userDiamond >= this.costDiamond) { //钻石抽奖
+            this.doLotteryByType(LOTTERY_TYPE.DIAMOND);
+        }
+        else {
+            MsgMgr.Ins.showMsg("主人,元宝不足噢~");
+            this.startBtnEnabled();
         }
     }
 
-    private onTimeHandler(): void {
-        if (this.freeTime > 0) {
-            this.ui.txt_time.text = "免费抽奖剩余时间: " + TimeUtil.timeFormatStr(this.freeTime, true);
-            this.ui.txt_time.color = "#66CD00";
-            this.freeTime--;
-        } else if (this.nextFreeTime > 0) {
-            this.ui.txt_time.text = "下一次免费抽奖倒计时: " + TimeUtil.timeFormatStr(this.nextFreeTime, true);
-            this.ui.txt_time.color = "#EE6363";
-            this.nextFreeTime--;
-            this.freeTimes = 0; //免费次数清零
-        } else {
-            if (this.ui.txt_time.visible) {
-                this.luckPrizeInfo();
-            }
-            this.ui.txt_time.visible = false;
-        }
-        //消耗元宝
-        this.refreshDiamontTxt();
-    }
-
-    private luckPrizeDrawPrize(type: number): void {
-        this._currType = type;
-        HttpMgr.Ins.requestDrawPrize(type, (res: any) => {
-            if (!res || res.id == null) {
-                console.log("@David 无法正常抽奖 类型为：", type);
-                this.setStartBtnEnabled();
+    private doLotteryByType(type: number): void {
+        HttpMgr.Ins.requestDrawPrize(type, (data: any) => {
+            if (!data || data.id == null) {
+                console.log("@David 无法正常抽奖 type:", type);
+                this.startBtnEnabled();
                 return;
             }
-            let itemId: number = res.id;
+            console.log("@David 转盘的抽奖：", data.id, "--", type);
+            let itemId: number = data.id;
             let rotation: number = (8 - itemId) * 360 / 8 + 360 / 16;
-            this.onRotation(360 * 7 + rotation, itemId);
+            this.onRotation(360 * 3 + rotation, itemId);
             switch (type) {
-                case LUCK_TYPE.FREE:
-                    this.isFreeDrawing = true;
-                    this.freeTimes--;
-                    this.freeTime = 0;
+                case LOTTERY_TYPE.FREE:
+                    this._freeCount--;
+                    this.refreshView();
                     break;
-                case LUCK_TYPE.DIAMOND:
-                    this.freeTimes--;
-                    this.freeTime = 0;
+                case LOTTERY_TYPE.VIDEO:
+                    this._videoCount--;
+                    this.refreshView();
+                    break;
+                case LOTTERY_TYPE.DIAMOND:
                     HttpMgr.Ins.requestDiamondData();
                     break;
             }
         })
+    }
+
+    /** 看视频抽奖 */
+    private handlerLookVideoLottery(): void {
+        SDKMgr.Ins.showVideoAd(() => {
+            this.doLotteryByType(LOTTERY_TYPE.VIDEO);
+        }, () => {
+            this.startBtnEnabled();
+        });
+    }
+
+    private refreshView() {
+        this.refreshDiamondText();
     }
 
     /** 转盘 */
@@ -159,7 +158,7 @@ export default class LuckPrizeView extends BaseView {
                 } else {
                     this.ui.imgBg.rotation = rotation;
                     this.ui.imgBg.clearTimer(this, animFun);
-                    this.setStartBtnEnabled();
+                    this.startBtnEnabled();
                     //显示奖励物品
                     this.showRewardView(itemId);
                 }
@@ -169,7 +168,7 @@ export default class LuckPrizeView extends BaseView {
                 } else {
                     this.ui.imgBg.rotation = rotation;
                     this.ui.imgBg.clearTimer(this, animFun);
-                    this.setStartBtnEnabled();
+                    this.startBtnEnabled();
                 }
             }
         }
@@ -179,23 +178,70 @@ export default class LuckPrizeView extends BaseView {
     /** 显示奖励界面 */
     private showRewardView(itemId: number): void {
         ViewMgr.Ins.open(ViewConst.LuckPrizeRewardView, (flag: boolean) => {
-            if (flag) this.isTryAgain = true;
+            this.freeLottery();
         }, itemId);
-        if (this._currType == LUCK_TYPE.FREE) {
-            this.isFreeDrawing = false;
+    }
+
+    private freeLottery(): void {
+        console.log("@David 转盘抽中物品后关闭界面：", LuckPrizeView.magnification);
+        this.ui.imgMagnification.skin = "images/luckPrize/luck_" + LuckPrizeView.magnification + ".png";
+        if (LuckPrizeView.magnification > 1) {
+            this.startBtnEnabled();
+            this.doLotteryByType(LOTTERY_TYPE.FREE_VIDEO);
+            console.log("@David 转盘抽中多倍后再一次免费抽奖");
         }
     }
 
-    private setStartBtnEnabled(isEnabled: boolean = true): void {
-        this.ui.btn_start.mouseEnabled = isEnabled;
+    /** 更新用户货币 */
+    private onUpdateCurrency(type: number, diamond: number, isTotal: boolean = true): void {
+        if (type == PlayerInfo.DIAMOND) {
+            this.onUpdateDiamond(diamond);
+        }
+    }
+
+    /** 更新钻石数量 */
+    private onUpdateDiamond(diamond: number = -1): void {
+        if (diamond > -1) {
+            this.ui.txt_myDiamond.text = diamond + "";
+        } else {
+            this.ui.txt_myDiamond.text = PlayerMgr.Ins.Info.userDiamond + "";
+        }
+    }
+
+    /** 更新滚动的名字 */
+    private onUpdateRollName(): void {
+        (this.ui.rollBox as Laya.Box).scrollRect = new Laya.Rectangle(0, 0, this.ui.rollBox.width, this.ui.rollBox.height);
+        this.timerLoop(600, this, this.timeLoopRollName);
+    }
+
+    private timeLoopRollName(): void {
+        let vo: LotteryRosterVO = GlobalData.getData(GlobalData.LotteryRosterVO, MathUtil.rangeInt(1, 100));
+        let rollName: RollNameItem = Laya.Pool.getItemByClass("RollNameItem", RollNameItem);
+        rollName.dataSource = vo;
+        if (rollName.txt_name) {
+            this.ui.rollBox.addChild(rollName);
+            rollName.x = 63;
+            rollName.y = this.ui.rollBox.height + rollName.height;
+            Laya.Tween.to(rollName, { y: -rollName.height }, 2500, Laya.Ease.linearNone, Laya.Handler.create(this, () => {
+                Laya.Tween.clearTween(rollName);
+                rollName.removeSelf();
+                Laya.Pool.recover("RollNameItem", rollName);
+            }));
+        }
+    }
+
+    private startBtnEnabled(_isEnabled: boolean = true): void {
+        this.ui.btn_start.mouseEnabled = _isEnabled;
     }
 }
 
-enum LUCK_TYPE {
-    /** 免费 */
-    FREE,
-    /** 钻石 */
-    DIAMOND,
-    /** 再一次 */
-    AGAIN
+enum LOTTERY_TYPE {
+    /** 免费抽奖 */
+    FREE = 0,
+    /** 钻石抽奖 */
+    DIAMOND = 1,
+    /** 免费抽奖的看视频 */
+    VIDEO = 2,
+    /** 这个是比较特殊的，只有抽中多倍后观看视频就免费赠送一次抽奖 */
+    FREE_VIDEO = 3,
 }

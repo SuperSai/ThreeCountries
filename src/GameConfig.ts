@@ -7,6 +7,7 @@ import CurrencyView from "./module/hall/view/CurrencyView"
 import HeadItem from "./module/hall/view/item/HeadItem"
 import SystemBtn from "./module/hall/view/item/SystemBtn"
 import LoginScene from "./module/login/view/LoginScene"
+import RollNameItem from "./module/luckPrize/view/item/RollNameItem"
 import RankItem from "./module/rank/view/RankItem"
 import ShopItem from "./module/shop/view/ShopItem"
 import TaskItem from "./module/task/view/TaskItem"
@@ -37,6 +38,7 @@ export default class GameConfig{
         reg("module/hall/view/item/HeadItem.ts",HeadItem);
         reg("module/hall/view/item/SystemBtn.ts",SystemBtn);
         reg("module/login/view/LoginScene.ts",LoginScene);
+        reg("module/luckPrize/view/item/RollNameItem.ts",RollNameItem);
         reg("module/rank/view/RankItem.ts",RankItem);
         reg("module/shop/view/ShopItem.ts",ShopItem);
         reg("module/task/view/TaskItem.ts",TaskItem);

@@ -120,9 +120,9 @@ export default class Hero extends BaseCharacter {
             this.timerOnce(180, this, () => {
                 this.playAnimation(0);
             });
-            if (this._heroBone) this._heroBone.play(this._atkAnimKey, false);
+            if (this._heroBone && this._heroBone.name != "") this._heroBone.play(this._atkAnimKey, false);
         } else {
-            if (this._heroBone) this._heroBone.play(this._walkKey, true);
+            if (this._heroBone && this._heroBone.name != "") this._heroBone.play(this._walkKey, true);
         }
     }
 
@@ -267,14 +267,17 @@ export default class Hero extends BaseCharacter {
     }
 
     private onRemoveEnemyFly(): void {
-        this.attackSprite.rotation += 7;
-        this.attackSprite.x += MathUtil.rangeInt(5, 20);
-        this.attackSprite.y -= MathUtil.rangeInt(5, 10);
-        if (this.attackSprite.y <= -this.attackSprite.height) {
-            this.clearTimer(this, this.onRemoveEnemyFly);
-            this.attackSprite.removeSelf();
-            Laya.Pool.recover(this._enemyData.id, this.attackSprite.getChildByName(this._enemyData.id));
-            this.attackSprite = null;
+        if (this.attackSprite) {
+            this.attackSprite.rotation += 7;
+            this.attackSprite.x += MathUtil.rangeInt(5, 20);
+            this.attackSprite.y -= MathUtil.rangeInt(5, 10);
+            if (this.attackSprite.y <= -this.attackSprite.height) {
+                this.clearTimer(this, this.onRemoveEnemyFly);
+                this.attackSprite.removeSelf();
+                let enemy = this.attackSprite.getChildByName(this._enemyData.id);
+                if (enemy) Laya.Pool.recover(this._enemyData.id, enemy);
+                this.attackSprite = null;
+            }
         }
     }
 
