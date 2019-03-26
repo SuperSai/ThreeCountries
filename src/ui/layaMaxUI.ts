@@ -42,6 +42,16 @@ export module ui.moduleView.common {
         }
     }
     REG("ui.moduleView.common.LevelRewardViewUI",LevelRewardViewUI);
+    export class MsgTipsViewUI extends Laya.View {
+		public imgBg:Laya.Image;
+		public txt_content:Laya.Label;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("moduleView/common/MsgTipsView");
+        }
+    }
+    REG("ui.moduleView.common.MsgTipsViewUI",MsgTipsViewUI);
     export class OffLineRewardViewUI extends Laya.View {
 		public txt_gold:Laya.Label;
 		public btn_get:Laya.Button;
@@ -254,8 +264,17 @@ export module ui.moduleView.luckPrize.item {
     REG("ui.moduleView.luckPrize.item.RollNameItemUI",RollNameItemUI);
 }
 export module ui.moduleView.luckPrize {
+    export class LuckPrizeBoxViewUI extends Laya.Scene {
+		public imgTitle:Laya.Image;
+		public btn_adv:Laya.Button;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("moduleView/luckPrize/LuckPrizeBoxView");
+        }
+    }
+    REG("ui.moduleView.luckPrize.LuckPrizeBoxViewUI",LuckPrizeBoxViewUI);
     export class LuckPrizeRewardViewUI extends Laya.View {
-		public imgItemBg:Laya.Sprite;
 		public imgIcon:Laya.Image;
 		public txt_name:Laya.Label;
         constructor(){ super()}
@@ -266,7 +285,7 @@ export module ui.moduleView.luckPrize {
     }
     REG("ui.moduleView.luckPrize.LuckPrizeRewardViewUI",LuckPrizeRewardViewUI);
     export class LuckPrizeViewUI extends Laya.View {
-		public imgBg:Laya.Sprite;
+		public imgBg:Laya.Image;
 		public btn_start:Laya.Button;
 		public imgDiamond:Laya.Image;
 		public txt_diamond:Laya.Label;

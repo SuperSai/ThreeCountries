@@ -12,6 +12,8 @@ import LevelRewardView from "../../module/common/view/LevelRewardView";
 import OffLineRewardView from "../../module/common/view/OffLineRewardView";
 import UserInfoView from "../../module/hall/view/UserInfoView";
 import NewHeroView from "../../module/hall/view/NewHeroView";
+import LuckPrizeRewardView from "../../module/luckPrize/view/LuckPrizeRewardView";
+import LuckPrizeBoxView from "../../module/luckPrize/view/LuckPrizeBoxView";
 
 /**
  * 界面注册类
@@ -33,6 +35,8 @@ export default class ViewRegisterMgr {
         ViewMgr.Ins.register(ViewConst.OffLineRewardView, new OffLineRewardView());
         ViewMgr.Ins.register(ViewConst.UserInfoView, new UserInfoView());
         ViewMgr.Ins.register(ViewConst.NewHeroView, new NewHeroView());
+        ViewMgr.Ins.register(ViewConst.LuckPrizeRewardView, new LuckPrizeRewardView());
+        ViewMgr.Ins.register(ViewConst.LuckPrizeBoxView, new LuckPrizeBoxView());
 
     }
 

@@ -84,7 +84,7 @@ export default class HallControl extends Laya.Script {
                     this._battleHeroIndex++;
                     this._startPos = {
                         x: MathUtil.rangeInt(10, 50) + this.hallScene.width * 0.5 * Math.random(),
-                        y: this.hallScene.beginEventView.y + MathUtil.rangeInt(-150, 200)//150 + (this.hallScene.beginEventView.height - 30) / this.hallScene.lists_head.array.length * this._battleHeroIndex
+                        y: this.hallScene.beginEventView.y + MathUtil.rangeInt(-150, 200)
                     };
                     EffectUtil.playBoneEffect("ui_born", { x: this._startPos.x - 20, y: this._startPos.y + 200 });
                     if (this._battleHeroIndex >= this.hallScene.lists_head.array.length) {

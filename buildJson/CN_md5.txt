@@ -17,4 +17,4 @@ Hero|3fee5b0bf532eadee39ea2e7f01a81a8
 HeroConfig|db18cc4f2cbbd373bf0ef5d2e9b8b2f7
 Guide|217e0284a415c0e0df73afc1acb3e12f
 System|b273f3ac6213438798f96d0d319be5f0
-Drop|1704e1c92987e7d06a49e647eda0e98c
+Drop|373b81b326dc5fe103f3d96b7bd5ad05

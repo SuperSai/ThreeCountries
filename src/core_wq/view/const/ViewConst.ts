@@ -25,6 +25,7 @@ export default class ViewConst {
     public static UserInfoView: number = 10011;
     /** 新武将界面 */
     public static NewHeroView: number = 10012;
-
+    /** 转盘抽中倍率界面 */
+    public static LuckPrizeBoxView: number = 10013;
 
 }

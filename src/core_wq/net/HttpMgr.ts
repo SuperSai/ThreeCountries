@@ -194,7 +194,7 @@ export default class HttpMgr extends Laya.Script {
     public requestDiamondData(): void {
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/userinfo/get_diamond',
+            url: 'v3/userinfo/get_diamond',
             success: function (res) {
                 console.log("@David 刷新用户元宝数量:", res);
                 if (res) {
@@ -212,7 +212,7 @@ export default class HttpMgr extends Laya.Script {
         let that = this;
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/seat/get',
+            url: 'v3/seat/get',
             success: function (res) {
                 console.log("@David 英雄数据:", res);
                 callback && callback(res);
@@ -260,7 +260,7 @@ export default class HttpMgr extends Laya.Script {
     public requestCarshopData(callback: any): void {
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/shop/get',
+            url: 'v3/shop/get',
             success: function (res) {
                 console.log("@David 商店数据:", res);
                 callback && callback(res);
@@ -310,7 +310,7 @@ export default class HttpMgr extends Laya.Script {
     public requestNotifyServerPrize(): void {
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/userinfo/reward',
+            url: 'v3/userinfo/reward',
             success: function (res) {
                 console.log("requestNotifyServerPrize:", res);
             },
@@ -358,7 +358,7 @@ export default class HttpMgr extends Laya.Script {
     public requestUserInfoData(callback: any): void {
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/userinfo/get',
+            url: 'v3/userinfo/get',
             success: function (res) {
                 console.log("@David 用户基础数据:", res);
                 callback && callback(res);
@@ -409,7 +409,7 @@ export default class HttpMgr extends Laya.Script {
         let that = this;
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/activity/get/roulette',
+            url: 'v3/activity/get/roulette',
             success: function (res) {
                 console.log("@David 获取抽奖信息:", res);
                 callback && callback(res);
@@ -425,7 +425,7 @@ export default class HttpMgr extends Laya.Script {
         let that = this;
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v2/activity/roulette/' + type,
+            url: 'v3/activity/roulette/' + type,
             success: function (res) {
                 console.log("requestDrawPrize", res);
                 callback && callback(res);
@@ -512,6 +512,21 @@ export default class HttpMgr extends Laya.Script {
             success: function (res) {
                 console.log("@David 请求我的收益周排行数据:", res);
                 callback && callback(res);
+            },
+            fail: function (res) {
+                console.log(res);
+            }
+        });
+    }
+
+    /** 发送保存新手步骤 */
+    public requestGuideStep(step: number): void {
+        var that = this;
+        var HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
+        HttpReqHelper.request({
+            url: 'v3/novice/' + step,
+            success: function (res) {
+                console.log("@David 发送保存新手步骤成功");
             },
             fail: function (res) {
                 console.log(res);

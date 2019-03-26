@@ -1,6 +1,8 @@
 import { ui } from "../../../ui/layaMaxUI";
 import HttpMgr from "../../../core_wq/net/HttpMgr";
 import MsgMgr from "../../../core_wq/msg/MsgMgr";
+import TaskView from "./TaskView";
+import RedPointMgr from "../../../core_wq/msg/RedPointMgr";
 
 export default class TaskItem extends ui.moduleView.task.TaskItemUI {
 
@@ -43,11 +45,16 @@ export default class TaskItem extends ui.moduleView.task.TaskItemUI {
                 this.btn_get.visible = false;
                 HttpMgr.Ins.requestDiamondData();
                 MsgMgr.Ins.showMsg("任务奖励领取成功!");
+                TaskView.redPointNum--;
+                if (TaskView.redPointNum < 1) {
+                    TaskView.redPointNum = 0;
+                    RedPointMgr.Ins.removeTaskRedPoint();
+                }
             }
         });
     }
 
     private onGotoView(): void {
-        
+
     }
 }

@@ -9,6 +9,8 @@ import HttpMgr from "../../../core_wq/net/HttpMgr";
  */
 export default class TaskView extends BaseView {
 
+    public static redPointNum: number = 0;
+
     constructor() {
         super(LayerMgr.Ins.frameLayer, ui.moduleView.task.TaskViewUI);
         this.setResources(["task"]);
@@ -19,7 +21,13 @@ export default class TaskView extends BaseView {
         this.ui.txt_noTask.visible = true;
         this.ui.lists.visible = false;
         HttpMgr.Ins.requestTaskInfo((data: any) => {
-            if (data) {
+            if (data && data.length > 0) {
+                for (let index = 0; index < data.length; index++) {
+                    const element = data[index];
+                    if (element.task_status == 1) {
+                        TaskView.redPointNum++;
+                    }
+                }
                 this.ui.txt_noTask.visible = false;
                 this.ui.lists.array = data;
                 this.ui.lists.renderHandler = Laya.Handler.create(this, this.onListRender, null, false);

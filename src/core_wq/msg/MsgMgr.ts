@@ -1,5 +1,6 @@
 import LayerMgr from "../layer/LayerMgr";
 import AlignUtils from "../utils/AlignUtils";
+import MsgTipsView from "../../module/common/view/MsgTipsView";
 
 export default class MsgMgr extends Laya.Script {
 
@@ -7,6 +8,23 @@ export default class MsgMgr extends Laya.Script {
 
     /** 显示提示消息 */
     public showMsg(content: string): void {
+        let tipView: MsgTipsView = Laya.Pool.getItemByClass("MsgTipsView", MsgTipsView);
+        tipView.dataSource = content;
+        tipView.visible = content == "" ? false : true;
+        AlignUtils.setToScreenGoldenPos(tipView);
+        LayerMgr.Ins.rollMessageLayer.addChild(tipView);
+
+        Laya.Tween.to(tipView, { x: tipView.x, y: (tipView.y - 100), alpha: 0 }, 3000,
+            Laya.Ease.cubicInOut, Laya.Handler.create(this, ($tipView: MsgTipsView) => {
+                Laya.Tween.clearTween($tipView);
+                $tipView.removeSelf();
+                $tipView.alpha = 1;
+                Laya.Pool.recover("MsgTipsView", $tipView);
+            }, [tipView]));
+    }
+
+    /** 显示提示消息 */
+    public showMsg1(content: string): void {
         var tipBarSp = new Laya.Image("images/component/tip_bg.png");
         AlignUtils.setToScreenGoldenPos(tipBarSp);
         LayerMgr.Ins.rollMessageLayer.addChild(tipBarSp);

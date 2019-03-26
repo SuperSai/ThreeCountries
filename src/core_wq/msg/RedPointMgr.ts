@@ -32,7 +32,7 @@ export default class RedPointMgr {
     /** 移除任务红点 */
     public removeTaskRedPoint(): void {
         HallControl.Ins.Model.showTaskRedPoint = false;
-        EventsMgr.Ins.dispatch(EventType.REMOVE_TASK_REN_POINT, true);
+        EventsMgr.Ins.dispatch(EventType.UPDATE_SYSTEM_RED_POINT, SystemConfig.TASK, false);
     }
 
     /** 是否显示转盘红点 */
@@ -42,7 +42,7 @@ export default class RedPointMgr {
     /** 移除转盘红点 */
     public removeLuckPrizeRedPoint(): void {
         HallControl.Ins.Model.showLuckPrizeRedPoint = false;
-        EventsMgr.Ins.dispatch(EventType.REMOVE_LUCK_PRIZE_REN_POINT, true);
+        EventsMgr.Ins.dispatch(EventType.UPDATE_SYSTEM_RED_POINT, SystemConfig.LUCK_PRIZE, false);
     }
 
     /** 是否显示每日签到红点 */
@@ -52,7 +52,7 @@ export default class RedPointMgr {
     /** 移除签到红点 */
     public removeSignRedPoint(): void {
         HallControl.Ins.Model.showDailySignRedPoint = false;
-        EventsMgr.Ins.dispatch(EventType.REMOVE_SIGN_REN_POINT, true);
+        EventsMgr.Ins.dispatch(EventType.UPDATE_SYSTEM_RED_POINT, SystemConfig.SIGN, false);
     }
 
     /** 是否显示关注红点 */
@@ -62,7 +62,7 @@ export default class RedPointMgr {
     /** 移除关注红点 */
     public removeFollowRedPoint(): void {
         HallControl.Ins.Model.showFollowRedPoint = false;
-        EventsMgr.Ins.dispatch(EventType.REMOVE_FOLLOW_REN_POINT, true);
+        EventsMgr.Ins.dispatch(EventType.UPDATE_SYSTEM_RED_POINT, SystemConfig.FOLLOW, false);
     }
 
     private static _instance: RedPointMgr;

@@ -15,4 +15,7 @@
    <item name="moduleView/hall/NewHeroView.scene" props="" ifExport="默认" aName="新英雄界面"/>
    <item name="moduleView/hall/item/SystemBtn.scene" props="" ifExport="默认" aName="系统功能按钮"/>
    <item name="moduleView/rank/RankView.scene" props="" ifExport="默认" aName="排行榜"/>
+   <item name="moduleView/common/MsgTipsView.scene" props="" ifExport="默认" aName="游戏提示界面"/>
+   <item name="moduleView/luckPrize/LuckPrizeBoxView.scene" props="" ifExport="默认" aName="倍率界面"/>
+   <item name="moduleView/luckPrize/LuckPrizeView.scene" props="" ifExport="默认" aName="转盘界面"/>
 </page>

@@ -19,14 +19,14 @@ import DropVO from "../../../core_wq/db/vo/DropVO";
 export default class LuckPrizeRewardView extends BaseView {
 
     private rewards: Array<any> = [
-        { id: 1, name: "少量铜钱", num: 1, imgUrl: "images/lottery/luck_prize_4.png" },
-        { id: 2, name: "大量元宝", num: 488, imgUrl: "images/lottery/luck_prize_6.png" },
-        { id: 3, name: "双倍奖励", num: 2, imgUrl: "images/lottery/luck_prize_5.png" },
-        { id: 4, name: "黄金宝箱", num: 1, imgUrl: "images/lottery/luck_item_bg.png" },
-        { id: 5, name: "八倍奖励", num: 8, imgUrl: "images/lottery/luck_prize_7.png" },
-        { id: 6, name: "少量元宝", num: 1, imgUrl: "images/lottery/luck_prize_6.png" },
-        { id: 7, name: "大量铜钱", num: 1, imgUrl: "images/lottery/luck_prize_1.png" },
-        { id: 8, name: "白银宝箱", num: 1, imgUrl: "images/lottery/luck_prize_8.png" }
+        { id: 1, name: "少量铜钱", num: 1, imgUrl: "images/luckPrize/luck_prize_4.png" },
+        { id: 2, name: "大量元宝", num: 488, imgUrl: "images/luckPrize/luck_prize_6.png" },
+        { id: 3, name: "双倍奖励", num: 2, imgUrl: "images/luckPrize/luck_prize_5.png" },
+        { id: 4, name: "黄金宝箱", num: 1, imgUrl: "images/luckPrize/luck_prize_3.png" },
+        { id: 5, name: "八倍奖励", num: 8, imgUrl: "images/luckPrize/luck_prize_7.png" },
+        { id: 6, name: "少量元宝", num: 88, imgUrl: "images/luckPrize/luck_prize_6.png" },
+        { id: 7, name: "大量铜钱", num: 1, imgUrl: "images/luckPrize/luck_prize_1.png" },
+        { id: 8, name: "白银宝箱", num: 1, imgUrl: "images/luckPrize/luck_prize_8.png" }
     ]; //奖励物品列表
 
     private _itemId: number = 0;
@@ -54,17 +54,9 @@ export default class LuckPrizeRewardView extends BaseView {
                 }
                 this.ui.txt_name.text = "获得：" + itemData.name + "x" + MathUtil.unitConversion(heroPrice * LuckPrizeView.magnification);
                 HallControl.Ins.updateGold(heroPrice, false);
-                HttpMgr.Ins.requestPrizeCensus(this._itemId, heroPrice);
-                LuckPrizeView.magnification = 1;
-            } else if (this._itemId == 2) { //钻石
+            } else if (this._itemId == 2 || this._itemId == 6) { //钻石
                 this.ui.txt_name.text = "获得：" + itemData.name + "x" + itemData.num * LuckPrizeView.magnification;
                 HttpMgr.Ins.requestDiamondData();
-                HttpMgr.Ins.requestPrizeCensus(this._itemId, itemData.num);
-                LuckPrizeView.magnification = 1;
-            } else if (this._itemId == 3 || this._itemId == 5) {//2倍奖励/8倍奖励
-                this.ui.txt_name.text = "获得：" + itemData.name + "x" + itemData.num;
-                LuckPrizeView.magnification = itemData.num;
-                HttpMgr.Ins.requestPrizeCensus(this._itemId, itemData.num);
             } else if (this._itemId == 4) { //黄金宝箱 获得英雄
                 let heroVO: HeroConfigVO = HallControl.Ins.Model.getPreNewHeroData(HallControl.Ins.Model.heroLevel, 1);
                 if (heroVO) {
@@ -80,9 +72,7 @@ export default class LuckPrizeRewardView extends BaseView {
                             }
                         }
                     }
-                    HttpMgr.Ins.requestPrizeCensus(this._itemId, heroVO.id);
                 }
-                LuckPrizeView.magnification = 1;
             } else if (this._itemId == 8) { //白银宝箱 获得英雄
                 let dropData: DropVO = GlobalData.getData(GlobalData.DropVO, HallControl.Ins.Model.heroLevel);
                 if (dropData) {
@@ -97,10 +87,8 @@ export default class LuckPrizeRewardView extends BaseView {
                                 MsgMgr.Ins.showMsg("主人,武将已打包到箱子里了哦~记得点击箱子喲!");
                             }
                         }
-                        HttpMgr.Ins.requestPrizeCensus(this._itemId, vo.id);
                     }
                 }
-                LuckPrizeView.magnification = 1;
             }
         }
     }

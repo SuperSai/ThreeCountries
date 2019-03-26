@@ -52,11 +52,12 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         this.haveStoreHero();
         this.showSurpassView();
         this.initSystemBtn();
-        this.initRedPoint();
+        this.onUpdateShopRedPoint();
         this.addEvents();
     }
 
     private init(): void {
+        MsgMgr.Ins.showMsg("");
         this._control = HallControl.Ins;
         this._control.hallScene = this;
         this.lists_head.vScrollBarSkin = "";
@@ -83,11 +84,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         StorageUtil.requestOfflinePrizeData();
         this._control.updateMapData();
         GuideMgr.Ins.setup();
-    }
-
-    /** 初始化红点 */
-    private initRedPoint(): void {
-        this.imgFree.visible = RedPointMgr.Ins.isShowShopRedPoint;
+        HttpMgr.Ins.requestDiamondData();
     }
 
     /** 初始化功能按钮 */
@@ -96,7 +93,9 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         if (datas && datas.length > 0 && (this.list_btn.array == null || datas.length > this.list_btn.array.length)) {
             this.list_btn.visible = true;
             this.list_btn.array = datas;
-            RedPointMgr.Ins.updateRedPoint();
+            this.timerOnce(1000, this, () => {
+                RedPointMgr.Ins.updateRedPoint();
+            })
         }
     }
 
@@ -112,6 +111,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         EventsMgr.Ins.addListener(EventType.SHOW_OFFLINE_REWARD, this.onOffLineReward, this);
         EventsMgr.Ins.addListener(EventType.UPDATE_SYSTEM_BTN, this.onUpdateSystemBtn, this);
         EventsMgr.Ins.addListener(EventType.OPEN_VIEW, this.onOpenSystemView, this);
+        EventsMgr.Ins.addListener(EventType.REMOVE_SHOP_REN_POINT, this.onUpdateShopRedPoint, this);
     }
 
     private onOpenSystemView(id: number): void {
@@ -313,7 +313,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
             let cell = this.lists_head.getCell(index);
             if (cell) {
                 let headItem: HeadItem = cell.getChildByName("hero") as HeadItem;
-                if (headItem && headItem.Info.heroId > 0 && !headItem.isDie) {
+                if (headItem && headItem.Info && headItem.Info.heroId > 0 && !headItem.isDie) {
                     isRollView = true;
                     let battleHero: Hero = headItem.BattleHero;
                     if (battleHero) {
@@ -522,6 +522,26 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         }
     }
 
+    private onRenderSystem(cell: Laya.Box, index: number): void {
+        if (index > this.list_btn.array.length) {
+            return;
+        }
+        let btn: SystemBtn = cell.getChildByName("item") as SystemBtn;
+        if (btn) {
+            btn.dataSource = this.list_btn.array[index];
+        }
+    }
+
+    /** 更新系统功能按钮 */
+    private onUpdateSystemBtn(): void {
+        this.initSystemBtn();
+    }
+
+    /** 商店红点 */
+    private onUpdateShopRedPoint(): void {
+        this.imgFree.visible = RedPointMgr.Ins.isShowShopRedPoint;
+    }
+
     /** 显示英雄信息Tips */
     private showHeroTips(): void {
         if (this._heroTips == null) {
@@ -547,21 +567,6 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
             SDKMgr.Ins.wxSetUserCloudStorage();
             this.surpassView.postMsg({ message: "showSurpassFriend" });
         }
-    }
-
-    private onRenderSystem(cell: Laya.Box, index: number): void {
-        if (index > this.list_btn.array.length) {
-            return;
-        }
-        let btn: SystemBtn = cell.getChildByName("item") as SystemBtn;
-        if (btn) {
-            btn.dataSource = this.list_btn.array[index];
-        }
-    }
-
-    /** 更新系统功能按钮 */
-    private onUpdateSystemBtn(): void {
-        this.initSystemBtn();
     }
 
 }

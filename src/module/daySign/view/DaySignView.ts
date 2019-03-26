@@ -8,6 +8,7 @@ import HttpMgr from "../../../core_wq/net/HttpMgr";
 import MsgMgr from "../../../core_wq/msg/MsgMgr";
 import EventsMgr from "../../../core_wq/event/EventsMgr";
 import EventType from "../../../core_wq/event/EventType";
+import RedPointMgr from "../../../core_wq/msg/RedPointMgr";
 
 /**
  * 每日签到界面
@@ -67,6 +68,9 @@ export default class DaySignView extends BaseView {
                             this.ui.imgGet.visible = true;
                             ViewMgr.Ins.close(ViewConst.DaySignView);
                             MsgMgr.Ins.showMsg("签到奖励领取成功：元宝x" + DaySignView.SignData.prize["day7"]);
+                        }
+                        if (RedPointMgr.Ins.isShowSignRedPoint) {
+                            RedPointMgr.Ins.removeSignRedPoint();
                         }
                     } else if (_res.code == 2) {
                         MsgMgr.Ins.showMsg("今日签到奖励已领取");

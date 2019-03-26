@@ -80,6 +80,7 @@ export default class StorageUtil extends Laya.Script {
         localData["guideStep"] = GuideMgr.Ins.guideStep;
         let dataJson = JSON.stringify(localData);
         if (dataJson) {
+            HttpMgr.Ins.requestGuideStep(GuideMgr.Ins.guideStep);
             let storage = window.localStorage;
             storage.setItem(StorageUtil.storage_user, dataJson);
         }
@@ -118,7 +119,9 @@ export default class StorageUtil extends Laya.Script {
             //从服务器同步数据
             let serverDataProgress = 3;
             HttpMgr.Ins.requestCarparkData((res: any) => {
-                HallControl.Ins.Model.AllHeros = res;
+                if (res.length > 0) {
+                    HallControl.Ins.Model.AllHeros = res;
+                }
                 serverDataProgress--;
                 if (serverDataProgress < 1) {
                     callback && callback(true);
@@ -140,7 +143,7 @@ export default class StorageUtil extends Laya.Script {
                     PlayerMgr.Ins.Info.userLevel = MathUtil.parseInt(res.level);
                     PlayerMgr.Ins.Info.userExp = MathUtil.parseStringNum(res.exp);
                     HallControl.Ins.Model.heroLevel = MathUtil.parseInt(res.car_level);
-                    // GuideMgr.Ins.guideStep = MathUtil.parseInt(res.guideStep);
+                    GuideMgr.Ins.guideStep = MathUtil.parseInt(res.tutorial);
                 }
                 serverDataProgress--;
                 if (serverDataProgress < 1) {
@@ -194,7 +197,7 @@ export default class StorageUtil extends Laya.Script {
         console.log("requestSaveCarparkData:", dataString);
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/seat/post',
+            url: 'v3/seat/post',
             method: 'Post',
             data: dataString,
             success: function (res) {
@@ -221,7 +224,7 @@ export default class StorageUtil extends Laya.Script {
         console.log("requestSaveCarshopData:", dataString);
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/shop/post',
+            url: 'v3/shop/post',
             method: 'Post',
             data: dataString,
             success: function (res) {
@@ -243,7 +246,7 @@ export default class StorageUtil extends Laya.Script {
         console.log("@David 保存用户信息金币:", dataString);
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/userinfo/post',
+            url: 'v3/userinfo/post',
             method: 'Post',
             data: dataString,
             success: function (res) {
@@ -339,7 +342,7 @@ export default class StorageUtil extends Laya.Script {
         let that = this;
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/login',
+            url: 'v3/login',
             success: function (res) {
                 console.log("@David 查询离线奖励:", res);
                 let offlineTime = MathUtil.parseInt(res.time); //离线时长

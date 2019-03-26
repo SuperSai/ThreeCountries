@@ -24,7 +24,7 @@ export default class DaySignItem extends ui.moduleView.daySign.DaySignItemUI {
             this.btn_get.skin = "images/daySign/day_prize_item1.png";
             this.imgGet.skin = "images/daySign/day_prize_get.png";
             if (this._day == DaySignView.SignData.sign.day && DaySignView.SignData.sign.status == 0) {
-                this.imgGet.visible = false;
+                // this.imgGet.visible = false;
                 this.btn_get.on(Laya.Event.CLICK, this, this.onGetReward);
                 EventsMgr.Ins.addListener(EventType.DAYSIGN_REWARD_COMPLETE, this.onRewardGetComplete, this);
             }
@@ -49,9 +49,9 @@ export default class DaySignItem extends ui.moduleView.daySign.DaySignItemUI {
     }
 
     private onRewardGetComplete(): void {
+        MsgMgr.Ins.showMsg("签到奖励领取成功：元宝x" + this._diamond);
         HttpMgr.Ins.requestDiamondData();
         this.imgGet.visible = true;
         ViewMgr.Ins.close(ViewConst.DaySignView);
-        MsgMgr.Ins.showMsg("签到奖励领取成功：元宝x" + this._diamond);
     }
 }

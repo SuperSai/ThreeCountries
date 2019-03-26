@@ -14,7 +14,7 @@ R 8A09E663 summonhero.mp3
 R DCB3F965 unlock.mp3
 R 5D23A9A8 upgradecar.mp3
 D config/csvJson
-R B4C1282B Drop.json
+R A93E0097 Drop.json
 R 76F5FE6A Guide.json
 R 72EF6ED0 Hero.json
 R 7AFAD894 HeroConfig.json
@@ -26,6 +26,7 @@ R 50A81745 System.json
 D images/boneAnim
 D images/common
 P 141CD45F coin.png
+P BE12F052 core_tips_icon.png
 P 703494A8 fenxiang_icon.png
 P 6AF94592 game_diamondIcon.png
 P A3DE9626 game_hearIcon_big.png
@@ -46,6 +47,7 @@ P 13E52F78 common_bg_frame.png
 P D693B5B2 common_dialog_title_bg.png
 P 729580D5 common_frame_1.png
 P 466A7A59 common_title_bg.png
+P 014F26CF frame_tips_bg.png
 P D20E9EF2 game_close_btn.png
 P 192FF8E7 game_dialogue_frame.png
 P 41470F53 game_diamond_bg.png
@@ -72,6 +74,7 @@ P E7AF51E3 guide_jiantou2.png
 P 8F67A316 icon_duihuakuang4.png
 D images/hall
 P 6252917F acce_effect.png
+P ECCB7CAD adventure_btn_skill.png
 P 7D082908 battle_title_bg.png
 P 179E68E7 bg.jpg
 P 0F56760B box_lucky.png
@@ -91,6 +94,7 @@ P BD26BC49 game_running_num1.png
 P C4B6A6E8 game_running_num2.png
 P B6567EB7 game_shareBtn.png
 P C415B44F game_taskBtn.png
+P 72B5EABB hall_currency_up.png
 P 295A99ED home_menu_music1.png
 P B6F871CE home_menu_music2.png
 P 62C10535 home_menu_server.png
@@ -117,7 +121,6 @@ P A2959861 luck_2.png
 P D82199B4 luck_8.png
 P 25BB124A luck_go.png
 P D4174B4C luck_huanpan.png
-P 594CA87E luck_item_bg.png
 P 105A1C46 luck_item_box.png
 P 82CAD3C0 luck_item_title_2.png
 P 75719957 luck_item_title_8.png

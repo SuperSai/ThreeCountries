@@ -259,8 +259,9 @@ export default class Hero extends BaseCharacter {
                 }
                 this.frameLoop(1, this, this.onRemoveEnemyFly);
             } else {
+                let enemy = this.attackSprite.getChildByName(this._enemyData.id);
+                if (enemy) Laya.Pool.recover(this._enemyData.id, enemy);
                 this.attackSprite.removeSelf();
-                Laya.Pool.recover(this._enemyData.id, this.attackSprite.getChildByName(this._enemyData.id));
                 this.attackSprite = null;
             }
         }

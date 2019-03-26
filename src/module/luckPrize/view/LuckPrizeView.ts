@@ -15,6 +15,8 @@ import PlayerInfo from "../../../core_wq/player/data/PlayerInfo";
 import RollNameItem from "./item/RollNameItem";
 import LotteryRosterVO from "../../../core_wq/db/vo/LotteryRosterVO";
 import GlobalData from "../../../core_wq/db/GlobalData";
+import AppConfig from "../../../core_wq/config/AppConfig";
+import RedPointMgr from "../../../core_wq/msg/RedPointMgr";
 
 export default class LuckPrizeView extends BaseView {
 
@@ -59,6 +61,9 @@ export default class LuckPrizeView extends BaseView {
             }
         } else {
             this.ui.txt_diamond.changeText('' + this.costDiamond);
+            if (RedPointMgr.Ins.isShowLuckPrizeRedPoint) {
+                RedPointMgr.Ins.removeLuckPrizeRedPoint();
+            }
         }
     }
 
@@ -120,11 +125,22 @@ export default class LuckPrizeView extends BaseView {
 
     /** 看视频抽奖 */
     private handlerLookVideoLottery(): void {
-        SDKMgr.Ins.showVideoAd(() => {
+        if (AppConfig.isDebug) {
             this.doLotteryByType(LOTTERY_TYPE.VIDEO);
-        }, () => {
-            this.startBtnEnabled();
-        });
+        } else {
+            SDKMgr.Ins.showVideoAd((res) => {
+                if (res && res.isEnded || res === undefined) {
+                    // 正常播放结束，可以下发游戏奖励
+                    this.doLotteryByType(LOTTERY_TYPE.VIDEO);
+                }
+                else {
+                    // 播放中途退出，不下发游戏奖励
+                    this.startBtnEnabled();
+                }
+            }, () => {
+                this.startBtnEnabled();
+            });
+        }
     }
 
     private refreshView() {
@@ -177,14 +193,21 @@ export default class LuckPrizeView extends BaseView {
 
     /** 显示奖励界面 */
     private showRewardView(itemId: number): void {
-        ViewMgr.Ins.open(ViewConst.LuckPrizeRewardView, (flag: boolean) => {
-            this.freeLottery();
-        }, itemId);
+        if (itemId != 3 && itemId != 5) {
+            ViewMgr.Ins.open(ViewConst.LuckPrizeRewardView, () => {
+                LuckPrizeView.magnification = 1;
+                this.ui.imgMagnification.skin = "images/luckPrize/luck_" + LuckPrizeView.magnification + ".png";
+            }, itemId);
+        } else {    //倍率界面
+            ViewMgr.Ins.open(ViewConst.LuckPrizeBoxView, (flag: boolean) => {
+                this.ui.imgMagnification.skin = "images/luckPrize/luck_" + LuckPrizeView.magnification + ".png";
+                if (flag) this.freeLottery();
+            }, itemId);
+        }
     }
 
     private freeLottery(): void {
         console.log("@David 转盘抽中物品后关闭界面：", LuckPrizeView.magnification);
-        this.ui.imgMagnification.skin = "images/luckPrize/luck_" + LuckPrizeView.magnification + ".png";
         if (LuckPrizeView.magnification > 1) {
             this.startBtnEnabled();
             this.doLotteryByType(LOTTERY_TYPE.FREE_VIDEO);
