@@ -460,7 +460,7 @@ export default class HttpMgr extends Laya.Script {
         var that = this;
         var HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
-            url: 'v1/rank/week',
+            url: 'v1/rank/world',
             success: function (res) {
                 console.log("@David 请求世界排行数据:", res);
                 callback && callback(res);
@@ -527,6 +527,25 @@ export default class HttpMgr extends Laya.Script {
             url: 'v3/novice/' + step,
             success: function (res) {
                 console.log("@David 发送保存新手步骤成功");
+            },
+            fail: function (res) {
+                console.log(res);
+            }
+        });
+    }
+
+    //提交用户名称位置等信息
+    public requestSaveWxUserinfoData(_nickName: string, _avatarUrl: string, _city: string, _gender: number): void {
+        let that = this;
+        let dataString = 'nickName=' + _nickName + '&avatarUrl=' + _avatarUrl + '&city=' + _city + '&gender=' + _gender;
+        console.log("requestSaveWxUserinfoData:", dataString);
+        let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
+        HttpReqHelper.request({
+            url: 'v1/userinfo/update',
+            method: 'Post',
+            data: dataString,
+            success: function (res) {
+                console.log("requestSaveWxUserinfoData2", res);
             },
             fail: function (res) {
                 console.log(res);

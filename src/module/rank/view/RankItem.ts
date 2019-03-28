@@ -9,7 +9,6 @@ export default class RankItem extends ui.moduleView.rank.RankItemUI {
             this.txt_name.text = value.nick_name;
             this.txt_position.text = value.city == null ? "火星" : value.city;
             this.imgHead.skin = value.avatar_url;
-            this.txt_score.text = value.week_output;
         }
     }
 }

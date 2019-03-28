@@ -26,6 +26,8 @@ import HeroTips from "./HeroTips";
 import RedPointMgr from "../../../core_wq/msg/RedPointMgr";
 import SystemBtn from "./item/SystemBtn";
 import SystemConfig from "../config/SystemConfig";
+import AnimBone from "../bone/AnimBone";
+import PointUtils from "../../../core_wq/utils/PointUtils";
 
 export default class HallScene extends ui.moduleView.hall.HallSceneUI {
 
@@ -57,16 +59,22 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
     }
 
     private init(): void {
-        MsgMgr.Ins.showMsg("");
+        MsgMgr.Ins.showMsg("测试测试测试测试测试");
         this._control = HallControl.Ins;
         this._control.hallScene = this;
         this.lists_head.vScrollBarSkin = "";
+        if (this._control.Model.AllHeros.length < 1) {
+            this._control.Model.initAllHeros();
+        }
         this.lists_head.array = this._control.Model.AllHeros;
         this.lists_head.renderHandler = Laya.Handler.create(this, this.onListRender, null, false);
         this.foregroundTwo.x = this._control.Model.foregroundWidth;
         this.fargroundTwo.x = this._control.Model.fargroundWidth;
         this.list_btn.renderHandler = Laya.Handler.create(this, this.onRenderSystem, null, false);
         SoundMgr.Ins.playBg(SoundType.BG_MUSIC);
+        if (PlayerMgr.Ins.Info.wxUserInfo) {
+            HttpMgr.Ins.requestSaveWxUserinfoData(PlayerMgr.Ins.Info.wxUserInfo.nickName, PlayerMgr.Ins.Info.wxUserInfo.avatarUrl, PlayerMgr.Ins.Info.wxUserInfo.city, PlayerMgr.Ins.Info.wxUserInfo.gender);
+        }
     }
 
     /** 初始化用户数据 */
@@ -133,9 +141,6 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                 break;
             case SystemConfig.FOLLOW:
                 ViewMgr.Ins.open(ViewConst.FollowView);
-                break;
-            case SystemConfig.FEEDBACK:
-
                 break;
         }
     }
@@ -264,7 +269,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                                     }
                                     if (exp > 0) {
                                         this._control.setUserExp(PlayerMgr.Ins.Info.userExp + exp);
-                                        let headItemPos = headItem.localToGlobal(new Laya.Point(0, 0));
+                                        let headItemPos = PointUtils.localToGlobal(headItem);
                                         let pos: { x: number, y: number } = { x: headItemPos.x + headItem.width * 0.5, y: headItemPos.y + 2 };
                                         EffectUtil.playTextEffect(this, "Exp+" + exp, pos);
                                         headItemPos = null;
@@ -427,6 +432,19 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
     private openGameAcc(): void {
         let stage = ShareMgr.Ins.showShareOrAdv(() => {
             this.playAccEffect();
+            // let effect: AnimBone = new AnimBone();
+            // effect.createBone("images/boneAnim/zhuque.sk", true);
+            // effect.scale(0.5, 0.5);
+            // effect.pos(197, 198);
+            // effect.completeBack = (animName: string) => {
+            //     if (animName == "attack") {
+            //         effect.playAnimation("", true, 3);
+            //     }
+            // }
+            // this.addChild(effect);
+            // this.timerLoop(3000, this, () => {
+            //     effect.playAnimation("", false, 1);
+            // })
         }, 10, false, true);
     }
 
@@ -456,7 +474,6 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         if (this._control.Model.userAcceTime > 0) {
             this._control.Model.userAcceTime--;
             StorageUtil.saveAcceLeftTime(this._control.Model.userAcceTime);
-            EffectUtil.playCoinRainEffect("images/common/coin.png");
         } else {
             this._control.setBattleHeroAcce(1);
             this.clearTimer(this, this.refreshAcceTime);

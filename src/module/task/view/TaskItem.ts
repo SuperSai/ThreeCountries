@@ -19,17 +19,33 @@ export default class TaskItem extends ui.moduleView.task.TaskItemUI {
             }
             this.txt_title.text = this._info.title + "(" + finishNum + "/" + this._info.num + ")";
             this.txt_diamond.text = "+" + this._info.reward;
-            this.btn_get.visible = false;
             if (this._info.task_status > 0) {
                 if (this._info.task_status > 1) {//已领取
-                    this.btn_get.visible = false;
-                } else {
-                    this.btn_get.disabled = false;
+                    this.updateGetBtnState(STATE.HaveReceived);
+                } else {//可领取
+                    this.updateGetBtnState(STATE.Receive);
                 }
             } else {
-                this.btn_get.disabled = true;
+                this.updateGetBtnState(STATE.Uncollected);
             }
             this.addEvents();
+        }
+    }
+
+    private updateGetBtnState(state: number): void {
+        switch (state) {
+            case STATE.Uncollected:
+                this.btn_get.label = "未领取";
+                this.btn_get.disabled = true;
+                break;
+            case STATE.Receive:
+                this.btn_get.label = "可领取";
+                this.btn_get.disabled = false;
+                break;
+            case STATE.HaveReceived:
+                this.btn_get.label = "已领取";
+                this.btn_get.disabled = true;
+                break;
         }
     }
 
@@ -39,17 +55,17 @@ export default class TaskItem extends ui.moduleView.task.TaskItemUI {
     }
 
     private onGetReward(): void {
-        HttpMgr.Ins.requestTaskPrize(this._info.id, (_res: any) => {
-            if (_res) {
+        HttpMgr.Ins.requestTaskPrize(this._info.id, (res: any) => {
+            if (res) {
                 this._info.status = 2;
-                this.btn_get.visible = false;
-                HttpMgr.Ins.requestDiamondData();
+                this.updateGetBtnState(STATE.HaveReceived);
                 MsgMgr.Ins.showMsg("任务奖励领取成功!");
                 TaskView.redPointNum--;
                 if (TaskView.redPointNum < 1) {
                     TaskView.redPointNum = 0;
                     RedPointMgr.Ins.removeTaskRedPoint();
                 }
+                HttpMgr.Ins.requestDiamondData();
             }
         });
     }
@@ -57,4 +73,13 @@ export default class TaskItem extends ui.moduleView.task.TaskItemUI {
     private onGotoView(): void {
 
     }
+}
+
+enum STATE {
+    /** 未领取 */
+    Uncollected,
+    /** 可领取 */
+    Receive,
+    /** 已领取 */
+    HaveReceived
 }

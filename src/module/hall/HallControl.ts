@@ -95,15 +95,15 @@ export default class HallControl extends Laya.Script {
                         this.createHeroBone(headItem, this._startPos);
                         this.setBattleHeroCount(PlayerMgr.Ins.Info.userRuncarCount + 1);
                         SoundMgr.Ins.playEffect(SoundType.SUMMON_HERO);
-                    })
-                    this.setSaveHeroData(headItem);
-                    GuideMgr.Ins.onNextStep();
+                        this.setSaveHeroData(headItem);
+                        GuideMgr.Ins.onNextStep();
+                    });
                     return headItem;
                 }
             }
         }
         if (!isBackward) {
-            MsgMgr.Ins.showMsg("兵营不足,快去合成英雄哟!");
+            MsgMgr.Ins.showMsg("兵营不足,快去合成武将哟!");
         }
         return null;
     }

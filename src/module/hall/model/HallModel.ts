@@ -69,7 +69,11 @@ export default class HallModel extends Laya.Script {
 
     public constructor() {
         super();
-        //初始化英雄信息
+        this.initAllHeros();
+    }
+
+    /** 初始化英雄信息 */
+    public initAllHeros(): void {
         if (this._allHeros.length < 1) {
             for (let index = 0; index < this.allHeroCount; index++) {
                 this._allHeros.push({ id: index, heroId: 0, isRunning: false });

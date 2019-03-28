@@ -10,7 +10,7 @@ export default class MsgMgr extends Laya.Script {
     public showMsg(content: string): void {
         let tipView: MsgTipsView = Laya.Pool.getItemByClass("MsgTipsView", MsgTipsView);
         tipView.dataSource = content;
-        tipView.visible = content == "" ? false : true;
+        tipView.visible = content == "测试测试测试测试测试" ? false : true;
         AlignUtils.setToScreenGoldenPos(tipView);
         LayerMgr.Ins.rollMessageLayer.addChild(tipView);
 

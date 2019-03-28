@@ -14,8 +14,10 @@ import GlobalData from "../../../core_wq/db/GlobalData";
  */
 export default class RankView extends BaseView {
 
+
+    private static isInitWorlHero: boolean = false;
     private curSelectedIndex: number = -1;
-    private isWorldRanking: boolean = false;
+    private isWorldRanking: boolean = true;
     /** 收益榜数据 */
     private _incomeRankData: any;
     /** 世界榜数据 */
@@ -33,10 +35,15 @@ export default class RankView extends BaseView {
 
     /** 初始化世界榜 */
     private initWorldRank(): void {
+        this.ui.imgBase.visible = false;
         HttpMgr.Ins.requestWorldRankingData((data: any) => {
             this._worldRankData = data;
             if (this._worldRankData) {
                 this.updateRankList(this._worldRankData);
+                this.ui.imgBase.visible = true;
+                if (this._worldRankData.length > 0 && RankView.isInitWorlHero == false) {
+                    this.showBaseHero(this._worldRankData);
+                }
             }
             this.showMyWorldRank();
         })
@@ -85,20 +92,25 @@ export default class RankView extends BaseView {
             this.ui.txt_noRank.visible = false;
             this.ui.lists.visible = true;
             this.ui.imgMyRank.visible = true;
-            // this.showBaseHero(rankData);
             this.ui.lists.array = rankData;
         }
     }
 
     /** 显示底座上的英雄 */
     private showBaseHero(rankData): void {
-        for (let index = 0; index < 3; index++) {
+        let count: number = rankData.length <= 3 ? rankData.length : 3;
+        RankView.isInitWorlHero = true;
+        for (let index = 0; index < count; index++) {
             const data = rankData[index];
-            let vo: HeroVO = GlobalData.getData(GlobalData.HeroVO, data.heroId);
-            if (vo) {
-                let heroBone: BoneAnim = new BoneAnim(vo.modelImgUrl, true, true);
-                this.addChild(heroBone);
-                heroBone.pos(this["pos_" + index].x, this["pos_" + index].y);
+            if (data) {
+                let vo: HeroVO = GlobalData.getData(GlobalData.HeroVO, data.car_level);
+                if (vo) {
+                    let heroBone: BoneAnim = new BoneAnim(vo.modelImgUrl, true, true);
+                    this.ui.imgBase.addChild(heroBone);
+                    heroBone.pos(this.ui["pos_" + index].x, this.ui["pos_" + index].y);
+                    this.ui["txt_name" + index].text = data.nick_name;
+                    this.ui["txt_name" + index].visible = true;
+                }
             }
         }
     }
@@ -119,10 +131,12 @@ export default class RankView extends BaseView {
         if (this.isWorldRanking) {  //世界榜
             this.ui.lists.height = 465;
             this.ui.lists.y = 454;
+            this.ui.imgBase.visible = true;
             this._worldRankData != null ? this.updateRankList(this._worldRankData) : this.initWorldRank();
         } else {    //收益榜
             this.ui.lists.height = 735;
             this.ui.lists.y = 185;
+            this.ui.imgBase.visible = false;
             this._incomeRankData != null ? this.updateRankList(this._incomeRankData) : this.initIncomeRank();
         }
     }
@@ -131,7 +145,8 @@ export default class RankView extends BaseView {
         if (index > this.ui.lists.array.length) return;
         let item: RankItem = cell.getChildByName("item") as RankItem;
         if (item) {
-            item.dataSource = this.ui.lists.array[index];
+            let data = this.ui.lists.array[index]
+            item.dataSource = data;
             item.box_title.visible = this.isWorldRanking;
             item.box_price.visible = !this.isWorldRanking;
             item.imgRank.visible = index < 3;
@@ -140,6 +155,12 @@ export default class RankView extends BaseView {
                 item.imgRank.skin = PathConfig.RANK_PATH.replace("{0}", (index + 1) + "");
             } else {
                 item.txt_rank.text = (index + 1) + "";
+            }
+            if (this.isWorldRanking) {
+                let vo: HeroVO = GlobalData.getData(GlobalData.HeroVO, data.car_level);
+                if (vo) item.txt_title.text = vo.name;
+            } else {
+                item.txt_score.text = data.week_output;
             }
         }
     }

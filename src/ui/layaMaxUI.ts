@@ -326,12 +326,12 @@ export module ui.moduleView.rank {
 		public imgMyRank:Laya.Sprite;
 		public txt_myRank:Laya.Label;
 		public imgBase:Laya.Sprite;
-		public pos_0:Laya.Sprite;
-		public pos_1:Laya.Sprite;
-		public pos_2:Laya.Sprite;
 		public txt_name1:Laya.Label;
 		public txt_name2:Laya.Label;
 		public txt_name0:Laya.Label;
+		public pos_0:Laya.Sprite;
+		public pos_1:Laya.Sprite;
+		public pos_2:Laya.Sprite;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

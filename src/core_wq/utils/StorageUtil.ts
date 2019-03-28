@@ -60,6 +60,7 @@ export default class StorageUtil extends Laya.Script {
     }
 
     /** 保存缓存到本地 */
+    private static guideStep: number = 0;
     public static saveStorageToLocal(upload: boolean = false): void {
         if (StorageUtil._isLoadStorage == false) {
             console.log("@David 未同步本地/服务器数据");
@@ -80,7 +81,10 @@ export default class StorageUtil extends Laya.Script {
         localData["guideStep"] = GuideMgr.Ins.guideStep;
         let dataJson = JSON.stringify(localData);
         if (dataJson) {
-            HttpMgr.Ins.requestGuideStep(GuideMgr.Ins.guideStep);
+            if (StorageUtil.guideStep != GuideMgr.Ins.guideStep) {
+                HttpMgr.Ins.requestGuideStep(GuideMgr.Ins.guideStep);
+                StorageUtil.guideStep = GuideMgr.Ins.guideStep;
+            }
             let storage = window.localStorage;
             storage.setItem(StorageUtil.storage_user, dataJson);
         }
@@ -189,19 +193,19 @@ export default class StorageUtil extends Laya.Script {
         if (dataJson == null || dataJson.length < 1 || HallControl.Ins.Model.AllHeros.length < 1) {
             return;
         } else if (self.carparkJsonRecord == dataJson) {
-            console.log("carparkJsonRecord数据未刷新");
+            console.log("@David requestSaveHerosData数据未刷新");
             return;
         }
         self.carparkJsonRecord = dataJson;
         let dataString = 'info=' + dataJson;
-        console.log("requestSaveCarparkData:", dataString);
+        console.log("@David requestSaveHerosData:", dataString);
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
             url: 'v3/seat/post',
             method: 'Post',
             data: dataString,
             success: function (res) {
-                console.log("requestSaveCarparkData2:", res);
+                console.log("@David requestSaveHerosData:", res);
             },
             fail: function (res) {
                 console.log(res);
@@ -216,19 +220,19 @@ export default class StorageUtil extends Laya.Script {
         if (dataJson == null || dataJson.length < 1 || HallControl.Ins.Model.BuyHerosRecord.length < 1) {
             return;
         } else if (this.carshopJsonRecord == dataJson) {
-            console.log("carshopJsonRecord数据未刷新");
+            console.log("@David requestSaveHeroShopData数据未刷新");
             return;
         }
         this.carshopJsonRecord = dataJson;
         let dataString = 'info=' + dataJson;
-        console.log("requestSaveCarshopData:", dataString);
+        console.log("@David requestSaveHeroShopData:", dataString);
         let HttpReqHelper = new HttpRequestHelper(PathConfig.AppUrl);
         HttpReqHelper.request({
             url: 'v3/shop/post',
             method: 'Post',
             data: dataString,
             success: function (res) {
-                console.log("requestSaveCarshopData2:", res);
+                console.log("@David requestSaveHeroShopData:", res);
             },
             fail: function (res) {
                 console.log(res);

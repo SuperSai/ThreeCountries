@@ -136,6 +136,19 @@ P AA9A4F98 luck_prize_7.png
 P 29AD4BCD luck_prize_8.png
 D images/map
 D images/rank
+R 5AF84D69 .DS_Store
+P 990D3163 cell_bg.png
+P 69781B33 cell_coin_bg.png
+P F0EA90B1 cell_gps.png
+P BB30C218 cell_top1.png
+P E0BAE0CF cell_top2.png
+P 7030C19C cell_top3.png
+P 7041E718 coin.png
+P 49852D69 headIcon.png
+P DCF09119 mytop.png
+R 037E835C rank_king.jpg
+P 9C085D94 surpass_bg.png
+P 5D165DF6 tap_ranking.png
 D images/shop
 P 73111785 shop_buy_btn.png
 P 4A895B42 shop_cell_bg.png

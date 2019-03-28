@@ -36,7 +36,7 @@ export default class Hero extends BaseCharacter {
     private _enemyModelUrlArray: Array<any> = [
         { id: "enemy_1", heroUrl: "images/boneAnim/enemy/bubinglv.sk", horseUrl: "" },
         { id: "enemy_2", heroUrl: "images/boneAnim/enemy/gongbinglv.sk", horseUrl: "" },
-        { id: "enemy_3", heroUrl: "images/boneAnim/enemy/qibinglv.sk", horseUrl: "" },
+        { id: "enemy_3", heroUrl: "images/boneAnim/enemy/qibinglv.sk", horseUrl: "images/boneAnim/horse/shibingzuoqi.sk" },
     ]; //敌军模型
 
     constructor() { super(); }
