@@ -134,6 +134,24 @@ export default class HallModel extends Laya.Script {
         return 0;
     }
 
+    /** 查询购买英雄最高记录 */
+    public queryBuyHeroRecordTop(): number {
+        let buyTimes: number = 0;
+        let index: number = 0;
+        for (let key in this._buyHerosRecord) {
+            let element = this._buyHerosRecord[key];
+            if (element) {
+                if (index > (this._buyHerosRecord.length - 4)) {
+                    if (buyTimes < this._buyHerosRecord[key].buyTimes) {
+                        buyTimes = this._buyHerosRecord[key].buyTimes;
+                    }
+                }
+                index++;
+            }
+        }
+        return buyTimes;
+    }
+
     /** 刷新购买英雄记录 */
     public refreshBuyHeroRecord(heroId: number, isDiamond: boolean = false): void {
         let isNew: boolean = true;

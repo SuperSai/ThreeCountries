@@ -55,6 +55,8 @@ export default class HttpRequestHelper {
 						self.request(params)
 					}, true);
 				};
+			} else if (res == '404') {
+				console.log("@David request-err: ", params.url);
 			} else if (res == '500') {
 				console.log("@David request-err: ", params.url);
 			} else if (params.success) {

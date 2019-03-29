@@ -84,8 +84,8 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
         }
         this._control.setUserLevel(PlayerMgr.Ins.Info.userLevel);//用户等级
         this._control.setUserExp(PlayerMgr.Ins.Info.userExp);//用户经验
-        EventsMgr.Ins.dispatch(EventType.UPDATE_INCOME, PlayerMgr.Ins.Info.userIncomeSec);//用户每秒可获得的金币
         this._control.updateGold(PlayerMgr.Ins.Info.userGold);
+        EventsMgr.Ins.dispatch(EventType.UPDATE_INCOME, PlayerMgr.Ins.Info.userIncomeSec);//用户每秒可获得的金币
         EventsMgr.Ins.dispatch(EventType.UPDATE_CURRENCY, PlayerInfo.DIAMOND, PlayerMgr.Ins.Info.userDiamond);//更新用户获得钻石
         this.updateRecruitData();
         this.frameLoop(1, this, this.onUpdateBattleView);
@@ -200,7 +200,7 @@ export default class HallScene extends ui.moduleView.hall.HallSceneUI {
                     headItem.setStage(2);
                     this._currHeadItem = headItem;
                     this._currHeadItem.visible = false;
-                    this._copyHeadItem = Laya.Pool.getItemByClass("copyHeadItem", HeadItem);// new HeadItem();
+                    this._copyHeadItem = Laya.Pool.getItemByClass("copyHeadItem", HeadItem);
                     this._copyHeadItem.updateHeadSkin(headItem.Info.heroId, index);
                     this._copyHeadItem.pivot(126 / 2, 127 / 2);
                     this._copyHeadItem.zOrder = 999;

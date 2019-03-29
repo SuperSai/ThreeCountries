@@ -22,8 +22,8 @@ export default class GoldNotEnoughView extends BaseView {
         super.initUI();
         let vo: HeroConfigVO = HallControl.Ins.Model.getPreNewHeroData(HallControl.Ins.Model.heroLevel);
         if (vo) {
-            let price: number = HallControl.Ins.Model.getHeroBuyPrice(vo.buyPrice, HallControl.Ins.Model.queryBuyHeroRecord(vo.id))
-            this._gold = price * 0.6;
+            let price: number = HallControl.Ins.Model.getHeroBuyPrice(vo.buyPrice, HallControl.Ins.Model.queryBuyHeroRecordTop());
+            this._gold = price * 5;
             this.ui.txt_price.text = MathUtil.unitConversion(this._gold);
         }
         let isAd = ShareMgr.Ins.isAdStage(12);
